@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKIS MVC - Home</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        body { font-family: system-ui, Arial, sans-serif; margin: 2rem; }
+        nav a { margin-right: 1rem; }
+    </style>
+    </head>
+<body>
+    <h1 th:text="${message}">Chào mừng đến BKIS MVC!</h1>
+    <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/students">Danh sách sinh viên</a>
+    </nav>
+    <p>Đây là trang chủ mẫu của ứng dụng MVC dùng Spring Boot + Thymeleaf.</p>
+</body>
+</html>

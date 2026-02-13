@@ -1,0 +1,115 @@
+@startuml full_model
+
+' --- Online Learning Platform ---
+entity "users" as users {
+  *id : CHAR(36)
+  username : VARCHAR(100)
+  email : VARCHAR(255)
+  password_hash : VARCHAR(255)
+  role : ENUM
+  created_by : CHAR(36)
+  updated_by : CHAR(36)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity "courses" as courses {
+  *id : BIGINT
+  title : VARCHAR(255)
+  description : TEXT
+  teacher_id : CHAR(36)
+  price : DECIMAL
+  created_by : CHAR(36)
+  updated_by : CHAR(36)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity "lessons" as lessons {
+  *id : BIGINT
+  course_id : BIGINT
+  title : VARCHAR(255)
+  description : TEXT
+  position : INT
+  created_by : CHAR(36)
+  updated_by : CHAR(36)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity "lesson_videos" as lesson_videos {
+  *id : BIGINT
+  lesson_id : BIGINT
+  video_url : VARCHAR(500)
+  duration : INT
+  position : INT
+  created_by : CHAR(36)
+  updated_by : CHAR(36)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity "payments" as payments {
+  *id : BIGINT
+  student_id : CHAR(36)
+  course_id : BIGINT
+  amount : DECIMAL
+  status : ENUM
+  created_by : CHAR(36)
+  updated_by : CHAR(36)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity "progress" as progress {
+  *id : BIGINT
+  student_id : CHAR(36)
+  lesson_video_id : BIGINT
+  watched_duration : INT
+  is_completed : BOOLEAN
+  created_by : CHAR(36)
+  updated_by : CHAR(36)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity "course_reviews" as course_reviews {
+  *id : BIGINT
+  course_id : BIGINT
+  student_id : CHAR(36)
+  rating : INT
+  comment : TEXT
+  created_by : CHAR(36)
+  updated_by : CHAR(36)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+' --- Access/Enrollment ---
+entity "enrollments" as enrollments {
+  *id : BIGINT
+  student_id : CHAR(36)
+  course_id : BIGINT
+  payment_id : BIGINT
+  status : ENUM
+  enrolled_at : TIMESTAMP
+  expires_at : TIMESTAMP
+  created_by : CHAR(36)
+  updated_by : CHAR(36)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+' --- RELATIONSHIPS ---
+users ||--o{ courses : "teaches"
+courses ||--o{ lessons : "has"
+lessons ||--o{ lesson_videos : "contains"
+users ||--o{ payments : "makes"
+courses ||--o{ payments : "purchased in"
+lesson_videos ||--o{ progress : "progress"
+courses ||--o{ course_reviews : "reviewed by"
+users ||--o{ course_reviews : "writes"
+users ||--o{ enrollments : "enrolls"
+courses ||--o{ enrollments : "has"
+payments ||--o{ enrollments : "grants"
+@enduml

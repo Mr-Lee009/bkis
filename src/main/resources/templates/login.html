@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <style>
+        body { font-family: system-ui, Arial, sans-serif; margin: 2rem; }
+        .form { max-width: 360px; margin: 0 auto; }
+        label { display: block; margin-top: 1rem; }
+        input[type=text], input[type=password] { width: 100%; padding: 8px; }
+        .error { color: #b00020; margin-top: 1rem; }
+        button { margin-top: 1rem; padding: 8px 12px; }
+    </style>
+</head>
+<body>
+<div class="form">
+    <h1>Đăng nhập</h1>
+    <div th:if="${error}">
+        <p class="error" th:if="${error}=='captcha'">Sai mã captcha, vui lòng thử lại.</p>
+        <p class="error" th:if="${error}!='captcha'">Tên đăng nhập hoặc mật khẩu không đúng, hoặc tài khoản bị khóa.</p>
+    </div>
+    <form th:action="@{/login}" method="post">
+        <label>Tên đăng nhập</label>
+        <input type="text" name="username" required>
+
+        <label>Mật khẩu</label>
+        <input type="password" name="password" required>
+
+        <label>Mã captcha: <span th:text="${captchaQuestion}">1 + 1 = ?</span></label>
+        <input type="text" name="captchaAnswer" required placeholder="Nhập kết quả">
+
+        <button type="submit">Đăng nhập</button>
+    </form>
+    <p style="margin-top: 1rem; font-size: 0.9rem;">Nếu nhập sai quá 10 lần, tài khoản sẽ bị khóa.</p>
+    <p><a href="/">Về trang chủ</a></p>
+    </div>
+</body>
+</html>
