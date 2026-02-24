@@ -20,8 +20,8 @@ public class SecurityConfig {
     private final AuthSuccessHandler authSuccessHandler;
 
     public SecurityConfig(CaptchaFilter captchaFilter,
-                          AuthFailureHandler authFailureHandler,
-                          AuthSuccessHandler authSuccessHandler) {
+            AuthFailureHandler authFailureHandler,
+            AuthSuccessHandler authSuccessHandler) {
         this.captchaFilter = captchaFilter;
         this.authFailureHandler = authFailureHandler;
         this.authSuccessHandler = authSuccessHandler;
@@ -32,16 +32,14 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/captcha", "/css/**", "/js/**").permitAll()
-                .anyRequest().authenticated()
-            )
+            .requestMatchers("/login", "/captcha", "/css/**", "/js/**", "/favicon.ico").permitAll()
+            .anyRequest().authenticated())
             .formLogin(login -> login
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .failureHandler(authFailureHandler)
-                .successHandler(authSuccessHandler)
-                .permitAll()
-            )
+            .loginPage("/login")
+            .loginProcessingUrl("/login") // Đổi sang /do-login
+            .failureHandler(authFailureHandler)
+            .successHandler(authSuccessHandler)
+            .permitAll())
             .logout(logout -> logout.logoutUrl("/logout").permitAll());
 
         http.addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);

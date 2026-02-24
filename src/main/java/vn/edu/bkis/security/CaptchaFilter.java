@@ -1,12 +1,14 @@
 package vn.edu.bkis.security;
 
+import java.io.IOException;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class CaptchaFilter extends OncePerRequestFilter {
@@ -23,8 +25,12 @@ public class CaptchaFilter extends OncePerRequestFilter {
             }
 
             if (!matchesCaptcha(answer, expected)) {
+                System.out.println("[CaptchaFilter] Captcha failed: answer='" + answer + "', expected='" + expected + "'. Redirecting to /login?error=captcha and stopping filter chain.");
+                request.setAttribute("captchaFailed", true);
                 response.sendRedirect("/login?error=captcha");
                 return;
+            } else {
+                System.out.println("[CaptchaFilter] Captcha passed: answer='" + answer + "', expected='" + expected + "'.");
             }
         }
         filterChain.doFilter(request, response);

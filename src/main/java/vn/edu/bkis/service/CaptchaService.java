@@ -1,8 +1,10 @@
 package vn.edu.bkis.service;
 
 import java.security.SecureRandom;
-import jakarta.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Service;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class CaptchaService {
@@ -12,7 +14,9 @@ public class CaptchaService {
         int a = 1 + random.nextInt(9);
         int b = 1 + random.nextInt(9);
         int result = a + b;
+        String question = a + " + " + b + " = ?";
         session.setAttribute("captchaExpected", String.valueOf(result));
-        return a + " + " + b + " = ?";
+        session.setAttribute("captchaQuestion", question);
+        return question;
     }
 }
