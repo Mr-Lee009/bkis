@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>eLEARNING - Đăng nhập</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <div class="wow fadeInUp" data-wow-delay="0.1s">
+                        <h2 class="mb-4">Quản lý toàn bộ khoá học trong một tài khoản</h2>
+                        <p class="mb-4">Theo dõi tiến độ học tập, truy cập tài nguyên đã mở khoá và nhận thông báo từ mentor ngay trong dashboard của bạn.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><i class="fa fa-check text-primary me-2"></i>Đồng bộ bài học giữa các thiết bị</li>
+                            <li class="mb-3"><i class="fa fa-check text-primary me-2"></i>Xác thực hai lớp & captcha chống bot</li>
+                            <li class="mb-3"><i class="fa fa-check text-primary me-2"></i>Cảnh báo bảo mật nếu có đăng nhập lạ</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-lg wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="card-body p-4 p-lg-5">
+                            <h4 class="mb-4">Đăng nhập tài khoản</h4>
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control form-control-lg" placeholder="ban@elearning.dev" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mật khẩu</label>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control form-control-lg pe-5" id="passwordInput" placeholder="••••••••" required>
+                                        <button type="button" class="btn btn-link position-absolute top-50 end-0 translate-middle-y me-2 text-decoration-none" id="togglePassword"><i class="fa fa-eye"></i></button>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                                        <label class="form-check-label" for="rememberMe">Ghi nhớ tài khoản</label>
+                                    </div>
+                                    <a href="#" class="text-primary">Quên mật khẩu?</a>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Captcha xác minh</label>
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <div class="bg-light border rounded flex-grow-1 text-center py-2" id="captchaText">ABCDE</div>
+                                        <button type="button" class="btn btn-outline-primary" id="refreshCaptcha"><i class="fa fa-sync"></i></button>
+                                    </div>
+                                    <input type="text" class="form-control" id="captchaInput" placeholder="Nhập chuỗi bên trên" required>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary py-3">Đăng nhập</button>
+                                </div>
+                            </form>
+                            <p class="text-center text-muted mt-3 mb-0">Chưa có tài khoản? <a href="course_signup.html" class="text-primary">Đăng ký ngay</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        (function() {
+            const captchaTextEl = document.getElementById('captchaText');
+            const captchaInput = document.getElementById('captchaInput');
+            const refreshBtn = document.getElementById('refreshCaptcha');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('passwordInput');
+            const loginForm = document.getElementById('loginForm');
+
+            function generateCaptcha() {
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                let output = '';
+                for (let i = 0; i < 5; i += 1) {
+                    output += chars[Math.floor(Math.random() * chars.length)];
+                }
+                captchaTextEl.textContent = output;
+                captchaInput.value = '';
+            }
+
+            refreshBtn.addEventListener('click', function() {
+                generateCaptcha();
+            });
+
+            togglePassword.addEventListener('click', function() {
+                const isHidden = passwordInput.type === 'password';
+                passwordInput.type = isHidden ? 'text' : 'password';
+                this.innerHTML = isHidden ? '<i class="fa fa-eye-slash"></i>' : '<i class="fa fa-eye"></i>';
+            });
+
+            loginForm.addEventListener('submit', function(event) {
+                if (captchaInput.value.trim().toUpperCase() !== captchaTextEl.textContent.trim()) {
+                    event.preventDefault();
+                    captchaInput.classList.add('is-invalid');
+                    captchaInput.focus();
+                } else {
+                    captchaInput.classList.remove('is-invalid');
+                    alert('Xác thực thành công!');
+                }
+            });
+
+            captchaInput.addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+            });
+
+            generateCaptcha();
+        })();
+    </script>
+</body>
+
+</html>

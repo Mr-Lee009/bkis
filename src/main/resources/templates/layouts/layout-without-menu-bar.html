@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+    <th:block th:insert="~{fragments/common :: head}"></th:block>
+</head>
+<body>
+    <div th:replace="~{fragments/header-without-menu-bar :: headerWithoutMenuBar(title=${pageTitle})}"></div>
+    <main layout:fragment="content">
+        <!-- Page-specific content will be inserted here -->
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

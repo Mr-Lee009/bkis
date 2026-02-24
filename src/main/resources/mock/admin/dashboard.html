@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard - eLEARNING</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../img/favicon.ico" rel="icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="admin.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-3 col-lg-2 sidebar py-4">
+                <div class="px-3 mb-4">
+                    <h4 class="text-white mb-0"><i class="fa fa-graduation-cap me-2"></i>eLEARNING</h4>
+                    <small class="text-muted">Admin Panel</small>
+                </div>
+                <div class="sidebar-user text-center">
+                    <img src="../img/testimonial-1.jpg" alt="Admin Avatar" class="sidebar-avatar">
+                    <strong class="d-block">Nguyen Admin</strong>
+                    <span class="user-role-pill">Super Admin</span>
+                    <small>admin@elearning.vn</small>
+                </div>
+                <a href="#" class="active"><i class="fa fa-chart-line me-2"></i>Dashboard</a>
+                <a href="accounts.html"><i class="fa fa-users-cog me-2"></i>Tài khoản</a>
+                <a href="students.html"><i class="fa fa-user-graduate me-2"></i>Học viên</a>
+                <a href="courses.html"><i class="fa fa-book-open me-2"></i>Khoá học</a>
+                <a href="payments.html"><i class="fa fa-credit-card me-2"></i>Thanh toán</a>
+                <a href="settings.html"><i class="fa fa-cog me-2"></i>Cài đặt</a>
+            </aside>
+            <main class="col-md-9 col-lg-10 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="mb-0">Tổng quan</h2>
+                        <small class="text-muted">Quản trị dữ liệu học viên và khoá học</small>
+                    </div>
+                    <button class="btn btn-outline-primary"><i class="fa fa-sign-out-alt me-2"></i>Đăng xuất</button>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted mb-1">Tổng học viên</p>
+                                        <h3 class="mb-0">2,450</h3>
+                                    </div>
+                                    <span class="badge bg-success">+8%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted mb-1">Khoá học active</p>
+                                        <h3 class="mb-0">32</h3>
+                                    </div>
+                                    <span class="badge bg-primary">+2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted mb-1">Doanh thu tháng</p>
+                                        <h3 class="mb-0">$18,200</h3>
+                                    </div>
+                                    <span class="badge bg-warning text-dark">+12%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Học viên mới nhất</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Học viên</th>
+                                        <th>Khoá học</th>
+                                        <th>Ngày đăng ký</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Minh Nguyen</td>
+                                        <td>Web Design</td>
+                                        <td>05/01/2026</td>
+                                        <td><span class="badge bg-success">Đang học</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Thao Tran</td>
+                                        <td>UI/UX Foundation</td>
+                                        <td>04/01/2026</td>
+                                        <td><span class="badge bg-warning text-dark">Chờ thanh toán</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ken Pham</td>
+                                        <td>Digital Marketing</td>
+                                        <td>02/01/2026</td>
+                                        <td><span class="badge bg-primary">Hoàn thành</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
+                            <small class="text-muted">Hiển thị 1-3 / 12 học viên mới</small>
+                            <nav>
+                                <ul class="pagination pagination-sm mb-0">
+                                    <li class="page-item disabled"><span class="page-link">Trước</span></li>
+                                    <li class="page-item active"><span class="page-link">1</span></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">Sau</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>eLEARNING - Khoá học đã mua</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>eLEARNING</h2>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link">Home</a>
+                <a href="about.html" class="nav-item nav-link">About</a>
+                <a href="courses.html" class="nav-item nav-link">Courses</a>
+                <a href="course_signup.html" class="nav-item nav-link">Đăng ký</a>
+                <a href="course_learn.html" class="nav-item nav-link active">Học viên</a>
+                <a href="course_checkout.html" class="nav-item nav-link">Thanh toán</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu fade-down m-0">
+                        <a href="team.html" class="dropdown-item">Our Team</a>
+                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                        <a href="404.html" class="dropdown-item">404 Page</a>
+                    </div>
+                </div>
+                <a href="contact.html" class="nav-item nav-link">Contact</a>
+            </div>
+            <a href="course_learn.html" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Học tiếp<i class="fa fa-arrow-right ms-3"></i></a>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Khoá học của bạn</h1>
+                    <p class="text-white-50 mb-0">Tiếp tục hành trình học tập với toàn bộ nội dung đã mở khoá</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+
+    <!-- Learn Dashboard Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-8">
+                    <div class="bg-light rounded p-4 mb-4">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+                            <div>
+                                <p class="text-uppercase text-primary mb-1">Tiến độ khoá học</p>
+                                <h3 class="mb-0">60% hoàn thành</h3>
+                            </div>
+                            <a class="btn btn-primary mt-3 mt-lg-0" href="#module-04">Tiếp tục bài 4</a>
+                        </div>
+                        <div class="progress mt-4" style="height: 12px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row text-center mt-3">
+                            <div class="col-4">
+                                <small class="text-uppercase text-muted">Video đã xem</small>
+                                <h6 class="mb-0">29 / 48</h6>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-uppercase text-muted">Bài tập</small>
+                                <h6 class="mb-0">6 / 12</h6>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-uppercase text-muted">Buổi live</small>
+                                <h6 class="mb-0">4 / 6</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion" id="lessonAccordion">
+                        <div class="accordion-item" id="module-01">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Module 1: Làm quen HTML & CSS (Đã hoàn thành)
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#lessonAccordion">
+                                <div class="accordion-body">
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                            <div><i class="fa fa-check text-primary me-2"></i>Giới thiệu dự án eLearning</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small>12 phút</small>
+                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#lessonModal" data-title="Giới thiệu dự án" data-video="https://www.youtube.com/embed/1Rs2ND1ryYc">Xem</button>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                            <div><i class="fa fa-check text-primary me-2"></i>Layout responsive với Flexbox</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small>18 phút</small>
+                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#lessonModal" data-title="Flexbox cơ bản" data-video="https://www.youtube.com/embed/fYq5PXgSsbE">Xem</button>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex justify-content-between py-2"><span><i class="fa fa-check text-primary me-2"></i>Bài tập 01: Landing page</span><small>Tải file</small></li>
+                                    </ul>
+                                    <div class="mt-3 p-3 bg-white border rounded">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fa fa-paperclip text-primary me-2"></i>
+                                            <strong>Tài nguyên buổi học</strong>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/lesson01-slides.pdf"><i class="fa fa-file-pdf me-2"></i>Slides giới thiệu</a>
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/checklist-responsive.docx"><i class="fa fa-check-square me-2"></i>Checklist responsive</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" id="module-02">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Module 2: Bootstrap 5 nâng cao (Đã hoàn thành)
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#lessonAccordion">
+                                <div class="accordion-body">
+                                    <p class="mb-0">Khai thác hệ thống grid, utilities và cách tuỳ biến theme để khớp với brand.</p>
+                                    <div class="mt-3 p-3 bg-white border rounded">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fa fa-paperclip text-primary me-2"></i>
+                                            <strong>Tài nguyên buổi học</strong>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/bootstrap-theme.fig"><i class="fa fa-object-ungroup me-2"></i>File Figma</a>
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/assignment-grid.zip"><i class="fa fa-file-archive me-2"></i>Bài tập Grid</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" id="module-03">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Module 3: JavaScript tương tác (Đang học)
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#lessonAccordion">
+                                <div class="accordion-body">
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                            <div><i class="fa fa-play text-primary me-2"></i>Bài 1: DOM essentials</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small>08:35</small>
+                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#lessonModal" data-title="DOM essentials" data-video="https://www.youtube.com/embed/0ik6X4DJKCc">Xem</button>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                            <div><i class="fa fa-lock text-muted me-2"></i>Bài 2: Tương tác với Owl Carousel</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small>09:12</small>
+                                                <button class="btn btn-sm btn-outline-secondary disabled">Mở sau</button>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center justify-content-between py-2">
+                                            <div><i class="fa fa-lock text-muted me-2"></i>Bài 3: Animations với WOW.js</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small>10:44</small>
+                                                <button class="btn btn-sm btn-outline-secondary disabled">Mở sau</button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="mt-3 p-3 bg-white border rounded">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fa fa-paperclip text-primary me-2"></i>
+                                            <strong>Tài nguyên buổi học</strong>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/dom-cheatsheet.pdf"><i class="fa fa-file-code me-2"></i>DOM Cheatsheet</a>
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/owl-carousel-config.json"><i class="fa fa-file-alt me-2"></i>Config mẫu</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" id="module-04">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    Module 4: Dự án cuối khoá (Chưa học)
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#lessonAccordion">
+                                <div class="accordion-body">
+                                    <p class="mb-0">Tổng hợp toàn bộ kiến thức để ship website đa trang và tối ưu Lighthouse.</p>
+                                    <div class="mt-3 p-3 bg-white border rounded">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fa fa-paperclip text-primary me-2"></i>
+                                            <strong>Tài nguyên buổi học</strong>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/project-brief.pdf"><i class="fa fa-file-signature me-2"></i>Project brief</a>
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/design-assets.zip"><i class="fa fa-images me-2"></i>Design assets</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" id="module-05">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    Module 5: Tối ưu hiệu năng & SEO (Đang mở)
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#lessonAccordion">
+                                <div class="accordion-body">
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                            <div><i class="fa fa-play text-primary me-2"></i>Core Web Vitals overview</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small>07:55</small>
+                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#lessonModal" data-title="Core Web Vitals" data-video="https://www.youtube.com/embed/AeUCNkvzYqQ">Xem</button>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                            <div><i class="fa fa-play text-primary me-2"></i>SEO on-page cho eLearning</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small>11:03</small>
+                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#lessonModal" data-title="SEO on-page" data-video="https://www.youtube.com/embed/x4HUaiazDes">Xem</button>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex align-items-center justify-content-between py-2">
+                                            <div><i class="fa fa-lock text-muted me-2"></i>Bài tập Lighthouse report</div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small>Tải file</small>
+                                                <button class="btn btn-sm btn-outline-secondary disabled">Mở sau</button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="mt-3 p-3 bg-white border rounded">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fa fa-paperclip text-primary me-2"></i>
+                                            <strong>Tài nguyên buổi học</strong>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/core-web-vitals.xlsx"><i class="fa fa-table me-2"></i>Mẫu dashboard</a>
+                                            <a class="btn btn-sm btn-outline-primary" href="assets/seo-checklist.pdf"><i class="fa fa-file-alt me-2"></i>SEO checklist</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" id="module-06">
+                            <h2 class="accordion-header" id="headingSix">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                    Module 6: Chuẩn bị Portfolio & Phỏng vấn (Chưa mở)
+                                </button>
+                            </h2>
+                            <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#lessonAccordion">
+                                <div class="accordion-body">
+                                    <p class="mb-0">Unlock khi bạn hoàn thành 80% khoá học. Nội dung gồm coaching CV, mô phỏng phỏng vấn và checklist portfolio.</p>
+                                    <div class="mt-3 p-3 bg-white border rounded">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fa fa-paperclip text-primary me-2"></i>
+                                            <strong>Tài nguyên dự kiến</strong>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <span class="badge bg-secondary">Template CV (đang khóa)</span>
+                                            <span class="badge bg-secondary">Checklist phỏng vấn (đang khóa)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5">
+                        <h5 class="mb-3">Tài nguyên đã mở khoá</h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="border rounded p-3 h-100">
+                                    <i class="fa fa-file-archive text-primary fa-2x mb-3"></i>
+                                    <h6 class="mb-2">Source code update 1.2</h6>
+                                    <a href="assets/course-source.zip" class="btn btn-sm btn-outline-primary">Tải xuống</a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded p-3 h-100">
+                                    <i class="fa fa-image text-primary fa-2x mb-3"></i>
+                                    <h6 class="mb-2">UI Kit Figma</h6>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">Mở file</a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded p-3 h-100">
+                                    <i class="fa fa-headphones text-primary fa-2x mb-3"></i>
+                                    <h6 class="mb-2">Audio Podcast</h6>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">Nghe ngay</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="border rounded p-4 mb-4">
+                        <h5 class="mb-3">Buổi học tiếp theo</h5>
+                        <p class="mb-1"><i class="fa fa-calendar text-primary me-2"></i>Thứ 5, 20:00 - 21:30</p>
+                        <p class="mb-3"><i class="fa fa-video text-primary me-2"></i>Zoom live cùng mentor Minh Nguyen</p>
+                        <a class="btn btn-primary w-100" href="#">Đặt lịch nhắc</a>
+                    </div>
+
+                    <div class="bg-light rounded p-4 mb-4">
+                        <h5 class="mb-3">Cộng đồng & hỗ trợ</h5>
+                        <p class="mb-2"><i class="fa fa-discord text-primary me-2"></i>Discord riêng cho học viên</p>
+                        <p class="mb-2"><i class="fa fa-envelope text-primary me-2"></i>Email: mentor@example.com</p>
+                        <p class="mb-3"><i class="fa fa-comment-dots text-primary me-2"></i>Hỏi đáp trong 24h</p>
+                        <a class="btn btn-outline-primary w-100" href="contact.html">Gửi câu hỏi</a>
+                    </div>
+
+                    <div class="border rounded p-4">
+                        <h5 class="mb-3">Chứng chỉ</h5>
+                        <p class="mb-2">Hoàn thành 100% khoá học để mở khoá chứng chỉ PDF có chữ ký số.</p>
+                        <ul class="list-unstyled mb-3">
+                            <li class="mb-2"><i class="fa fa-check text-primary me-2"></i>Tự động add vào LinkedIn</li>
+                            <li class="mb-2"><i class="fa fa-check text-primary me-2"></i>Định dạng chuẩn HR</li>
+                            <li><i class="fa fa-check text-primary me-2"></i>QR verify</li>
+                        </ul>
+                        <a class="btn btn-primary w-100" href="courses_detail.html">Xem yêu cầu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Learn Dashboard End -->
+
+    <!-- Lesson Modal -->
+    <div class="modal fade" id="lessonModal" tabindex="-1" aria-labelledby="lessonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lessonModalLabel">Xem bài học</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9">
+                        <iframe id="lessonModalVideo" src="" title="Lesson video" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3">Quick Link</h4>
+                    <a class="btn btn-link" href="">About Us</a>
+                    <a class="btn btn-link" href="">Contact Us</a>
+                    <a class="btn btn-link" href="">Privacy Policy</a>
+                    <a class="btn btn-link" href="">Terms & Condition</a>
+                    <a class="btn btn-link" href="">FAQs & Help</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3">Contact</h4>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3">Gallery</h4>
+                    <div class="row g-2 pt-2">
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/course-1.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/course-2.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/course-3.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/course-2.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/course-3.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/course-1.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3">Newsletter</h4>
+                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
+                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
+
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a><br><br>
+                        Distributed By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="">Home</a>
+                            <a href="">Cookies</a>
+                            <a href="">Help</a>
+                            <a href="">FQAs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+    <script>
+        (function() {
+            const lessonModal = document.getElementById('lessonModal');
+            if (!lessonModal) {
+                return;
+            }
+            const videoFrame = document.getElementById('lessonModalVideo');
+            const modalTitle = document.getElementById('lessonModalLabel');
+            lessonModal.addEventListener('show.bs.modal', function (event) {
+                const trigger = event.relatedTarget;
+                if (!trigger) {
+                    return;
+                }
+                const title = trigger.getAttribute('data-title') || 'Bài học';
+                const video = trigger.getAttribute('data-video') || '';
+                modalTitle.textContent = title;
+                videoFrame.src = video;
+            });
+            lessonModal.addEventListener('hidden.bs.modal', function () {
+                videoFrame.src = '';
+            });
+        })();
+    </script>
+</body>
+
+</html>

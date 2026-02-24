@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="pageUrl" th:content="${pageUrl}"/>
+    <!-- スタイルシート -->
+    <!-- Material Design Icons -->
+    <link type="text/css" th:href="@{/fonts/icons/material-icons.css}" rel="stylesheet" />
+    <!-- Roboto Fonts -->
+    <link type="text/css" th:href="@{/fonts/roboto/roboto-fonts.css}" rel="stylesheet" />
+    <!-- bootstrap-material-design v4.1 -->
+    <link type="text/css" th:href="@{/css/libs/bootstrap-material-design.min.css}" rel="stylesheet" />
+    <!-- jQueryUI 1.12 -->
+    <link type="text/css" th:href="@{/css/libs/jquery-ui.min.css}" rel="stylesheet" />
+    <!-- Bootstrap Docs v4.1 -->
+    <link type="text/css" th:href="@{/css/libs/docs.min.css}" rel="stylesheet" />
+    <!-- 業務共通 -->
+    <link type="text/css" th:href="@{/css/libs/style.css}" rel="stylesheet" />
+
+    <!-- JavaScript -->
+    <script type="text/javascript" th:src="@{/js/libs/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/libs/jquery-ui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/libs/popper.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/libs/bootstrap-material-design.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/libs/datepicker-ja-Ext.js}"></script>
+    <script type="text/javascript" th:src="@{/js/libs/bootstrap-table.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/libs/bootstrap-table-ja-JP-Ext.js}"></script>
+    <script type="text/javascript" th:src="@{/js/constant.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+</head>
+<body>
+    <div th:fragment="errorMessages(errorMessage, fieldErrors)"
+         class="alert alert-danger" role="alert"
+         id="errorMessage"
+         th:if="${(errorMessage != null and errorMessage != '') or (fieldErrors != null and #lists.size(fieldErrors) > 0)}">
+        <ul th:if="${errorMessage != null and errorMessage != ''}" class="mb-0">
+            <li style="white-space: pre-line;" th:text="${errorMessage}"></li>
+        </ul>
+        
+        <ul th:if="${fieldErrors != null}" class="mb-0">
+            <li style="white-space: pre-line;" th:each="err : ${#sets.toSet(fieldErrors)}" th:text="${err}"></li>
+        </ul>
+    </div>
+</body>
+</html>

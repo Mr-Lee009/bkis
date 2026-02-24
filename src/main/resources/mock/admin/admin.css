@@ -1,0 +1,360 @@
+/* Layout basics */
+body {
+    background-color: #f5f7fb;
+}
+
+.sidebar {
+    min-height: 100vh;
+    background: #181d38;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar a {
+    color: #b6c0ff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.sidebar-user {
+    padding: 1.5rem 1rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 1rem;
+    margin: 0 1rem 1.5rem;
+}
+
+.sidebar-user small {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.sidebar-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.user-role-pill {
+    padding: 0.2rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.15);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.menu-text {
+    transition: opacity 0.2s ease;
+}
+
+/* Accounts */
+.role-chip {
+    border-radius: 30px;
+    padding: 0.25rem 0.75rem;
+    background: rgba(24, 29, 56, 0.08);
+    color: #181d38;
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+}
+
+/* Courses */
+.kanban-column {
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 10px 30px rgba(24, 29, 56, 0.08);
+}
+
+.kanban-column h6 {
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.module-item {
+    border: 1px dashed rgba(24, 29, 56, 0.2);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    background: #fff;
+}
+
+.upload-dropzone {
+    border: 2px dashed rgba(24, 29, 56, 0.25);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background: rgba(24, 29, 56, 0.03);
+    text-align: center;
+}
+
+/* Students */
+.progress-mini {
+    height: 6px;
+    border-radius: 10px;
+}
+
+.timeline-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    background: #181d38;
+}
+
+.support-card {
+    border: 1px dashed rgba(24, 29, 56, 0.2);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.filter-toolbar {
+    background: linear-gradient(120deg, #eef2ff, #f7fbff);
+    border-radius: 1rem;
+    border: 1px solid rgba(24, 29, 56, 0.07);
+}
+
+.filter-pill {
+    border-radius: 30px;
+    border: 1px solid rgba(24, 29, 56, 0.15);
+    padding: 0.35rem 0.95rem;
+    background: #fff;
+    font-size: 0.9rem;
+    color: #181d38;
+    transition: all 0.2s ease;
+}
+
+.filter-pill.active,
+.filter-pill:hover {
+    background: #181d38;
+    color: #fff;
+    border-color: #181d38;
+}
+
+.saved-filter {
+    border-radius: 25px;
+    background: rgba(24, 29, 56, 0.06);
+    padding: 0.25rem 0.85rem;
+    font-size: 0.85rem;
+}
+
+.input-icon {
+    position: absolute;
+    top: 50%;
+    left: 0.9rem;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.input-icon-field {
+    padding-left: 2.4rem;
+}
+
+.student-row {
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.student-row:hover {
+    background: #f7f9ff;
+    transform: translateY(-1px);
+}
+
+.profile-modal .modal-content {
+    border-radius: 1.25rem;
+}
+
+.avatar-pill {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: #181d38;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.goal-pill {
+    border-radius: 999px;
+    background: rgba(24, 29, 56, 0.08);
+    color: #181d38;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.85rem;
+}
+
+.modal-info-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.35rem 0;
+    font-weight: 500;
+    color: #181d38;
+}
+
+.modal-info-list li i {
+    color: #6c63ff;
+}
+
+.modal-timeline li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: #4b4b66;
+}
+
+.modal-timeline li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 0.4rem;
+    width: 1px;
+    height: calc(100% + 0.75rem);
+    background: rgba(24, 29, 56, 0.1);
+}
+
+.modal-timeline li:last-child::before {
+    display: none;
+}
+
+.profile-modal .support-card {
+    border-style: solid;
+    border-color: rgba(24, 29, 56, 0.1);
+}
+
+.gradient-card {
+    background: linear-gradient(130deg, #3949ff, #8845ff, #f35dc7);
+}
+
+.gradient-card .btn-light {
+    color: #181d38;
+    font-weight: 600;
+}
+
+.gradient-card-blur {
+    position: absolute;
+    left: 55%;
+    top: 15%;
+    width: 220px;
+    height: 220px;
+    background: rgba(255, 255, 255, 0.3);
+    filter: blur(60px);
+    border-radius: 50%;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.modal-icon-bubble {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(24, 29, 56, 0.08);
+    color: #181d38;
+}
+
+.modal-editor-panel {
+    border-top: 1px solid #eceffa;
+    padding-top: 1.5rem;
+}
+
+@media (min-width: 992px) {
+    .modal-editor-panel {
+        border-top: 0;
+        border-left: 1px solid #eceffa;
+        padding-left: 2rem;
+    }
+}
+
+/* Payments */
+.stat-card {
+    border: 1px solid rgba(24, 29, 56, 0.08);
+    border-radius: 0.85rem;
+}
+
+.pill-option {
+    border-radius: 30px;
+    border: 1px solid rgba(24, 29, 56, 0.15);
+    padding: 0.35rem 0.95rem;
+    background: #fff;
+    font-size: 0.9rem;
+    color: #181d38;
+}
+
+.pill-option.active {
+    background: #181d38;
+    color: #fff;
+    border-color: #181d38;
+}
+
+.payout-card {
+    border: 1px dashed rgba(24, 29, 56, 0.2);
+    border-radius: 0.85rem;
+    padding: 1rem;
+}
+
+.timeline-line {
+    border-left: 2px solid rgba(24, 29, 56, 0.1);
+    margin-left: 0.6rem;
+    padding-left: 1rem;
+}
+
+.timeline-line .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #181d38;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+/* Settings */
+.setting-block {
+    border: 1px solid rgba(24, 29, 56, 0.08);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background: #fff;
+}
+
+.brand-preview {
+    border: 1px dashed rgba(24, 29, 56, 0.2);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    background: rgba(24, 29, 56, 0.02);
+}
+
+.toggle-note {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.email-card {
+    border: 1px solid rgba(24, 29, 56, 0.07);
+    border-radius: 0.85rem;
+    padding: 1rem;
+}

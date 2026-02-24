@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_bkis
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bkis_edu
+      MYSQL_USER: bkis_user
+      MYSQL_PASSWORD: bkis_password
+    ports:
+      - "3310:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+
+  app:
+    build: .
+    container_name: bkis_app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3310/bkis_edu?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: bkis_user
+      SPRING_DATASOURCE_PASSWORD: bkis_password
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  db_data:

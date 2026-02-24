@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Danh mục khóa học - eLEARNING</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../img/favicon.ico" rel="icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="admin.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-3 col-lg-2 sidebar py-4">
+                <div class="px-3 mb-4">
+                    <h4 class="text-white mb-0"><i class="fa fa-graduation-cap me-2"></i>eLEARNING</h4>
+                    <small class="text-muted">Admin Panel</small>
+                </div>
+                <div class="sidebar-user text-center">
+                    <img src="../img/testimonial-1.jpg" alt="Admin Avatar" class="sidebar-avatar">
+                    <strong class="d-block">Nguyen Admin</strong>
+                    <span class="user-role-pill">Super Admin</span>
+                    <small>admin@elearning.vn</small>
+                </div>
+                <a href="dashboard.html"><i class="fa fa-chart-line me-2"></i>Dashboard</a>
+                <a href="accounts.html"><i class="fa fa-users-cog me-2"></i>Tài khoản</a>
+                <a href="students.html"><i class="fa fa-user-graduate me-2"></i>Học viên</a>
+                <a href="#" class="active"><i class="fa fa-book-open me-2"></i>Khoá học</a>
+                <a href="payments.html"><i class="fa fa-credit-card me-2"></i>Thanh toán</a>
+                <a href="settings.html"><i class="fa fa-cog me-2"></i>Cài đặt</a>
+            </aside>
+            <main class="col-md-9 col-lg-10 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="mb-0">Danh mục khoá học</h2>
+                        <small class="text-muted">Soạn nháp, xuất bản, sắp xếp giáo trình và bật/tắt hiển thị</small>
+                    </div>
+                    <button class="btn btn-primary"><i class="fa fa-pen me-2"></i>Tạo khoá nháp</button>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Khoá đang nháp</p>
+                                <h3 class="mb-0">8</h3>
+                                <small class="text-warning">4 cần duyệt</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Khoá đã xuất bản</p>
+                                <h3 class="mb-0">32</h3>
+                                <small class="text-success">+3 tuần này</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Khoá đang ẩn</p>
+                                <h3 class="mb-0">5</h3>
+                                <small class="text-muted">Tự động ẩn khi chưa đủ nội dung</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-7">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Bảng soạn thảo & xuất bản</h5>
+                                <button class="btn btn-sm btn-outline-secondary">Quy tắc duyệt</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="kanban-column">
+                                            <h6 class="text-muted">Draft</h6>
+                                            <p class="mb-2"><strong>Brand Design 101</strong></p>
+                                            <p class="mb-2"><strong>SQL for Analyst</strong></p>
+                                            <p class="mb-0"><strong>Metaverse Intro</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="kanban-column">
+                                            <h6 class="text-muted">Review</h6>
+                                            <p class="mb-2"><strong>Growth Hacking</strong></p>
+                                            <p class="mb-2"><strong>Advanced React</strong></p>
+                                            <p class="mb-0"><strong>Motion Graphic</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="kanban-column">
+                                            <h6 class="text-muted">Published</h6>
+                                            <p class="mb-2"><strong>Product Discovery</strong></p>
+                                            <p class="mb-2"><strong>UX Writing Master</strong></p>
+                                            <p class="mb-0"><strong>Data Pipeline</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Giáo trình & sắp xếp</h5>
+                                <button class="btn btn-sm btn-outline-primary">Lưu thứ tự</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="module-item d-flex justify-content-between align-items-center">
+                                    <span><i class="fa fa-grip-lines me-2 text-muted"></i>Module 01 · Tổng quan</span>
+                                    <span class="badge bg-light text-dark">15 video</span>
+                                </div>
+                                <div class="module-item d-flex justify-content-between align-items-center">
+                                    <span><i class="fa fa-grip-lines me-2 text-muted"></i>Module 02 · UX Research</span>
+                                    <span class="badge bg-light text-dark">12 tài liệu</span>
+                                </div>
+                                <div class="module-item d-flex justify-content-between align-items-center">
+                                    <span><i class="fa fa-grip-lines me-2 text-muted"></i>Module 03 · Prototyping</span>
+                                    <span class="badge bg-light text-dark">8 bài tập</span>
+                                </div>
+                                <div class="module-item d-flex justify-content-between align-items-center">
+                                    <span><i class="fa fa-grip-lines me-2 text-muted"></i>Module 04 · Usability Test</span>
+                                    <span class="badge bg-light text-dark">6 buổi live</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-5">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Tải tài nguyên bài học</h5>
+                                <button class="btn btn-sm btn-outline-secondary">Lịch sử</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="upload-dropzone mb-3">
+                                    <i class="fa fa-cloud-upload-alt fa-2x text-primary mb-2"></i>
+                                    <p class="mb-1">Kéo thả file PDF, video hoặc slide vào đây</p>
+                                    <small class="text-muted">Giới hạn 500MB · Auto gắn watermark</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Chọn module</label>
+                                    <select class="form-select">
+                                        <option>Module 01 · Foundation</option>
+                                        <option>Module 02 · Research</option>
+                                        <option>Module 03 · Prototype</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Loại tài nguyên</label>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-outline-primary btn-sm">Video</button>
+                                        <button class="btn btn-outline-primary btn-sm">Slide</button>
+                                        <button class="btn btn-outline-primary btn-sm">Bài tập</button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100"><i class="fa fa-upload me-2"></i>Tải lên</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Danh sách khoá học</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary me-2">Bộ lọc</button>
+                                    <button class="btn btn-sm btn-outline-primary">Xuất CSV</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Khoá học</th>
+                                                <th>Trạng thái</th>
+                                                <th>Hiển thị</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <strong>UX Writing Master</strong>
+                                                    <div class="text-muted small">Cập nhật 04/01/2026</div>
+                                                </td>
+                                                <td><span class="badge bg-success">Published</span></td>
+                                                <td>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" checked>
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <button class="btn btn-sm btn-outline-secondary me-2">Chỉnh sửa</button>
+                                                    <button class="btn btn-sm btn-outline-danger">Ẩn</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>AI For Marketer</strong>
+                                                    <div class="text-muted small">Cập nhật 03/01/2026</div>
+                                                </td>
+                                                <td><span class="badge bg-warning text-dark">Review</span></td>
+                                                <td>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <button class="btn btn-sm btn-outline-secondary me-2">Tiếp tục soạn</button>
+                                                    <button class="btn btn-sm btn-outline-success">Gửi duyệt</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Frontend Sprint</strong>
+                                                    <div class="text-muted small">Cập nhật 28/12/2025</div>
+                                                </td>
+                                                <td><span class="badge bg-secondary">Draft</span></td>
+                                                <td>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox">
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <button class="btn btn-sm btn-outline-secondary me-2">Biên tập</button>
+                                                    <button class="btn btn-sm btn-outline-primary">Xuất bản</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
+                                    <small class="text-muted">Hiển thị 1-3 / 32 khoá</small>
+                                    <nav>
+                                        <ul class="pagination pagination-sm mb-0">
+                                            <li class="page-item disabled"><span class="page-link">Trước</span></li>
+                                            <li class="page-item active"><span class="page-link">1</span></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">Sau</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Bật/tắt hiển thị tự động</h5>
+                        <button class="btn btn-sm btn-outline-secondary">Quy tắc</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div class="col-md-4 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Ẩn khi thiếu tài nguyên</h6>
+                                    <small class="text-muted">Bật nếu module < 80% nội dung</small>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" checked>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Hiển thị landing</h6>
+                                    <small class="text-muted">Cho phép học viên xem preview</small>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" checked>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Khoá nội bộ</h6>
+                                    <small class="text-muted">Chỉ hiển thị với nhân sự công ty</small>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

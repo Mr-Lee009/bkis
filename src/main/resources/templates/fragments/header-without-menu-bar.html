@@ -1,0 +1,19 @@
+<!-- ヘッダー -->
+<header class="header bg-primary text-light pt-1 fixed-top" th:fragment="headerWithoutMenuBar">
+    <div class="container-fluid h-100">
+        <div class="h-100 d-flex flex-row">
+            <div class="col-2 pr-0 d-flex align-items-center" style="width:110px">
+                <!-- ロゴ -->
+                <img th:src="@{/images/typ3.png}" alt="ロゴ" class="p-1 bg-light" width="85px" height="90px"/>
+            </div>
+            <div class="col-8 pt-3 pl-0 pr-0 h-100">
+                <div class="container-fluid h-100">
+                    <div class="row h-25 d-flex align-items-center justify-content-center pt-2">
+                        <!-- メニュー画面タイトル -->
+                        <h4 class="bold text-center w-100" th:text="${title}"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
