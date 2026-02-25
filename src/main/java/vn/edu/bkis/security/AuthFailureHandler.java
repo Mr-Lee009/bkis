@@ -23,10 +23,10 @@ public class AuthFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
         // Skip redirect if captcha failed
-        if (request.getAttribute("captchaFailed") != null) {
-            System.out.println("[AuthFailureHandler] Captcha failed, skipping redirect.");
-            return;
-        }
+//        if (request.getAttribute("captchaFailed") != null) {
+//            System.out.println("[AuthFailureHandler] Captcha failed, skipping redirect.");
+//            return;
+//        }
         String username = request.getParameter("username");
         userRepository.findByUsername(username).ifPresent(user -> {
             int attempts = user.getFailedLoginAttempts() == null ? 0 : user.getFailedLoginAttempts();

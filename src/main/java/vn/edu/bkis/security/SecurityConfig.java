@@ -15,14 +15,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CaptchaFilter captchaFilter;
+//    private final CaptchaFilter captchaFilter;
     private final AuthFailureHandler authFailureHandler;
     private final AuthSuccessHandler authSuccessHandler;
 
-    public SecurityConfig(CaptchaFilter captchaFilter,
+    public SecurityConfig(
+//            CaptchaFilter captchaFilter,
             AuthFailureHandler authFailureHandler,
             AuthSuccessHandler authSuccessHandler) {
-        this.captchaFilter = captchaFilter;
+//        this.captchaFilter = captchaFilter;
         this.authFailureHandler = authFailureHandler;
         this.authSuccessHandler = authSuccessHandler;
     }
@@ -30,19 +31,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/login", "/captcha", "/css/**", "/js/**", "/favicon.ico").permitAll()
-            .anyRequest().authenticated())
-            .formLogin(login -> login
-            .loginPage("/login")
-            .loginProcessingUrl("/login") // Đổi sang /do-login
-            .failureHandler(authFailureHandler)
-            .successHandler(authSuccessHandler)
-            .permitAll())
-            .logout(logout -> logout.logoutUrl("/logout").permitAll());
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/captcha", "/css/**", "/js/**", "/favicon.ico").permitAll()
+                        .anyRequest().authenticated())
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login") // Đổi sang /do-login
+                        .failureHandler(authFailureHandler)
+                        .successHandler(authSuccessHandler)
+                        .permitAll())
+                .logout(logout -> logout.logoutUrl("/logout").permitAll());
 
-        http.addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
