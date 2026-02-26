@@ -66,53 +66,8 @@
             </div>
         </div>
     </div>
-    <script>
-        (function() {
-            const captchaTextEl = document.getElementById('captchaText');
-            const captchaInput = document.getElementById('captchaInput');
-            const refreshBtn = document.getElementById('refreshCaptcha');
-            const togglePassword = document.getElementById('togglePassword');
-            const passwordInput = document.getElementById('passwordInput');
-            const loginForm = document.getElementById('loginForm');
-
-            function generateCaptcha() {
-                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-                let output = '';
-                for (let i = 0; i < 5; i += 1) {
-                    output += chars[Math.floor(Math.random() * chars.length)];
-                }
-                captchaTextEl.textContent = output;
-                captchaInput.value = '';
-            }
-
-            refreshBtn.addEventListener('click', function() {
-                generateCaptcha();
-            });
-
-            togglePassword.addEventListener('click', function() {
-                const isHidden = passwordInput.type === 'password';
-                passwordInput.type = isHidden ? 'text' : 'password';
-                this.innerHTML = isHidden ? '<i class="fa fa-eye-slash"></i>' : '<i class="fa fa-eye"></i>';
-            });
-
-            loginForm.addEventListener('submit', function(event) {
-                if (captchaInput.value.trim().toUpperCase() !== captchaTextEl.textContent.trim()) {
-                    event.preventDefault();
-                    captchaInput.classList.add('is-invalid');
-                    captchaInput.focus();
-                } else {
-                    captchaInput.classList.remove('is-invalid');
-                    alert('Xác thực thành công!');
-                }
-            });
-
-            captchaInput.addEventListener('input', function() {
-                this.classList.remove('is-invalid');
-            });
-
-            generateCaptcha();
-        })();
-    </script>
+    <!-- import 01-login.js -->
+    <script th:src="@{/js/01-login.js}"></script>
 </div>
 </body>
 

@@ -10,6 +10,6 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("message", "Chào mừng đến BKIS MVC!");
-        return "home";
+        return "03-home";
     }
 }
