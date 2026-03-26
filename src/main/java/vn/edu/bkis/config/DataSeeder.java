@@ -16,22 +16,25 @@ public class DataSeeder {
     CommandLineRunner seedUsers(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             createIfMissing(userRepository, passwordEncoder,
-                    "admin", "admin@example.com", "admin123", UserRole.ADMIN);
+                "admin", "System Admin", "admin@example.com", "admin123", UserRole.ADMIN);
             createIfMissing(userRepository, passwordEncoder,
-                    "teacher1", "teacher1@example.com", "teacher123", UserRole.TEACHER);
+                "teacher1", "Minh Nguyen", "teacher1@example.com", "teacher123", UserRole.TEACHER);
             createIfMissing(userRepository, passwordEncoder,
-                    "student1", "student1@example.com", "student123", UserRole.STUDENT);
+                "student1", "Nguyen Van A", "student1@example.com", "student123", UserRole.STUDENT);
             createIfMissing(userRepository, passwordEncoder,
-                    "student2", "student2@example.com", "student234", UserRole.STUDENT);
+                "student2", "Tran Thi B", "student2@example.com", "student234", UserRole.STUDENT);
         };
     }
 
     private void createIfMissing(UserRepository repo, PasswordEncoder encoder,
-                                 String username, String email, String plainPassword, UserRole role) {
+                     String username, String fullName, String email, String plainPassword, UserRole role) {
         if (repo.findByUsername(username).isEmpty()) {
             User u = new User();
             u.setId(UUID.randomUUID().toString());
             u.setUsername(username);
+            u.setFullName(fullName);
+            u.setBio("Seeded user for local and Docker development.");
+            u.setProfilePictureUrl("/img/team-1.jpg");
             u.setEmail(email);
             u.setPasswordHash(encoder.encode(plainPassword));
             u.setRole(role);
