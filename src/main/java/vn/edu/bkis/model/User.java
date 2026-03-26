@@ -19,6 +19,15 @@ public class User extends BasicEntity {
     @Column(name = "username", nullable = false, length = 100)
     private String username;
 
+    @Column(name = "full_name", nullable = false, length = 255)
+    private String fullName;
+
+    @Column(name = "bio", length = 1000)
+    private String bio;
+
+    @Column(name = "profile_picture_url", length = 255)
+    private String profilePictureUrl;
+
     @Column(name = "email", nullable = false, length = 255)
     private String email;
 
