@@ -1,12 +1,204 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout-menu-bar(pageTitle='home')}">
+      layout:decorate="~{layouts/layout-common(pageTitle='home')}">
 <head>
-    <title>BKIS - Home</title>
-    <link type="text/css" th:href="@{/css/01-app-agreement.css}" rel="stylesheet"/>
+    <title>[[${pageTitle}]]</title>
 </head>
 <body>
+<section layout:fragment="content">
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Courses</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Pages</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Courses</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-xxl py-5 category">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Categories</h6>
+                <h1 class="mb-5">Courses Categories</h1>
+            </div>
+            <div class="row g-3">
+                <div class="col-lg-7 col-md-6">
+                    <div class="row g-3">
+                        <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
+                            <a class="position-relative d-block overflow-hidden" href="#courses-section">
+                                <img class="img-fluid" th:src="@{/img/cat-1.jpg}" alt="Web Design">
+                                <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
+                                    <h5 class="m-0">Web Design</h5>
+                                    <small class="text-primary">49 Courses</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
+                            <a class="position-relative d-block overflow-hidden" href="#courses-section">
+                                <img class="img-fluid" th:src="@{/img/cat-2.jpg}" alt="Graphic Design">
+                                <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
+                                    <h5 class="m-0">Graphic Design</h5>
+                                    <small class="text-primary">24 Courses</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
+                            <a class="position-relative d-block overflow-hidden" href="#courses-section">
+                                <img class="img-fluid" th:src="@{/img/cat-3.jpg}" alt="Video Editing">
+                                <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
+                                    <h5 class="m-0">Video Editing</h5>
+                                    <small class="text-primary">18 Courses</small>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;">
+                    <a class="position-relative d-block h-100 overflow-hidden" href="#courses-section">
+                        <img class="img-fluid position-absolute w-100 h-100" th:src="@{/img/cat-4.jpg}" alt="Online Marketing" style="object-fit: cover;">
+                        <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
+                            <h5 class="m-0">Online Marketing</h5>
+                            <small class="text-primary">32 Courses</small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--fragment for #courses-section-->
+    <div class="container-xxl py-5" id="courses-section">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Courses</h6>
+                <h1 class="mb-3">Popular Courses</h1>
+                <p class="mb-5" th:text="${message}">Chào mừng đến BKIS MVC!</p>
+            </div>
+            <div class="row g-4 justify-content-center" th:if="${!#lists.isEmpty(featuredCourses)}">
+                <div class="col-lg-4 col-md-6 wow fadeInUp"
+                     th:each="course, stat : ${featuredCourses}"
+                     th:attr="data-wow-delay=${(stat.index * 0.2 + 0.1) + 's'}">
+                    <div class="course-item bg-light h-100">
+                        <div class="position-relative overflow-hidden">
+                            <img class="img-fluid" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
+                            <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                <a th:href="@{/}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">Read More</a>
+                                <a th:href="@{/}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                            </div>
+                        </div>
+                        <div class="text-center p-4 pb-0">
+                            <span class="badge bg-primary mb-3" th:if="${course.tag != null && !course.tag.isBlank()}" th:text="${course.tag}">Featured</span>
+                            <h3 class="mb-0" th:text="${'$' + #numbers.formatDecimal(course.price, 1, 'COMMA', 2, 'POINT')}">$149.00</h3>
+                            <div class="mb-3">
+                                <small class="fa fa-star text-primary"></small>
+                                <small class="fa fa-star text-primary"></small>
+                                <small class="fa fa-star text-primary"></small>
+                                <small class="fa fa-star text-primary"></small>
+                                <small class="fa fa-star text-primary"></small>
+                                <small th:text="${'(' + course.reviewCount + ')'}">(123)</small>
+                            </div>
+                            <h5 class="mb-3" th:text="${course.title}">Course title</h5>
+                            <p class="px-2" th:text="${#strings.abbreviate(course.description, 120)}">Course description</p>
+                        </div>
+                        <div class="d-flex border-top">
+                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-user-tie text-primary me-2"></i><span th:text="${course.instructorName}">Instructor</span></small>
+                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-clock text-primary me-2"></i><span th:text="${course.durationHours + ' Hrs'}">1.49 Hrs</span></small>
+                            <small class="flex-fill text-center py-2"><i class="fa fa-user text-primary me-2"></i><span th:text="${course.totalStudents + ' Students'}">30 Students</span></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" th:if="${#lists.isEmpty(featuredCourses)}">
+                <div class="col-12">
+                    <div class="alert alert-light border text-center mb-0">
+                        Hiện chưa có khóa học nào được kích hoạt để hiển thị trên trang chủ.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--fragment for #tag name-->
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="text-center">
+                <h6 class="section-title bg-white text-center text-primary px-3">Java Courses</h6>
+                <h1 class="mb-5">Explore Our Java Courses</h1>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" th:each="course : ${javaCourses}">
+                    <div class="course-item bg-light">
+                        <div class="position-relative overflow-hidden">
+                            <img class="img-fluid" th:src="@{${course.imageUrl}}" alt="Course Image">
+                        </div>
+                        <div class="text-center p-4">
+                            <h5 class="mb-3" th:text="${course.title}">Course Title</h5>
+                            <p class="mb-4" th:text="${course.description}">Course Description</p>
+                            <div class="d-flex border-top">
+                                <small class="flex-fill text-center border-end py-2"><i class="fa fa-user-tie text-primary me-2"></i><span th:text="${course.instructorName}">Instructor</span></small>
+                                <small class="flex-fill text-center border-end py-2"><i class="fa fa-clock text-primary me-2"></i><span th:text="${course.durationHours + ' Hrs'}">1.49 Hrs</span></small>
+                                <small class="flex-fill text-center py-2"><i class="fa fa-user text-primary me-2"></i><span th:text="${course.totalStudents + ' Students'}">30 Students</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--fragment for #testimonial-section-->
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.2s">
+        <div class="container">
+            <div class="text-center">
+                <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
+                <h1 class="mb-5">Our Students Say!</h1>
+            </div>
+            <div class="owl-carousel testimonial-carousel position-relative">
+                <div class="testimonial-item text-center">
+                    <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-1.jpg}" alt="Student 1" style="width: 80px; height: 80px;">
+                    <h5 class="mb-0">Mai Linh</h5>
+                    <p>Frontend Student</p>
+                    <div class="testimonial-text bg-light text-center p-4">
+                        <p class="mb-0">Lộ trình học rõ ràng, mentor phản hồi nhanh và dự án thực chiến giúp mình đi làm sớm hơn kế hoạch.</p>
+                    </div>
+                </div>
+                <div class="testimonial-item text-center">
+                    <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-2.jpg}" alt="Student 2" style="width: 80px; height: 80px;">
+                    <h5 class="mb-0">Quang Huy</h5>
+                    <p>Java Student</p>
+                    <div class="testimonial-text bg-light text-center p-4">
+                        <p class="mb-0">Khóa Java backend bám sát doanh nghiệp, phần code review và định hướng kiến trúc rất hữu ích.</p>
+                    </div>
+                </div>
+                <div class="testimonial-item text-center">
+                    <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-3.jpg}" alt="Student 3" style="width: 80px; height: 80px;">
+                    <h5 class="mb-0">Thanh Trúc</h5>
+                    <p>Marketing Student</p>
+                    <div class="testimonial-text bg-light text-center p-4">
+                        <p class="mb-0">Case study cập nhật liên tục, nội dung không quá lý thuyết nên có thể áp dụng ngay cho công việc thực tế.</p>
+                    </div>
+                </div>
+                <div class="testimonial-item text-center">
+                    <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-4.jpg}" alt="Student 4" style="width: 80px; height: 80px;">
+                    <h5 class="mb-0">Đức Anh</h5>
+                    <p>UI/UX Student</p>
+                    <div class="testimonial-text bg-light text-center p-4">
+                        <p class="mb-0">Phần portfolio cuối khóa được hướng dẫn kỹ, giúp mình tự tin hơn khi phỏng vấn với doanh nghiệp.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 </body>
 </html>

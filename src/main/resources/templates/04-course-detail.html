@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-common(pageTitle=${pageTitle})}">
+<head>
+    <title>[[${pageTitle}]]</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown" th:text="${course.title}">Course Detail</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Courses</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Detail</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="position-relative overflow-hidden rounded mb-4">
+                        <img class="img-fluid w-100" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3" th:text="${course.tag == null || course.tag.isBlank() ? 'Featured' : course.tag}">Featured</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <small class="me-3"><i class="fa fa-clock text-primary me-2"></i><span th:text="${course.durationHours + ' giờ'}">12 giờ</span></small>
+                        <small class="me-3"><i class="fa fa-play text-primary me-2"></i><span th:text="${course.lessonCount + ' Bài học'}">48 Bài học</span></small>
+                        <small class="me-3"><i class="fa fa-signal text-primary me-2"></i>Trình độ: Trung cấp</small>
+                        <small><i class="fa fa-language text-primary me-2"></i>Ngôn ngữ: Việt/Anh</small>
+                    </div>
+                    <h2 class="mb-3" th:text="${course.title}">Khoá học</h2>
+                    <p class="mb-4" th:text="${course.description}">Mô tả khóa học</p>
+
+                    <div class="bg-light rounded p-4 mb-5">
+                        <h5 class="mb-3">Bạn sẽ học được</h5>
+                        <div class="row g-3">
+                            <div class="col-sm-6" th:each="highlight : ${course.highlights}">
+                                <p class="mb-0"><i class="fa fa-check text-primary me-2"></i><span th:text="${highlight}">Nội dung nổi bật</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="mb-3">Nội dung chi tiết</h5>
+                    <div class="accordion mb-5" id="curriculum">
+                        <div class="accordion-item" th:each="lesson, stat : ${course.lessons}">
+                            <h2 class="accordion-header" th:id="${'week-' + lesson.id}">
+                                <button class="accordion-button"
+                                        th:classappend="${stat.index > 0} ? ' collapsed' : ''"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        th:attr="data-bs-target=${'#collapse-' + lesson.id},aria-controls=${'collapse-' + lesson.id},aria-expanded=${stat.index == 0}">
+                                    <span th:text="${'Buổi ' + lesson.position + ': ' + lesson.title}">Lesson title</span>
+                                </button>
+                            </h2>
+                            <div class="accordion-collapse collapse"
+                                 th:classappend="${stat.index == 0} ? ' show' : ''"
+                                 th:id="${'collapse-' + lesson.id}"
+                                 th:attr="aria-labelledby=${'week-' + lesson.id}"
+                                 data-bs-parent="#curriculum">
+                                <div class="accordion-body" th:text="${lesson.description}">Lesson description</div>
+                            </div>
+                        </div>
+                        <div class="alert alert-light border mb-0" th:if="${#lists.isEmpty(course.lessons)}">
+                            Chưa có lesson chi tiết cho khóa học này.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="mb-3">Đánh giá học viên</h5>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="display-5 text-primary me-3" th:text="${course.rating}">5</div>
+                            <div>
+                                <div class="mb-1">
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                </div>
+                                <small th:text="${'Hơn ' + course.totalReviews + ' đánh giá'}">Hơn 0 đánh giá</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div id="pricing" class="bg-light rounded p-4 mb-4">
+                        <div class="d-flex align-items-baseline mb-3">
+                            <h2 class="mb-0 me-2 text-primary" th:text="${'$' + #numbers.formatDecimal(course.price, 1, 'COMMA', 2, 'POINT')}">$149</h2>
+                            <span>/ trọn khoá</span>
+                        </div>
+                        <p class="mb-4">Thanh toán một lần, truy cập học liệu trọn đời và được cập nhật bài mới miễn phí.</p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="fa fa-check text-primary me-2"></i>Mentor kèm riêng 1-1</li>
+                            <li class="mb-2"><i class="fa fa-check text-primary me-2"></i>Source code và tài liệu đi kèm</li>
+                            <li class="mb-2"><i class="fa fa-check text-primary me-2"></i>Chứng chỉ hoàn thành</li>
+                            <li><i class="fa fa-check text-primary me-2"></i>Cộng đồng hỗ trợ học tập</li>
+                        </ul>
+                        <a class="btn btn-primary w-100 py-3" th:href="@{/contact.html}">Đăng ký ngay</a>
+                    </div>
+
+                    <div class="border rounded p-4 mb-4">
+                        <h5 class="mb-3">Thông tin nhanh</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Thời lượng</span>
+                            <strong th:text="${course.durationHours + ' giờ'}">48 giờ</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Bài học</span>
+                            <strong th:text="${course.lessonCount + ' bài'}">12 bài</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Học viên</span>
+                            <strong th:text="${course.totalStudents + '+'}">0+</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Hỗ trợ</span>
+                            <strong>Email & Community</strong>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border rounded p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="rounded-circle flex-shrink-0" th:src="${course.profilePictureUrl}" alt="Instructor" style="width: 60px; height: 60px;">
+                            <div class="ms-3">
+                                <h5 class="mb-0" th:text="${course.instructorName}">Instructor</h5>
+                                <small>Lead Instructor</small>
+                            </div>
+                        </div>
+                        <p class="mb-3" th:text="${course.instructorBio}">Instructor bio</p>
+                        <a class="btn btn-outline-primary w-100" th:href="${'mailto:' + course.instructorEmail}">Hỏi giảng viên</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5" th:if="${!#lists.isEmpty(course.relatedCourses)}">
+                <div class="col-12 text-center mb-4">
+                    <h4>Khoá học liên quan</h4>
+                </div>
+                <div class="col-lg-3 col-md-6" th:each="related : ${course.relatedCourses}">
+                    <div class="course-item bg-light h-100">
+                        <div class="position-relative overflow-hidden">
+                            <img class="img-fluid" th:src="@{${related.imageUrl}}" th:alt="${related.title}">
+                        </div>
+                        <div class="text-center p-3">
+                            <h6 class="mb-2" th:text="${related.title}">Related course</h6>
+                            <p class="mb-2" th:text="${'$' + #numbers.formatDecimal(related.price, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
+                            <a class="btn btn-sm btn-primary" th:href="@{/courses/{id}(id=${related.id})}">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
