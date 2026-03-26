@@ -3,6 +3,10 @@ package vn.edu.bkis.dto;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Data Transfer Object for detailed course information displayed on course detail page.
+ * Contains course metadata, instructor info, lessons, pricing, and related courses.
+ */
 public record CourseDetailPageDto(
         Long id,
         String title,

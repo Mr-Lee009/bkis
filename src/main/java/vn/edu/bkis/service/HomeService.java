@@ -15,6 +15,10 @@ import vn.edu.bkis.repository.CourseRepository;
 import vn.edu.bkis.repository.UserRepository;
 import vn.edu.bkis.util.BkisNumberUtils;
 
+/**
+ * Service layer for home page functionality.
+ * Handles featured course retrieval, filtering by tags, and data transformation.
+ */
 @Service
 public class HomeService {
 
@@ -23,16 +27,21 @@ public class HomeService {
   private final CourseRepository courseRepository;
   private final UserRepository userRepository;
 
+  /**
+   * Constructor for dependency injection.
+   * @param courseRepository for course data access
+   * @param userRepository for instructor information
+   */
   public HomeService(CourseRepository courseRepository, UserRepository userRepository) {
     this.courseRepository = courseRepository;
     this.userRepository = userRepository;
   }
 
   /**
-   * Fetches the top 6 active courses ordered by creation date and maps them to HomeCourseDto. It
-   * also retrieves the teacher names for the courses and normalizes the image URLs.
+   * Retrieve top 6 active courses ordered by creation date (newest first).
+   * Enriches course data with instructor names and normalized image paths.
    *
-   * @return a list of HomeCourseDto representing the featured courses
+   * @return list of up to 6 featured courses as DTOs
    */
   public List<HomeCourseDto> getFeaturedCourses() {
     List<Course> courses = courseRepository.findTop6ByActiveFlagTrueOrderByCreatedAtDesc();
@@ -52,12 +61,11 @@ public class HomeService {
   }
 
   /**
-   * Fetches the top 6 active courses with a specific tag ordered by creation date and maps them to
-   * HomeCourseDto. It also retrieves the teacher names for the courses and normalizes the image
-   * URLs.
+   * Retrieve courses filtered by tag, ordered by creation date (newest first).
+   * Enriches course data with instructor names and normalized image paths.
    *
-   * @param tag the tag to filter courses by
-   * @return a list of HomeCourseDto representing the featured courses with the specified tag
+   * @param tag the course category/tag to filter by
+   * @return list of up to 6 active courses with matching tag as DTOs
    */
   public List<HomeCourseDto> getFeaturedCoursesByTag(String tag) {
     List<Course> courses = courseRepository.findTop6ByActiveFlagTrueAndTagOrderByCreatedAtDesc(tag);
@@ -76,6 +84,12 @@ public class HomeService {
             normalizeImage(course.getImageUrl()), course.getTag())).toList();
   }
 
+  /**
+   * Normalize image URLs to ensure consistent path format.
+   * Returns absolute path or HTTP URL; falls back to default image if null.
+   * @param imageUrl the raw image URL from database
+   * @return normalized image URL path
+   */
   private String normalizeImage(String imageUrl) {
     if (imageUrl == null || imageUrl.isBlank()) {
       return DEFAULT_COURSE_IMAGE;

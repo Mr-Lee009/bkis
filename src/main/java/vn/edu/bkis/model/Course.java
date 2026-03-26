@@ -25,6 +25,9 @@ public class Course extends BasicEntity {
     @Lob
     private String description;
 
+    @Column(name = "highlights")
+    private String highlights;
+
     @Column(name = "teacher_id", nullable = false, length = 36)
     private String teacherId;
 

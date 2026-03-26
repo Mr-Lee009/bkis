@@ -7,27 +7,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import vn.edu.bkis.service.HomeService;
 
 /**
- * HomeController handle requests for the home page of the application.
+ * Controller handling the home page requests.
+ * Provides featured courses and category data for the landing page.
  */
 @Controller
 public class HomeController {
 
-    // Inject HomeService to fetch featured courses for the home page
     private final HomeService homeService;
 
-    // Constructor for HomeController, allowing Spring to inject the HomeService dependency
+    /**
+     * Constructor for dependency injection of HomeService.
+     * @param homeService service for fetching home page course data
+     */
     public HomeController(HomeService homeService) {
         this.homeService = homeService;
     }
 
     /**
-     * Handle GET requests to the root URL ("/") and return the home page view.
+     * Display the home page with featured courses.
+     * Retrieves top active courses and courses filtered by tag for display.
      *
-     * @param model the Model object to pass data to the view
-     * @return the name of the view template for the home page
-     * This method adds a welcome message, page title, and a list of featured courses to the model,
-     * which will be rendered in the "03-home" view template.
-     * The featured courses are retrieved from the HomeService, allowing dynamic content to be displayed on the home page.
+     * @param model the Spring MVC model to bind data for the view
+     * @return the name of the Thymeleaf template (03-home)
      */
     @GetMapping("/")
     public String home(Model model) {
