@@ -33,4 +33,10 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
      * @return list of up to 4 other active courses
      */
     List<Course> findTop4ByActiveFlagTrueAndIdNotOrderByCreatedAtDesc(Long id);
+
+    /**
+     * Retrieve top 4 active courses ordered by total students (most enrolled first).
+     * @return list of up to 4 most popular active courses
+     */
+    List<Course> findTop4ByActiveFlagTrueOrderByTotalStudentsDesc();
 }

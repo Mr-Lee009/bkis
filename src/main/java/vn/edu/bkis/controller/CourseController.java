@@ -25,7 +25,7 @@ public class CourseController {
     }
 
     /**
-     * Displays the course detail page for a specific course.
+     * Displays the course detail page for a specific04-course-detail course.
      * Fetches complete course information including lessons, reviews, and related courses.
      *
      * @param id the unique identifier of the course to display

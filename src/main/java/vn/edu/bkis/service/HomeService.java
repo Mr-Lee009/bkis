@@ -85,6 +85,29 @@ public class HomeService {
   }
 
   /**
+   * Retrieve top 4 active courses ordered by number of enrollments (most enrolled first).
+   * Enriches course data with instructor names and normalized image paths.
+   *
+   * @return list of up to 4 most popular courses by enrollment count as DTOs
+   */
+  public List<HomeCourseDto> getTop4CoursesByEnrollment() {
+    List<Course> courses = courseRepository.findTop4ByActiveFlagTrueOrderByTotalStudentsDesc();
+    Map<String, String> teachers = userRepository.findAllById(
+            courses.stream().map(Course::getTeacherId).filter(Objects::nonNull).distinct().toList())
+        .stream().collect(Collectors.toMap(User::getId, User::getUsername));
+
+    return courses.stream().map(
+        course -> new HomeCourseDto(course.getId(), course.getTitle(), course.getDescription(),
+            teachers.getOrDefault(course.getTeacherId(), "BKIS Instructor"),
+            BkisNumberUtils.defaultPrice(course.getPrice()),
+            BkisNumberUtils.defaultInteger(course.getTotalStudents(), 0),
+            2 + (int) ((course.getId() == null ? 1 : course.getId()) % 4),
+            BkisNumberUtils.defaultInteger(course.getRating(), 5),
+            120 + (int) ((course.getId() == null ? 1 : course.getId()) * 3),
+            normalizeImage(course.getImageUrl()), course.getTag())).toList();
+  }
+
+  /**
    * Normalize image URLs to ensure consistent path format.
    * Returns absolute path or HTTP URL; falls back to default image if null.
    * @param imageUrl the raw image URL from database

@@ -36,6 +36,7 @@ public class HomeController {
         model.addAttribute("pageTitle", "Courses");
         model.addAttribute("featuredCourses", homeService.getFeaturedCourses());
         model.addAttribute("javaCourses", homeService.getFeaturedCoursesByTag("#java"));
+        model.addAttribute("topCoursesByEnrollment", homeService.getTop4CoursesByEnrollment());
         return "03-home";
     }
 }
