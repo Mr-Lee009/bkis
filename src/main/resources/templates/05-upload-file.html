@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-common(pageTitle=${pageTitle})}">
+<head>
+    <title>Upload file</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f6fa;
+    }
+
+    .container {
+        width: 400px;
+        margin: 100px auto;
+        text-align: center;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    .progress-container {
+        width: 100%;
+        height: 20px;
+        background: #ddd;
+        margin-top: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    #progressBar {
+        height: 100%;
+        width: 0%;
+        background: #4caf50;
+        transition: width 0.2s;
+
+        /* thêm */
+        color: white;
+        text-align: center;
+        line-height: 20px;
+        font-size: 12px;
+    }
+</style>
+<body>
+<section layout:fragment="content">
+    <div class="container-fluid">
+        <div class="container py-5">
+            <div class="container">
+                <h2>Upload File (Chunk)</h2>
+
+                <input type="file" id="fileInput" />
+                <button onclick="startUpload()">Upload</button>
+
+                <div class="progress-container">
+                    <div id="progressBar"></div>
+                </div>
+
+                <p id="status"></p>
+                <p>⏱ Time: <span id="time">0m 0s</span></p>
+
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/05-upload.js}"></script>
+</section>
+</body>
+</html>
