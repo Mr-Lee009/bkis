@@ -1,5 +1,6 @@
 const CHUNK_SIZE = 1024 * 1024 * 10; // 10MB
 const MAX_RETRY = 3;
+const MAX_CONCURRENT = 4; // ⚡ số chunk upload song song
 
 async function startUpload() {
     const fileInput = document.getElementById("fileInput");
@@ -12,6 +13,7 @@ async function startUpload() {
 
     const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
     const startTime = Date.now();
+    let uploadedCount = 0;
 
     setStatus("Initializing upload...");
     toggleButton(true);
@@ -32,25 +34,33 @@ async function startUpload() {
 
         const uploadId = await initRes.text();
 
-        setStatus("Uploading...");
+        setStatus("Uploading in parallel...");
 
-        // UPLOAD CHUNKS
+        // 🔥 Tạo danh sách tasks
+        const tasks = [];
+
         for (let i = 0; i < totalChunks; i++) {
-            const start = i * CHUNK_SIZE;
-            const end = Math.min(start + CHUNK_SIZE, file.size);
-            const chunk = file.slice(start, end);
+            tasks.push(async () => {
+                const start = i * CHUNK_SIZE;
+                const end = Math.min(start + CHUNK_SIZE, file.size);
+                const chunk = file.slice(start, end);
 
-            const formData = new FormData();
-            formData.append("uploadId", uploadId);
-            formData.append("chunkIndex", i);
-            formData.append("file", chunk);
+                const formData = new FormData();
+                formData.append("uploadId", uploadId);
+                formData.append("chunkIndex", i);
+                formData.append("file", chunk);
 
-            await uploadChunkWithRetry(formData, i);
+                await uploadChunkWithRetry(formData, i);
 
-            updateProgress(i + 1, totalChunks, startTime);
+                uploadedCount++;
+                updateProgress(uploadedCount, totalChunks, startTime);
+            });
         }
 
-        // COMPLETE (merge file)
+        // 🔥 chạy pool
+        await runWithConcurrency(tasks, MAX_CONCURRENT);
+
+        // COMPLETE
         setStatus("Merging file on server...");
 
         const completeRes = await fetch(`/upload/complete?uploadId=${uploadId}`, {
@@ -61,7 +71,6 @@ async function startUpload() {
 
         const totalTime = formatTime(Date.now() - startTime);
 
-        updateProgress(totalChunks, totalChunks, startTime);
         setStatus(`✅ Upload completed in ${totalTime}`);
     } catch (err) {
         console.error(err);
@@ -69,6 +78,24 @@ async function startUpload() {
     } finally {
         toggleButton(false);
     }
+}
+
+async function runWithConcurrency(tasks, limit) {
+    const executing = [];
+
+    for (const task of tasks) {
+        const p = task().then(() => {
+            executing.splice(executing.indexOf(p), 1);
+        });
+
+        executing.push(p);
+
+        if (executing.length >= limit) {
+            await Promise.race(executing);
+        }
+    }
+
+    await Promise.all(executing);
 }
 
 async function uploadChunkWithRetry(formData, chunkIndex) {
@@ -81,14 +108,20 @@ async function uploadChunkWithRetry(formData, chunkIndex) {
 
             if (!res.ok) throw new Error();
 
-            return; // success
+            return;
         } catch (err) {
             if (attempt === MAX_RETRY) {
                 throw new Error(`Chunk ${chunkIndex} failed after ${MAX_RETRY} retries`);
             }
+
             console.warn(`Retry chunk ${chunkIndex} - attempt ${attempt}`);
+            await sleep(500 * attempt); // backoff nhẹ
         }
     }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function updateProgress(done, total, startTime) {
