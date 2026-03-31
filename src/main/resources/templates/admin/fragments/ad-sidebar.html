@@ -1,0 +1,18 @@
+<aside class="col-md-3 col-lg-2 sidebar py-4" th:fragment="ad-sidebar">
+    <div class="px-3 mb-4">
+        <h4 class="text-white mb-0"><i class="fa fa-graduation-cap me-2"></i>eLEARNING</h4>
+        <small class="text-muted">Admin Panel</small>
+    </div>
+    <div class="sidebar-user text-center">
+        <img th:src="@{/img/testimonial-1.jpg}" alt="Admin Avatar" class="sidebar-avatar">
+        <strong class="d-block">Nguyen Admin</strong>
+        <span class="user-role-pill">Super Admin</span>
+        <small>admin@elearning.vn</small>
+    </div>
+    <a th:href="@{/admin/dashboard/}"><i class="fa fa-chart-line me-2"></i>Dashboard</a>
+    <a th:href="@{/admin/accounts/}"><i class="fa fa-users-cog me-2"></i>Tài khoản</a>
+    <a th:href="@{/admin/studentDtos/}"><i class="fa fa-user-graduate me-2"></i>Học viên</a>
+    <a th:href="@{/admin/studentDtos/}"><i class="fa fa-book-open me-2"></i>Khoá học</a>
+    <a th:href="@{/admin/studentDtos/}"><i class="fa fa-credit-card me-2"></i>Thanh toán</a>
+    <a th:href="@{/admin/studentDtos/}"><i class="fa fa-cog me-2"></i>Cài đặt</a>
+</aside>

@@ -3,6 +3,7 @@ package vn.edu.bkis.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.bkis.model.Course;
@@ -39,4 +40,11 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
      * @return list of up to 4 most popular active courses
      */
     List<Course> findTop4ByActiveFlagTrueOrderByTotalStudentsDesc();
+
+    @Query(value = "SELECT COUNT(c.id) FROM courses c WHERE c.active_flag = TRUE",nativeQuery = true)
+    Long countAllCourses();
+
+    @Query(value = "SELECT COUNT(c.id) FROM courses c WHERE c.active_flag = TRUE " +
+        " AND c.created_at BETWEEN DATE_FORMAT(CURDATE(), '%Y-%m-01') AND LAST_DAY(CURDATE())",nativeQuery = true)
+    Long countAllCoursesCreateThisMonth();
 }

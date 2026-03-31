@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layouts/ad-layout-common(pageTitle='login')}">
+<head>
+    <title>Dashboard</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">Tổng quan</h2>
+            <small class="text-muted">Quản trị dữ liệu học viên và khoá học</small>
+        </div>
+        <button class="btn btn-outline-primary"><i class="fa fa-sign-out-alt me-2"></i>Đăng xuất</button>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Tổng học viên</p>
+                            <h3 class="mb-0">[[${infoDto.totalStudent}]]</h3>
+                        </div>
+<!--                        <span class="badge bg-success">+8%</span>-->
+                        <span class="badge bg-success">+[[${infoDto.totalStudentCurrentMonth}]]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Khoá học active</p>
+                            <h3 class="mb-0">[[${infoDto.totalCourse}]]</h3>
+                        </div>
+                        <span class="badge bg-primary">+[[${infoDto.totalCourseCurrentMonth}]]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Doanh thu tháng</p>
+                            <h3 class="mb-0">[[${infoDto.revenueThisMonth}]]</h3>
+                        </div>
+                        <span class="badge bg-warning text-dark">[[${infoDto.profitRate}]]%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Học viên mới nhất</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                    <tr>
+                        <th>Học viên</th>
+                        <th>Khoá học</th>
+                        <th>Ngày đăng ký</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each = "student : ${infoDto.students}">
+                        <tr>
+                            <td>[[${student.getUsername()}]]</td>
+                            <td>[[${student.getTitleCourse()}]]</td>
+                            <td>[[${#temporals.format(student.getEnrolledAt(), 'dd/MM/yyyy HH:mm:ss')}]]</td>
+                            <td><span class="badge bg-success">[[${student.getStatus()}]]</span></td>
+                        </tr>
+                    </th:block>
+<!--                    <tr>-->
+<!--                        <td>Thao Tran</td>-->
+<!--                        <td>UI/UX Foundation</td>-->
+<!--                        <td>04/01/2026</td>-->
+<!--                        <td><span class="badge bg-warning text-dark">Chờ thanh toán</span></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td>Ken Pham</td>-->
+<!--                        <td>Digital Marketing</td>-->
+<!--                        <td>02/01/2026</td>-->
+<!--                        <td><span class="badge bg-primary">Hoàn thành</span></td>-->
+<!--                    </tr>-->
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
+                <small class="text-muted">Hiển thị 1-3 / 12 học viên mới</small>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled"><span class="page-link">Trước</span></li>
+                        <li class="page-item active"><span class="page-link">1</span></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Sau</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

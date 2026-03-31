@@ -7,9 +7,9 @@ INSERT INTO users (id, username, email, password_hash, role, created_at, updated
 ('teacher-001', 'john_doe', 'john@bkis.edu', '$2a$10$DXJ3SW6G7P50ecc/mGQkCOYO9wjHAfUtq/mKQBtQxWXga2xJA7Z3a', 'INSTRUCTOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO users (id, username, email, password_hash, role, created_at, updated_at) VALUES
-('student-001', 'alice_smith', 'alice@bkis.edu', '$2a$10$DXJ3SW6G7P50ecc/mGQkCOYO9wjHAfUtq/mKQBtQxWXga2xJA7Z3a', 'STUDENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-002', 'bob_johnson', 'bob@bkis.edu', '$2a$10$DXJ3SW6G7P50ecc/mGQkCOYO9wjHAfUtq/mKQBtQxWXga2xJA7Z3a', 'STUDENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-003', 'carol_white', 'carol@bkis.edu', '$2a$10$DXJ3SW6G7P50ecc/mGQkCOYO9wjHAfUtq/mKQBtQxWXga2xJA7Z3a', 'STUDENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('studentDto-001', 'alice_smith', 'alice@bkis.edu', '$2a$10$DXJ3SW6G7P50ecc/mGQkCOYO9wjHAfUtq/mKQBtQxWXga2xJA7Z3a', 'STUDENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-002', 'bob_johnson', 'bob@bkis.edu', '$2a$10$DXJ3SW6G7P50ecc/mGQkCOYO9wjHAfUtq/mKQBtQxWXga2xJA7Z3a', 'STUDENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-003', 'carol_white', 'carol@bkis.edu', '$2a$10$DXJ3SW6G7P50ecc/mGQkCOYO9wjHAfUtq/mKQBtQxWXga2xJA7Z3a', 'STUDENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO courses (title, description, teacher_id, price, total_students, active_flag, tag, image_url, rating, created_at, updated_at) VALUES
 (
@@ -40,23 +40,23 @@ INSERT INTO lesson_videos (lesson_id, title, video_url, duration, position, crea
 (3, 'CRUD Operations with Repository', 'https://example.com/videos/spring-db-2.mp4', 480, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO payments (student_id, course_id, amount, status, created_at, updated_at) VALUES
-('student-001', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-002', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-003', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('studentDto-001', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-002', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-003', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO enrollments (student_id, course_id, payment_id, status, enrolled_at, expires_at, created_at, updated_at) VALUES
-('student-001', 1, 1, 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-002', 1, 2, 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-003', 1, 3, 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('studentDto-001', 1, 1, 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-002', 1, 2, 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-003', 1, 3, 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO progress (student_id, lesson_video_id, watched_duration, is_completed, created_at, updated_at) VALUES
-('student-001', 1, 450, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-001', 2, 200, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-001', 3, 380, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-002', 1, 100, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-003', 1, 450, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('student-003', 2, 520, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('studentDto-001', 1, 450, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-001', 2, 200, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-001', 3, 380, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-002', 1, 100, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-003', 1, 450, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-003', 2, 520, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO course_reviews (course_id, student_id, rating, comment, created_at, updated_at) VALUES
-(1, 'student-001', 5, 'Excellent course! Very comprehensive and easy to follow.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1, 'student-002', 4, 'Great content, could use more real-world projects.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 'studentDto-001', 5, 'Excellent course! Very comprehensive and easy to follow.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 'studentDto-002', 4, 'Great content, could use more real-world projects.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

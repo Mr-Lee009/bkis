@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="s : ${students}">
+            <tr th:each="s : ${studentDtos}">
                 <td th:text="${s.id}">1</td>
                 <td th:text="${s.name}">Tên</td>
                 <td th:text="${s.email}">email@example.com</td>

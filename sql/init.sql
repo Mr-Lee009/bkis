@@ -38,7 +38,7 @@ create table course_reviews
     constraint course_reviews_ibfk_1
         foreign key (course_id) references courses (id)
 )
-    comment 'Store student reviews and ratings for courses';
+    comment 'Store studentDto reviews and ratings for courses';
 
 create table lessons
 (
@@ -109,7 +109,7 @@ create table progress
     constraint progress_ibfk_1
         foreign key (lesson_video_id) references lesson_videos (id)
 )
-    comment 'Track student progress for each lesson video';
+    comment 'Track studentDto progress for each lesson video';
 
 create index lesson_video_id
     on progress (lesson_video_id);
@@ -132,7 +132,7 @@ create table users
     constraint uq_users_email unique (email),
     constraint uq_users_username unique (username)
 )
-    comment 'Store system users including students, teachers, and admins';
+    comment 'Store system users including studentDtos, teachers, and admins';
 
 
 -- Link courses.teacher_id to users
@@ -174,7 +174,7 @@ create table enrollments
     constraint fk_enrollments_course foreign key (course_id) references courses (id),
     constraint fk_enrollments_payment foreign key (payment_id) references payments (id)
 )
-    comment 'Grant course access for a student (based on payment).';
+    comment 'Grant course access for a studentDto (based on payment).';
 
 create index idx_enrollments_course_id on enrollments (course_id);
 create index idx_enrollments_student_id on enrollments (student_id);

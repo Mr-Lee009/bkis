@@ -1,24 +1,24 @@
-package vn.edu.bkis.model;
+package vn.edu.bkis.dto;
 
-public class Student {
-    private Long id;
+public class StudentDto {
+    private String id;
     private String name;
     private String email;
 
-    public Student() {
+    public StudentDto() {
     }
 
-    public Student(Long id, String name, String email) {
+    public StudentDto(String id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

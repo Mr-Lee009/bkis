@@ -121,7 +121,7 @@ async function uploadChunkWithRetry(formData, chunkIndex) {
 }
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve =>  (resolve, ms));
 }
 
 function updateProgress(done, total, startTime) {
