@@ -1,102 +1,93 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layouts/ad-layout-common(pageTitle='accounts')}">
+      layout:decorate="~{admin/layouts/ad-layout-common(pageTitle='Accounts')}">
 <head>
-    <title>Account Management</title>
+    <title>Tài khoản người dùng</title>
 </head>
+
 <body>
 <div layout:fragment="content">
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="mb-0">Quản lý tài khoản</h2>
-            <small class="text-muted">Tạo mới, theo dõi trạng thái và lọc tài khoản trong hệ thống.</small>
+            <h2 class="mb-0">Tài khoản người dùng</h2>
+            <small class="text-muted">Tạo/sửa giảng viên, quản lý hồ sơ học viên, phân quyền linh hoạt</small>
         </div>
+        <button class="btn btn-primary" type="button">
+            <i class="fa fa-plus me-2"></i>Thêm tài khoản
+        </button>
     </div>
 
     <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
     <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
 
-    <div class="row g-4 mb-4">
-        <div class="col-md-4 col-xl-2">
-            <div class="card border-0 shadow-sm h-100">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <p class="text-muted mb-1">Tổng tài khoản</p>
-                    <h3 class="mb-0" th:text="${accountPage.summary.totalAccounts}">0</h3>
+                    <p class="text-muted mb-1">Giảng viên active</p>
+                    <h3 class="mb-0" th:text="${accountPage.summary.teacherAccounts}">18</h3>
+                    <small class="text-success">Bao gồm TEACHER và INSTRUCTOR</small>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-xl-2">
-            <div class="card border-0 shadow-sm h-100">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <p class="text-muted mb-1">Admin</p>
-                    <h3 class="mb-0" th:text="${accountPage.summary.adminAccounts}">0</h3>
+                    <p class="text-muted mb-1">Học viên đang học</p>
+                    <h3 class="mb-0" th:text="${accountPage.summary.studentAccounts}">2450</h3>
+                    <small class="text-success"
+                           th:text="${accountPage.summary.activeAccounts} + ' tài khoản đang hoạt động'">92% đã xác thực hồ sơ</small>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-xl-2">
-            <div class="card border-0 shadow-sm h-100">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <p class="text-muted mb-1">Giảng viên</p>
-                    <h3 class="mb-0" th:text="${accountPage.summary.teacherAccounts}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-xl-2">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">Học viên</p>
-                    <h3 class="mb-0" th:text="${accountPage.summary.studentAccounts}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-xl-2">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">Đang hoạt động</p>
-                    <h3 class="mb-0 text-success" th:text="${accountPage.summary.activeAccounts}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-xl-2">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">Bị khóa</p>
-                    <h3 class="mb-0 text-danger" th:text="${accountPage.summary.lockedAccounts}">0</h3>
+                    <p class="text-muted mb-1">Vai trò hệ thống</p>
+                    <h3 class="mb-0" th:text="${#lists.size(accountPage.roles)} + ' nhóm'">4 nhóm</h3>
+                    <small class="text-muted">Admin · Instructor · Teacher · Student</small>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row g-4">
-        <div class="col-lg-4">
+    <div class="row g-4 mt-1">
+        <div class="col-lg-5">
             <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Tạo tài khoản mới</h5>
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Tạo nhanh giảng viên</h5>
+                    <button class="btn btn-sm btn-outline-secondary" type="button">Nhập file</button>
                 </div>
                 <div class="card-body">
                     <form th:action="@{/admin/accounts/}" th:object="${accountForm}" method="post">
                         <div class="mb-3">
                             <label class="form-label">Username</label>
-                            <input type="text" class="form-control" th:field="*{username}" placeholder="system.admin">
+                            <input type="text" class="form-control" th:field="*{username}" placeholder="pham.anh.thu">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Họ và tên</label>
-                            <input type="text" class="form-control" th:field="*{fullName}" placeholder="Nguyen Van A">
+                            <label class="form-label">Họ tên</label>
+                            <input type="text" class="form-control" th:field="*{fullName}" placeholder="VD: Phạm Anh Thư">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" th:field="*{email}" placeholder="user@bkis.edu.vn">
+                            <label class="form-label">Email công việc</label>
+                            <input type="email" class="form-control" th:field="*{email}" placeholder="giangvien@elearning.vn">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Mật khẩu tạm</label>
                             <input type="password" class="form-control" th:field="*{password}" placeholder="Ít nhất 6 ký tự">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Vai trò</label>
+                            <label class="form-label">Chuyên môn</label>
+                            <input type="text" class="form-control" th:field="*{bio}" placeholder="UI/UX, Web Frontend, Data Analyst">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phân quyền</label>
                             <select class="form-select" th:field="*{role}">
                                 <option value="">Chọn vai trò</option>
-                                <option th:each="role : ${accountPage.roles}" th:value="${role.name()}" th:text="${role.name()}"></option>
+                                <option th:each="role : ${accountPage.roles}"
+                                        th:value="${role.name()}"
+                                        th:text="${role.name()}">ADMIN</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -104,41 +95,34 @@
                             <input type="text" class="form-control" th:field="*{profilePictureUrl}" placeholder="/img/team-1.jpg">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Mô tả ngắn</label>
-                            <textarea class="form-control" th:field="*{bio}" rows="4" placeholder="Thông tin cơ bản về tài khoản"></textarea>
+                            <label class="form-label">Phân quyền gợi ý</label>
+                            <div class="d-flex flex-wrap">
+                                <span class="role-chip me-2 mb-2" th:each="role : ${accountPage.roles}" th:text="${role.name()}">Admin</span>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Tạo tài khoản</button>
                     </form>
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-                        <div>
-                            <h5 class="mb-1">Danh sách tài khoản</h5>
-                            <small class="text-muted">Lọc theo từ khóa và vai trò để rà soát dữ liệu người dùng.</small>
-                        </div>
-                        <form class="row g-2 align-items-end" th:action="@{/admin/accounts/}" method="get">
-                            <div class="col-auto">
-                                <label class="form-label mb-1">Từ khóa</label>
-                                <input type="text" name="keyword" class="form-control" th:value="${accountFilter.keyword}" placeholder="username, tên, email">
-                            </div>
-                            <div class="col-auto">
-                                <label class="form-label mb-1">Vai trò</label>
-                                <select name="role" class="form-select">
-                                    <option value="">Tất cả</option>
-                                    <option th:each="role : ${accountPage.roles}"
-                                            th:value="${role.name()}"
-                                            th:text="${role.name()}"
-                                            th:selected="${accountFilter.role == role.name()}"></option>
-                                </select>
-                            </div>
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-outline-primary">Lọc</button>
-                            </div>
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Hồ sơ học viên</h5>
+                    <div>
+                        <form class="d-inline-flex gap-2" th:action="@{/admin/accounts/}" method="get">
+                            <input type="hidden" name="page" value="0">
+                            <input type="hidden" name="size" th:value="${accountPage.pageSize}">
+                            <input type="text" name="keyword" class="form-control form-control-sm"
+                                   th:value="${accountFilter.keyword}" placeholder="Lọc trạng thái">
+                            <select name="role" class="form-select form-select-sm">
+                                <option value="">Tất cả</option>
+                                <option th:each="role : ${accountPage.roles}"
+                                        th:value="${role.name()}"
+                                        th:text="${role.name()}"
+                                        th:selected="${accountFilter.role == role.name()}">ADMIN</option>
+                            </select>
+                            <button class="btn btn-sm btn-outline-primary" type="submit">Lọc</button>
                         </form>
                     </div>
                 </div>
@@ -147,43 +131,206 @@
                         <table class="table align-middle">
                             <thead>
                             <tr>
-                                <th>Người dùng</th>
+                                <th>STT</th>
+                                <th>Hồ sơ</th>
                                 <th>Vai trò</th>
-                                <th>Đăng nhập lỗi</th>
                                 <th>Trạng thái</th>
-                                <th>Tạo lúc</th>
+                                <th>Đăng nhập lỗi</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:if="${#lists.isEmpty(accountPage.accounts)}">
-                                <td colspan="5" class="text-center text-muted py-4">Không có tài khoản phù hợp bộ lọc.</td>
+                                <td colspan="5" class="text-center text-muted py-4">Không có hồ sơ phù hợp.</td>
                             </tr>
-                            <tr th:each="account : ${accountPage.accounts}">
+                            <tr th:each="account : ${accountPage.accounts}"
+                                class="account-row"
+                                role="button"
+                                title="Click để cập nhật"
+                                th:attr="data-account-id=${account.id},
+                                         data-account-username=${account.username},
+                                         data-account-full-name=${account.fullName},
+                                         data-account-email=${account.email},
+                                         data-account-role=${account.role},
+                                         data-account-bio=${account.bio},
+                                         data-account-profile-picture=${account.profilePictureUrl},
+                                         data-account-locked=${account.locked}">
+                                <td th:text="${account.rowNumber}">1</td>
                                 <td>
-                                    <strong th:text="${account.fullName}">Nguyen Van A</strong>
+                                    <strong th:text="${account.fullName}">Linh Dao</strong>
+                                    <div class="text-muted small" th:text="${account.email}">linhdao@mail.com</div>
                                     <div class="text-muted small">
-                                        <span th:text="${account.username}">username</span>
-                                        <span>·</span>
-                                        <span th:text="${account.email}">email</span>
+                                        <span th:text="${account.username}">linh.dao</span>
+                                        <span> · </span>
+                                        <span th:text="${account.createdAt}">05/04/2026 10:00</span>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge bg-light text-dark" th:text="${account.role}">STUDENT</span>
+                                    <span class="badge bg-light text-dark" th:text="${account.role}">Learner</span>
+                                </td>
+                                <td>
+                                    <span th:if="${account.locked}" class="badge bg-danger">Bị khóa</span>
+                                    <span th:unless="${account.locked}" class="badge bg-success">Đang hoạt động</span>
                                 </td>
                                 <td th:text="${account.failedLoginAttempts}">0</td>
-                                <td>
-                                    <span th:if="${account.locked}" class="badge bg-danger">Locked</span>
-                                    <span th:unless="${account.locked}" class="badge bg-success">Active</span>
-                                </td>
-                                <td th:text="${account.createdAt}">05/04/2026 10:00</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
+                        <small class="text-muted">
+                            Hiển thị <span th:text="${accountPage.startRow}">1</span>-<span th:text="${accountPage.endRow}">5</span> /
+                            <span th:text="${accountPage.totalItems}">48</span> hồ sơ
+                        </small>
+                        <nav th:if="${accountPage.totalPages > 0}">
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item" th:classappend="${!accountPage.hasPrevious} ? ' disabled'">
+                                    <a th:if="${accountPage.hasPrevious}" class="page-link"
+                                       th:href="@{/admin/accounts/(page=${accountPage.currentPage - 1},size=${accountPage.pageSize},keyword=${accountFilter.keyword},role=${accountFilter.role})}">«</a>
+                                    <span th:unless="${accountPage.hasPrevious}" class="page-link">«</span>
+                                </li>
+                                <li class="page-item"
+                                    th:each="pageNumber : ${#numbers.sequence(1, accountPage.totalPages)}"
+                                    th:classappend="${pageNumber == accountPage.displayPage} ? ' active'">
+                                    <a class="page-link"
+                                       th:href="@{/admin/accounts/(page=${pageNumber - 1},size=${accountPage.pageSize},keyword=${accountFilter.keyword},role=${accountFilter.role})}"
+                                       th:text="${pageNumber}">1</a>
+                                </li>
+                                <li class="page-item" th:classappend="${!accountPage.hasNext} ? ' disabled'">
+                                    <a th:if="${accountPage.hasNext}" class="page-link"
+                                       th:href="@{/admin/accounts/(page=${accountPage.currentPage + 1},size=${accountPage.pageSize},keyword=${accountFilter.keyword},role=${accountFilter.role})}">»</a>
+                                    <span th:unless="${accountPage.hasNext}" class="page-link">»</span>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <small class="text-muted d-block mt-2">Click vào một dòng để mở modal cập nhật.</small>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Vai trò & phân quyền rõ ràng</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <h6>Admin</h6>
+                    <p class="text-muted small">Toàn quyền cấu hình hệ thống, phê duyệt khóa và phân bổ vai trò.</p>
+                    <button class="btn btn-link p-0" type="button">Chỉnh sửa vai trò</button>
+                </div>
+                <div class="col-md-3">
+                    <h6>Instructor</h6>
+                    <p class="text-muted small">Tạo nội dung khóa học, quản lý lớp, theo dõi điểm danh.</p>
+                    <button class="btn btn-link p-0" type="button">Thiết lập quyền</button>
+                </div>
+                <div class="col-md-3">
+                    <h6>Mentor / Teacher</h6>
+                    <p class="text-muted small">Kèm cặp học viên, phản hồi bài tập, mở lịch coaching.</p>
+                    <button class="btn btn-link p-0" type="button">Cập nhật quyền</button>
+                </div>
+                <div class="col-md-3">
+                    <h6>Learner / Student</h6>
+                    <p class="text-muted small">Truy cập nội dung học, gửi bài tập, nhận thông báo.</p>
+                    <button class="btn btn-link p-0" type="button">Xem chi tiết</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="accountUpdateModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1">Cập nhật tài khoản</h5>
+                        <small class="text-muted">Chỉnh sửa nhanh thông tin user được chọn từ bảng.</small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/admin/accounts/update}" th:object="${accountUpdateForm}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" th:field="*{id}" id="updateAccountId">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-control" th:field="*{username}" id="updateUsername">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Họ tên</label>
+                                <input type="text" class="form-control" th:field="*{fullName}" id="updateFullName">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" th:field="*{email}" id="updateEmail">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Vai trò</label>
+                                <select class="form-select" th:field="*{role}" id="updateRole">
+                                    <option th:each="role : ${accountPage.roles}" th:value="${role.name()}" th:text="${role.name()}">ADMIN</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Chuyên môn / mô tả</label>
+                                <textarea class="form-control" rows="3" th:field="*{bio}" id="updateBio"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Ảnh đại diện</label>
+                                <input type="text" class="form-control" th:field="*{profilePictureUrl}" id="updateProfilePicture">
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" th:field="*{locked}" id="updateLocked">
+                                    <label class="form-check-label" for="updateLocked">Khóa tài khoản</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Lưu cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalElement = document.getElementById('accountUpdateModal');
+            if (!modalElement) {
+                return;
+            }
+
+            const accountModal = new bootstrap.Modal(modalElement);
+            const rows = document.querySelectorAll('.account-row');
+
+            const idInput = document.getElementById('updateAccountId');
+            const usernameInput = document.getElementById('updateUsername');
+            const fullNameInput = document.getElementById('updateFullName');
+            const emailInput = document.getElementById('updateEmail');
+            const roleInput = document.getElementById('updateRole');
+            const bioInput = document.getElementById('updateBio');
+            const profilePictureInput = document.getElementById('updateProfilePicture');
+            const lockedInput = document.getElementById('updateLocked');
+
+            rows.forEach(function (row) {
+                row.addEventListener('click', function () {
+                    idInput.value = row.dataset.accountId || '';
+                    usernameInput.value = row.dataset.accountUsername || '';
+                    fullNameInput.value = row.dataset.accountFullName || '';
+                    emailInput.value = row.dataset.accountEmail || '';
+                    roleInput.value = row.dataset.accountRole || '';
+                    bioInput.value = row.dataset.accountBio || '';
+                    profilePictureInput.value = row.dataset.accountProfilePicture || '';
+                    lockedInput.checked = row.dataset.accountLocked === 'true';
+                    accountModal.show();
+                });
+            });
+        });
+    </script>
 </div>
 </body>
+
 </html>

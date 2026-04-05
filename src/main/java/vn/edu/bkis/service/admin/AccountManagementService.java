@@ -1,6 +1,7 @@
 package vn.edu.bkis.service.admin;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -13,6 +14,7 @@ import vn.edu.bkis.dto.admin.AccountFormDto;
 import vn.edu.bkis.dto.admin.AccountManagementPageDto;
 import vn.edu.bkis.dto.admin.AccountRowDto;
 import vn.edu.bkis.dto.admin.AccountSummaryDto;
+import vn.edu.bkis.dto.admin.AccountUpdateFormDto;
 import vn.edu.bkis.model.User;
 import vn.edu.bkis.model.UserRole;
 import vn.edu.bkis.repository.UserRepository;
@@ -23,6 +25,7 @@ import vn.edu.bkis.repository.UserRepository;
 @Service
 public class AccountManagementService {
     private static final String DEFAULT_PROFILE_PICTURE = "/img/team-1.jpg";
+    private static final int DEFAULT_PAGE_SIZE = 5;
     private static final DateTimeFormatter ACCOUNT_DATE_FORMAT =
         DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm", Locale.forLanguageTag("vi-VN"));
 
@@ -55,7 +58,21 @@ public class AccountManagementService {
                 .filter(user -> user.getRole() != null && user.getRole().name().equalsIgnoreCase(roleFilter))
                 .toList();
         }
-        List<AccountRowDto> accountRows = users.stream().map(this::toAccountRowDto).toList();
+        int pageSize = resolvePageSize(filter.getSize());
+        int currentPage = resolveCurrentPage(filter.getPage());
+        long totalItems = users.size();
+        int totalPages = totalItems == 0 ? 1 : (int) Math.ceil((double) totalItems / pageSize);
+        currentPage = Math.min(currentPage, totalPages - 1);
+
+        int fromIndex = Math.min(currentPage * pageSize, users.size());
+        int toIndex = Math.min(fromIndex + pageSize, users.size());
+        List<User> pageUsers = users.subList(fromIndex, toIndex);
+
+        List<AccountRowDto> accountRows = new ArrayList<>();
+        for (int index = 0; index < pageUsers.size(); index++) {
+            long rowNumber = ((long) currentPage * pageSize) + index + 1;
+            accountRows.add(toAccountRowDto(pageUsers.get(index), rowNumber));
+        }
 
         AccountSummaryDto summary = new AccountSummaryDto(
             userRepository.count(),
@@ -66,7 +83,15 @@ public class AccountManagementService {
             userRepository.countByLockedTrue()
         );
 
-        return new AccountManagementPageDto(summary, accountRows, Arrays.asList(UserRole.values()));
+        return new AccountManagementPageDto(
+            summary,
+            accountRows,
+            Arrays.asList(UserRole.values()),
+            currentPage,
+            pageSize,
+            totalPages,
+            totalItems
+        );
     }
 
     /**
@@ -108,23 +133,88 @@ public class AccountManagementService {
     }
 
     /**
+     * Update an existing account from the admin modal form.
+     *
+     * @param form the submitted update form
+     */
+    @Transactional
+    public void updateAccount(AccountUpdateFormDto form) {
+        String accountId = required(form.getId(), "Account id is required");
+        String username = required(form.getUsername(), "Username is required");
+        String fullName = required(form.getFullName(), "Full name is required");
+        String email = required(form.getEmail(), "Email is required");
+        UserRole role = parseRole(required(form.getRole(), "Role is required"));
+
+        User user = userRepository.findById(accountId)
+            .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        userRepository.findByUsername(username)
+            .filter(existing -> !existing.getId().equals(user.getId()))
+            .ifPresent(existing -> {
+                throw new IllegalArgumentException("Username already exists");
+            });
+
+        userRepository.findByEmail(email)
+            .filter(existing -> !existing.getId().equals(user.getId()))
+            .ifPresent(existing -> {
+                throw new IllegalArgumentException("Email already exists");
+            });
+
+        user.setUsername(username);
+        user.setFullName(fullName);
+        user.setEmail(email.toLowerCase(Locale.ROOT));
+        user.setRole(role);
+        user.setBio(blankToDefault(form.getBio(), "Updated from admin account management screen."));
+        user.setProfilePictureUrl(blankToDefault(form.getProfilePictureUrl(), DEFAULT_PROFILE_PICTURE));
+        user.setLocked(Boolean.TRUE.equals(form.getLocked()));
+
+        userRepository.save(user);
+    }
+
+    /**
      * Convert a persistent user into a row DTO for table rendering.
      *
      * @param user the persistent user
      * @return the table row DTO
      */
-    private AccountRowDto toAccountRowDto(User user) {
+    private AccountRowDto toAccountRowDto(User user, long rowNumber) {
         String createdAt = user.getCreatedAt() == null ? "N/A" : user.getCreatedAt().format(ACCOUNT_DATE_FORMAT);
         return new AccountRowDto(
+            rowNumber,
             user.getId(),
             user.getUsername(),
             user.getFullName(),
             user.getEmail(),
             user.getRole() == null ? "UNKNOWN" : user.getRole().name(),
+            blankToDefault(user.getBio(), ""),
+            blankToDefault(user.getProfilePictureUrl(), DEFAULT_PROFILE_PICTURE),
             Boolean.TRUE.equals(user.getLocked()),
             user.getFailedLoginAttempts() == null ? 0 : user.getFailedLoginAttempts(),
             createdAt
         );
+    }
+
+    /**
+     * Resolve the requested page index into a safe zero-based value.
+     *
+     * @param requestedPage the requested page index
+     * @return a safe zero-based page index
+     */
+    private int resolveCurrentPage(Integer requestedPage) {
+        return requestedPage == null || requestedPage < 0 ? 0 : requestedPage;
+    }
+
+    /**
+     * Resolve the requested page size into a safe supported value.
+     *
+     * @param requestedSize the requested page size
+     * @return a safe page size
+     */
+    private int resolvePageSize(Integer requestedSize) {
+        if (requestedSize == null || requestedSize <= 0) {
+            return DEFAULT_PAGE_SIZE;
+        }
+        return Math.min(requestedSize, 20);
     }
 
     /**

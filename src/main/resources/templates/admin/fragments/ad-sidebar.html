@@ -9,10 +9,22 @@
         <span class="user-role-pill">Super Admin</span>
         <small>admin@elearning.vn</small>
     </div>
-    <a th:href="@{/admin/dashboard/}"><i class="fa fa-chart-line me-2"></i>Dashboard</a>
-    <a th:href="@{/admin/accounts/}"><i class="fa fa-users-cog me-2"></i>Tài khoản</a>
-    <a th:href="@{/admin/studentDtos/}"><i class="fa fa-user-graduate me-2"></i>Học viên</a>
-    <a th:href="@{/admin/studentDtos/}"><i class="fa fa-book-open me-2"></i>Khoá học</a>
-    <a th:href="@{/admin/studentDtos/}"><i class="fa fa-credit-card me-2"></i>Thanh toán</a>
-    <a th:href="@{/admin/studentDtos/}"><i class="fa fa-cog me-2"></i>Cài đặt</a>
+    <a th:href="@{/admin/dashboard/}" th:classappend="${pageTitle == 'Dashboard'} ? ' active'">
+        <i class="fa fa-chart-line me-2"></i>Dashboard
+    </a>
+    <a th:href="@{/admin/accounts/}" th:classappend="${pageTitle == 'Accounts'} ? ' active'">
+        <i class="fa fa-users-cog me-2"></i>Tài khoản
+    </a>
+    <a th:href="@{/admin/students/}" th:classappend="${pageTitle == 'Students'} ? ' active'">
+        <i class="fa fa-user-graduate me-2"></i>Học viên
+    </a>
+    <a href="#" th:classappend="${pageTitle == 'Courses'} ? ' active'">
+        <i class="fa fa-book-open me-2"></i>Khoá học
+    </a>
+    <a href="#" th:classappend="${pageTitle == 'Payments'} ? ' active'">
+        <i class="fa fa-credit-card me-2"></i>Thanh toán
+    </a>
+    <a href="#" th:classappend="${pageTitle == 'Settings'} ? ' active'">
+        <i class="fa fa-cog me-2"></i>Cài đặt
+    </a>
 </aside>

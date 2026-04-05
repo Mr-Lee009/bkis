@@ -4,11 +4,14 @@ package vn.edu.bkis.dto.admin;
  * Row data rendered in the admin account table.
  */
 public class AccountRowDto {
+    private final long rowNumber;
     private final String id;
     private final String username;
     private final String fullName;
     private final String email;
     private final String role;
+    private final String bio;
+    private final String profilePictureUrl;
     private final boolean locked;
     private final int failedLoginAttempts;
     private final String createdAt;
@@ -16,25 +19,40 @@ public class AccountRowDto {
     /**
      * Create a table row DTO for an account item.
      *
+     * @param rowNumber the visible row number in the current result set
      * @param id the account identifier
      * @param username the username
      * @param fullName the full name
      * @param email the email
      * @param role the role label
+     * @param bio the biography or specialty
+     * @param profilePictureUrl the profile picture URL
      * @param locked the lock status
      * @param failedLoginAttempts the number of failed logins
      * @param createdAt the formatted created-at value
      */
-    public AccountRowDto(String id, String username, String fullName, String email, String role,
-                         boolean locked, int failedLoginAttempts, String createdAt) {
+    public AccountRowDto(long rowNumber, String id, String username, String fullName, String email, String role,
+                         String bio, String profilePictureUrl, boolean locked, int failedLoginAttempts, String createdAt) {
+        this.rowNumber = rowNumber;
         this.id = id;
         this.username = username;
         this.fullName = fullName;
         this.email = email;
         this.role = role;
+        this.bio = bio;
+        this.profilePictureUrl = profilePictureUrl;
         this.locked = locked;
         this.failedLoginAttempts = failedLoginAttempts;
         this.createdAt = createdAt;
+    }
+
+    /**
+     * Get the visible row number.
+     *
+     * @return the visible row number
+     */
+    public long getRowNumber() {
+        return rowNumber;
     }
 
     /**
@@ -80,6 +98,24 @@ public class AccountRowDto {
      */
     public String getRole() {
         return role;
+    }
+
+    /**
+     * Get the biography or specialty text.
+     *
+     * @return the biography or specialty text
+     */
+    public String getBio() {
+        return bio;
+    }
+
+    /**
+     * Get the profile picture URL.
+     *
+     * @return the profile picture URL
+     */
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
     }
 
     /**
