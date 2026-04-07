@@ -79,58 +79,58 @@
                 </div>
 
                 <div class="card border-0 shadow-sm mt-4">
-                    <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center">
+                    <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center">
                         <div>
-                            <h5 class="mb-1">Bộ lọc học viên</h5>
+                            <h6 class="mb-1">Bộ lọc học viên</h6>
                             <small class="text-muted">Cá nhân hoá nhanh theo cohort, trạng thái, mentor và hoạt
                                 động</small>
                         </div>
                         <div class="d-flex flex-wrap gap-2">
-                            <button class="btn btn-outline-secondary"><i class="fa fa-undo me-2"></i>Reset</button>
-                            <button class="btn btn-primary"><i class="fa fa-save me-2"></i>Lưu bộ lọc</button>
+                            <button class="btn btn-sm btn-outline-secondary"><i class="fa fa-undo me-1"></i>Reset</button>
+                            <button class="btn btn-sm btn-primary"><i class="fa fa-save me-1"></i>Lưu bộ lọc</button>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="filter-toolbar p-3 mb-4">
-                            <div class="row g-3 align-items-center">
+                    <div class="card-body py-3">
+                        <div class="filter-toolbar p-2 p-md-3 mb-3">
+                            <div class="row g-2 align-items-center">
                                 <div class="col-md-5">
                                     <p class="text-muted small mb-1">Nhóm trạng thái chính</p>
                                     <div class="d-flex flex-wrap gap-2">
-                                        <button class="filter-pill active">Đang học</button>
-                                        <button class="filter-pill">Onboarding</button>
-                                        <button class="filter-pill">Tạm dừng</button>
-                                        <button class="filter-pill">Hoàn thành</button>
+                                        <button class="filter-pill py-1 px-3 small active">Đang học</button>
+                                        <button class="filter-pill py-1 px-3 small">Onboarding</button>
+                                        <button class="filter-pill py-1 px-3 small">Tạm dừng</button>
+                                        <button class="filter-pill py-1 px-3 small">Hoàn thành</button>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <p class="text-muted small mb-1">Cảnh báo</p>
                                     <div class="d-flex flex-wrap gap-2">
-                                        <span class="badge bg-light text-dark">Nợ bài (18)</span>
-                                        <span class="badge bg-light text-dark">Miss live (9)</span>
-                                        <span class="badge bg-light text-dark">Ticket mở (32)</span>
+                                        <span class="badge bg-light text-dark small">Nợ bài (18)</span>
+                                        <span class="badge bg-light text-dark small">Miss live (9)</span>
+                                        <span class="badge bg-light text-dark small">Ticket mở (32)</span>
                                     </div>
                                 </div>
                                 <div class="col-md-3 text-md-end">
                                     <p class="text-muted small mb-1">Hiển thị</p>
-                                    <div class="form-check form-switch d-inline-flex align-items-center">
+                                    <div class="form-check form-switch d-inline-flex align-items-center small mb-0">
                                         <input class="form-check-input" type="checkbox" checked>
                                         <label class="form-check-label ms-2">Chỉ khoá active</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row g-3 align-items-end">
+                        <div class="row g-2 align-items-end">
                             <div class="col-md-4">
-                                <label class="form-label">Tìm kiếm nâng cao</label>
+                                <label class="form-label small mb-1">Tìm kiếm nâng cao</label>
                                 <div class="position-relative">
                                     <i class="fa fa-search input-icon"></i>
-                                    <input type="search" class="form-control input-icon-field"
+                                    <input type="search" class="form-control form-control-sm input-icon-field"
                                         placeholder="Tên, email hoặc mã học viên">
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Cohort</label>
-                                <select class="form-select">
+                                <label class="form-label small mb-1">Cohort</label>
+                                <select class="form-select form-select-sm">
                                     <option>Tất cả cohort</option>
                                     <option>UX-01-2026</option>
                                     <option>PD-01-2026</option>
@@ -138,8 +138,8 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Mentor phụ trách</label>
-                                <select class="form-select">
+                                <label class="form-label small mb-1">Mentor phụ trách</label>
+                                <select class="form-select form-select-sm">
                                     <option>Tất cả</option>
                                     <option>Minh Do</option>
                                     <option>Thao Tran</option>
@@ -147,8 +147,8 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <label class="form-label">Tiến độ</label>
-                                <select class="form-select">
+                                <label class="form-label small mb-1">Tiến độ</label>
+                                <select class="form-select form-select-sm">
                                     <option>0-25%</option>
                                     <option>25-50%</option>
                                     <option selected>50-75%</option>
@@ -156,13 +156,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="d-flex flex-wrap gap-2 align-items-center mt-3">
+                        <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
                             <span class="text-muted small">Đã lưu:</span>
-                            <span class="saved-filter">Live Class No-show</span>
-                            <span class="saved-filter">Career Switch Cohort</span>
+                            <span class="saved-filter small">Live Class No-show</span>
+                            <span class="saved-filter small">Career Switch Cohort</span>
                             <button class="btn btn-sm btn-link text-decoration-none">Quản lý bộ lọc</button>
                         </div>
-                        <hr class="my-4">
+                        <hr class="my-3">
                         <div class="alert alert-light border-start border-4 border-primary shadow-sm mb-3" role="alert">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="modal-icon-bubble bg-white text-primary">
