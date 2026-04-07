@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Quản lý học viên - eLEARNING</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../img/favicon.ico" rel="icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="admin.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-3 col-lg-2 sidebar py-4">
+                <div class="px-3 mb-4">
+                    <h4 class="text-white mb-0"><i class="fa fa-graduation-cap me-2"></i>eLEARNING</h4>
+                    <small class="text-muted">Admin Panel</small>
+                </div>
+                <div class="sidebar-user text-center">
+                    <img src="../img/testimonial-1.jpg" alt="Admin Avatar" class="sidebar-avatar">
+                    <strong class="d-block">Nguyen Admin</strong>
+                    <span class="user-role-pill">Super Admin</span>
+                    <small>admin@elearning.vn</small>
+                </div>
+                <a href="dashboard.html"><i class="fa fa-chart-line me-2"></i>Dashboard</a>
+                <a href="accounts.html"><i class="fa fa-users-cog me-2"></i>Tài khoản</a>
+                <a href="#" class="active"><i class="fa fa-user-graduate me-2"></i>Học viên</a>
+                <a href="courses.html"><i class="fa fa-book-open me-2"></i>Khoá học</a>
+                <a href="payments.html"><i class="fa fa-credit-card me-2"></i>Thanh toán</a>
+                <a href="settings.html"><i class="fa fa-cog me-2"></i>Cài đặt</a>
+            </aside>
+            <main class="col-md-9 col-lg-10 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="mb-0">Học viên</h2>
+                        <small class="text-muted">Theo dõi tiến độ, chuyển lớp, gửi nhắc học tự động</small>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-outline-secondary"><i class="fa fa-upload me-2"></i>Nhập danh
+                            sách</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+                            <i class="fa fa-user-plus me-2"></i>Thêm học viên
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Đang học</p>
+                                <h3 class="mb-0">2,312</h3>
+                                <small class="text-success">+56 tuần này</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Đang onboarding</p>
+                                <h3 class="mb-0">124</h3>
+                                <small class="text-warning">18 chưa kích hoạt email</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Ticket hỗ trợ mở</p>
+                                <h3 class="mb-0">32</h3>
+                                <small class="text-muted">Ưu tiên mentor phản hồi</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">Bộ lọc học viên</h5>
+                            <small class="text-muted">Cá nhân hoá nhanh theo cohort, trạng thái, mentor và hoạt
+                                động</small>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-outline-secondary"><i class="fa fa-undo me-2"></i>Reset</button>
+                            <button class="btn btn-primary"><i class="fa fa-save me-2"></i>Lưu bộ lọc</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-toolbar p-3 mb-4">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-md-5">
+                                    <p class="text-muted small mb-1">Nhóm trạng thái chính</p>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="filter-pill active">Đang học</button>
+                                        <button class="filter-pill">Onboarding</button>
+                                        <button class="filter-pill">Tạm dừng</button>
+                                        <button class="filter-pill">Hoàn thành</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="text-muted small mb-1">Cảnh báo</p>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span class="badge bg-light text-dark">Nợ bài (18)</span>
+                                        <span class="badge bg-light text-dark">Miss live (9)</span>
+                                        <span class="badge bg-light text-dark">Ticket mở (32)</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-md-end">
+                                    <p class="text-muted small mb-1">Hiển thị</p>
+                                    <div class="form-check form-switch d-inline-flex align-items-center">
+                                        <input class="form-check-input" type="checkbox" checked>
+                                        <label class="form-check-label ms-2">Chỉ khoá active</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label class="form-label">Tìm kiếm nâng cao</label>
+                                <div class="position-relative">
+                                    <i class="fa fa-search input-icon"></i>
+                                    <input type="search" class="form-control input-icon-field"
+                                        placeholder="Tên, email hoặc mã học viên">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Cohort</label>
+                                <select class="form-select">
+                                    <option>Tất cả cohort</option>
+                                    <option>UX-01-2026</option>
+                                    <option>PD-01-2026</option>
+                                    <option>FE-12-2025</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Mentor phụ trách</label>
+                                <select class="form-select">
+                                    <option>Tất cả</option>
+                                    <option>Minh Do</option>
+                                    <option>Thao Tran</option>
+                                    <option>Ken Pham</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Tiến độ</label>
+                                <select class="form-select">
+                                    <option>0-25%</option>
+                                    <option>25-50%</option>
+                                    <option selected>50-75%</option>
+                                    <option>75-100%</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 align-items-center mt-3">
+                            <span class="text-muted small">Đã lưu:</span>
+                            <span class="saved-filter">Live Class No-show</span>
+                            <span class="saved-filter">Career Switch Cohort</span>
+                            <button class="btn btn-sm btn-link text-decoration-none">Quản lý bộ lọc</button>
+                        </div>
+                        <hr class="my-4">
+                        <div class="alert alert-light border-start border-4 border-primary shadow-sm mb-3" role="alert">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="modal-icon-bubble bg-white text-primary">
+                                    <i class="fa fa-pen"></i>
+                                </div>
+                                <div>
+                                    <strong>Hồ sơ nhanh trong modal</strong>
+                                    <div class="small text-muted">Chọn bất kỳ học viên nào trong bảng để mở modal chỉnh sửa và cập nhật trạng thái.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Học viên</th>
+                                        <th>Khoá học</th>
+                                        <th>Cohort</th>
+                                        <th>Tiến độ</th>
+                                        <th>Trạng thái</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="student-row" data-student-id="tu-nguyen" data-name="Tu Nguyen"
+                                        data-email="tu.nguyen@mail.com" data-course="Product Discovery"
+                                        data-cohort="PD-01-2026" data-progress="72" data-module="Module 5/7"
+                                        data-status="Đang học" data-status-class="bg-success" data-join="02/12/2025"
+                                        data-mentor="Minh Do" data-goals="Thăng tiến nội bộ|Nắm chắc discovery"
+                                        data-timeline="Hoàn thành phỏng vấn user · 22/12|Nhận feedback module 4 · 28/12|Chuẩn bị sprint build · 05/01"
+                                        data-note="Giữ nhịp giao bài hàng tuần, nhấn mạnh OKR đầu quý"
+                                        data-note-updated="Minh Do · 03/01/2026" data-risk="Thấp"
+                                        data-progress-class="bg-success" data-followup="2026-01-10">
+                                        <td>
+                                            <strong>Tu Nguyen</strong>
+                                            <div class="text-muted small">tu.nguyen@mail.com</div>
+                                        </td>
+                                        <td>Product Discovery</td>
+                                        <td>PD-01-2026</td>
+                                        <td style="min-width:140px;">
+                                            <div class="d-flex justify-content-between small">
+                                                <span>72%</span>
+                                                <span>Module 5/7</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-success" style="width:72%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-success">Đang học</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Chi tiết</button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Gửi nhắc</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="student-row" data-student-id="mai-le" data-name="Mai Le"
+                                        data-email="mai.le@edu.vn" data-course="UI/UX Foundation"
+                                        data-cohort="UX-12-2025" data-progress="38" data-module="Module 2/6"
+                                        data-status="Tạm dừng" data-status-class="bg-warning text-dark"
+                                        data-join="15/11/2025" data-mentor="Minh Do"
+                                        data-goals="Chuyển nghề UX|Nâng cấp portfolio"
+                                        data-timeline="Hoàn thành Module 1 · 24/12|Miss buổi live UX Research · 29/12|Nợ Assignment 02 · 02/01"
+                                        data-note="Đề xuất chuyển sang cohort FE-02-2026 để cân bằng lịch"
+                                        data-note-updated="Minh Do · 03/01/2026" data-risk="Trung bình"
+                                        data-progress-class="bg-warning" data-followup="2026-01-08">
+                                        <td>
+                                            <strong>Mai Le</strong>
+                                            <div class="text-muted small">mai.le@edu.vn</div>
+                                        </td>
+                                        <td>UI/UX Foundation</td>
+                                        <td>UX-12-2025</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between small">
+                                                <span>38%</span>
+                                                <span>Module 2/6</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-warning" style="width:38%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-warning text-dark">Tạm dừng</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Chuyển lớp</button>
+                                            <button type="button" class="btn btn-sm btn-outline-success">Kích hoạt lại</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="student-row" data-student-id="hoang-bui" data-name="Hoang Bui"
+                                        data-email="hoangb@company.com" data-course="Frontend Sprint"
+                                        data-cohort="FE-11-2025" data-progress="100" data-module="Module 8/8"
+                                        data-status="Hoàn thành" data-status-class="bg-primary" data-join="01/09/2025"
+                                        data-mentor="Ken Pham" data-goals="Củng cố FE nâng cao|Chuẩn bị portfolio case"
+                                        data-timeline="Hoàn thành capstone · 22/12|Mentor review xuất sắc · 26/12|Đợi lịch bảo vệ · 04/01"
+                                        data-note="Chuẩn bị buổi bảo vệ, nhắc gửi slide hoàn chỉnh"
+                                        data-note-updated="Ken Pham · 30/12/2025" data-risk="Thấp"
+                                        data-progress-class="bg-primary" data-followup="2026-01-06">
+                                        <td>
+                                            <strong>Hoang Bui</strong>
+                                            <div class="text-muted small">hoangb@company.com</div>
+                                        </td>
+                                        <td>Frontend Sprint</td>
+                                        <td>FE-11-2025</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between small">
+                                                <span>100%</span>
+                                                <span>Module 8/8</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-primary" style="width:100%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-primary">Hoàn thành</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Xuất chứng chỉ</button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger">Lưu trữ</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="student-row" data-student-id="khanh-tran" data-name="Khanh Tran"
+                                        data-email="khanh.tran@team.vn" data-course="Data Storytelling"
+                                        data-cohort="DS-09-2025" data-progress="58" data-module="Module 4/7"
+                                        data-status="Onboarding" data-status-class="bg-info text-dark"
+                                        data-join="20/11/2025" data-mentor="Thao Tran"
+                                        data-goals="Làm chủ dashboard|Tăng khả năng kể chuyện"
+                                        data-timeline="Hoàn thành bài mở đầu · 18/12|Đang học visualization · 27/12|Đăng ký coaching 1:1 · 03/01"
+                                        data-note="Cần thêm template kể chuyện dữ liệu tuần này"
+                                        data-note-updated="Thao Tran · 02/01/2026" data-risk="Thấp"
+                                        data-progress-class="bg-info" data-followup="2026-01-12">
+                                        <td>
+                                            <strong>Khanh Tran</strong>
+                                            <div class="text-muted small">khanh.tran@team.vn</div>
+                                        </td>
+                                        <td>Data Storytelling</td>
+                                        <td>DS-09-2025</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between small">
+                                                <span>58%</span>
+                                                <span>Module 4/7</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-info" style="width:58%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-info text-dark">Onboarding</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Phân mentor</button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Gửi checklist</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="student-row" data-student-id="yen-pham" data-name="Yen Pham"
+                                        data-email="yen.pham@brand.vn" data-course="Digital Marketing"
+                                        data-cohort="DM-10-2025" data-progress="22" data-module="Module 1/6"
+                                        data-status="Nguy cơ nghỉ" data-status-class="bg-danger" data-join="10/12/2025"
+                                        data-mentor="Ken Pham"
+                                        data-goals="Tối ưu kênh performance|Làm chủ data marketing"
+                                        data-timeline="Miss 2 buổi live liên tiếp · 26/12|Gọi nhắc lần 1 · 28/12|Chưa gửi Assignment 01 · 02/01"
+                                        data-note="Ưu tiên kết nối mentor để hoạch định lại lịch học"
+                                        data-note-updated="Customer Care · 03/01/2026" data-risk="Cao"
+                                        data-progress-class="bg-danger" data-followup="2026-01-05">
+                                        <td>
+                                            <strong>Yen Pham</strong>
+                                            <div class="text-muted small">yen.pham@brand.vn</div>
+                                        </td>
+                                        <td>Digital Marketing</td>
+                                        <td>DM-10-2025</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between small">
+                                                <span>22%</span>
+                                                <span>Module 1/6</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-danger" style="width:22%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-danger">Nguy cơ nghỉ</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Hẹn mentor</button>
+                                            <button type="button" class="btn btn-sm btn-outline-warning">Gọi nhắc</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="student-row" data-student-id="long-do" data-name="Long Do"
+                                        data-email="long.do@corp.vn" data-course="Backend Accelerate"
+                                        data-cohort="BE-08-2025" data-progress="81" data-module="Module 6/7"
+                                        data-status="Đang học" data-status-class="bg-success" data-join="04/10/2025"
+                                        data-mentor="Hieu Nguyen"
+                                        data-goals="Chuẩn bị lên Senior|Tối ưu hệ thống"
+                                        data-timeline="Hoàn thành module concurrency · 21/12|Đạt KPI code review · 27/12|Đăng ký mock interview · 05/01"
+                                        data-note="Gửi thêm bài tập scale system vào cuối tuần"
+                                        data-note-updated="Hieu Nguyen · 02/01/2026" data-risk="Thấp"
+                                        data-progress-class="bg-success" data-followup="2026-01-11">
+                                        <td>
+                                            <strong>Long Do</strong>
+                                            <div class="text-muted small">long.do@corp.vn</div>
+                                        </td>
+                                        <td>Backend Accelerate</td>
+                                        <td>BE-08-2025</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between small">
+                                                <span>81%</span>
+                                                <span>Module 6/7</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-success" style="width:81%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-success">Đang học</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Đặt lịch 1:1</button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Gửi tài liệu</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="student-row" data-student-id="thuy-dang" data-name="Thuy Dang"
+                                        data-email="thuy.dang@mail.me" data-course="Motion Graphic Lab"
+                                        data-cohort="MG-10-2025" data-progress="12" data-module="Module 1/8"
+                                        data-status="Cần hỗ trợ" data-status-class="bg-warning text-dark"
+                                        data-join="18/12/2025" data-mentor="Bao Tran"
+                                        data-goals="Thành thạo motion tool|Tạo portfolio video"
+                                        data-timeline="Onboard toolset · 20/12|Chưa hoàn thành storyboard · 27/12|Đổi lịch coaching · 02/01"
+                                        data-note="Đang gặp khó ở phần storyboard, gửi template chi tiết"
+                                        data-note-updated="Bao Tran · 04/01/2026" data-risk="Trung bình"
+                                        data-progress-class="bg-warning" data-followup="2026-01-09">
+                                        <td>
+                                            <strong>Thuy Dang</strong>
+                                            <div class="text-muted small">thuy.dang@mail.me</div>
+                                        </td>
+                                        <td>Motion Graphic Lab</td>
+                                        <td>MG-10-2025</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between small">
+                                                <span>12%</span>
+                                                <span>Module 1/8</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-warning" style="width:12%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-warning text-dark">Cần hỗ trợ</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Gửi khảo sát</button>
+                                            <button type="button" class="btn btn-sm btn-outline-success">Book mentor</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="student-row" data-student-id="hieu-vo" data-name="Hieu Vo"
+                                        data-email="hieu.vo@data.vn" data-course="Data Pipeline"
+                                        data-cohort="DP-09-2025" data-progress="47" data-module="Module 3/6"
+                                        data-status="Onboarding" data-status-class="bg-info text-dark"
+                                        data-join="12/11/2025" data-mentor="Thao Tran"
+                                        data-goals="Chuẩn hoá pipeline|Tự động hoá báo cáo"
+                                        data-timeline="Hoàn thành ETL cơ bản · 18/12|Fix bug ingestion · 27/12|Chờ duyệt kiến trúc mới · 03/01"
+                                        data-note="Cần thêm ví dụ pipeline theo chuẩn DataOps"
+                                        data-note-updated="Thao Tran · 03/01/2026" data-risk="Thấp"
+                                        data-progress-class="bg-info" data-followup="2026-01-12">
+                                        <td>
+                                            <strong>Hieu Vo</strong>
+                                            <div class="text-muted small">hieu.vo@data.vn</div>
+                                        </td>
+                                        <td>Data Pipeline</td>
+                                        <td>DP-09-2025</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between small">
+                                                <span>47%</span>
+                                                <span>Module 3/6</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-info" style="width:47%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-info text-dark">Onboarding</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Xem hoạt động</button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Gửi checklist</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="student-row" data-student-id="han-nguyen" data-name="Han Nguyen"
+                                        data-email="han.nguyen@portfolio.vn" data-course="Product Strategy"
+                                        data-cohort="PS-07-2025" data-progress="64" data-module="Module 5/8"
+                                        data-status="Đang học" data-status-class="bg-success" data-join="05/09/2025"
+                                        data-mentor="Minh Do"
+                                        data-goals="Nâng cấp kỹ năng chiến lược|Xây dựng portfolio sản phẩm"
+                                        data-timeline="Hoàn thành vision deck · 19/12|Feedback chiến lược · 28/12|Chuẩn bị workshop nhóm · 07/01"
+                                        data-note="Đang cân đối giữa 2 dự án, đề xuất phân bổ lại bài tập"
+                                        data-note-updated="Minh Do · 02/01/2026" data-risk="Thấp"
+                                        data-progress-class="bg-success" data-followup="2026-01-13">
+                                        <td>
+                                            <strong>Han Nguyen</strong>
+                                            <div class="text-muted small">han.nguyen@portfolio.vn</div>
+                                        </td>
+                                        <td>Product Strategy</td>
+                                        <td>PS-07-2025</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between small">
+                                                <span>64%</span>
+                                                <span>Module 5/8</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-success" style="width:64%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-success">Đang học</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Đổi mentor</button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Gửi nhắc</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="student-row" data-student-id="bao-chau" data-name="Bao Chau"
+                                        data-email="bao.chau@growth.vn" data-course="Growth Marketing"
+                                        data-cohort="GM-11-2025" data-progress="90" data-module="Module 7/8"
+                                        data-status="Sắp hoàn thành" data-status-class="bg-primary"
+                                        data-join="22/09/2025" data-mentor="Ken Pham"
+                                        data-goals="Dẫn dắt growth squad|Làm chủ khung đo lường"
+                                        data-timeline="Đạt KPI MQL · 20/12|Chuẩn bị capstone · 02/01|Set lịch bảo vệ · 08/01"
+                                        data-note="Cần checklist trước khi bảo vệ capstone"
+                                        data-note-updated="Ken Pham · 03/01/2026" data-risk="Thấp"
+                                        data-progress-class="bg-primary" data-followup="2026-01-09">
+                                        <td>
+                                            <strong>Bao Chau</strong>
+                                            <div class="text-muted small">bao.chau@growth.vn</div>
+                                        </td>
+                                        <td>Growth Marketing</td>
+                                        <td>GM-11-2025</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between small">
+                                                <span>90%</span>
+                                                <span>Module 7/8</span>
+                                            </div>
+                                            <div class="progress progress-mini bg-light">
+                                                <div class="progress-bar bg-primary" style="width:90%;"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-primary">Sắp hoàn thành</span></td>
+                                        <td class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-secondary me-2">Chuẩn bị bảo vệ</button>
+                                            <button type="button" class="btn btn-sm btn-outline-success">Đặt lịch review</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
+                            <small class="text-muted">Hiển thị 1-10 / 2,312 học viên</small>
+                            <nav>
+                                <ul class="pagination pagination-sm mb-0">
+                                    <li class="page-item disabled"><span class="page-link">«</span></li>
+                                    <li class="page-item active"><span class="page-link">1</span></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">»</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-5">
+                        <div class="card border-0 shadow-sm h-100 gradient-card text-white position-relative overflow-hidden">
+                            <div class="card-body d-flex flex-column justify-content-between h-100">
+                                <div>
+                                    <span class="badge bg-white text-primary mb-3">Modal nâng cấp</span>
+                                    <h4 class="mb-2">Chỉnh sửa chỉ với một cú click</h4>
+                                    <p class="text-white-50 mb-4">Toàn bộ thao tác cập nhật trạng thái, mentor và ghi chú đã được chuyển vào modal động giúp bạn tập trung vào dữ liệu quan trọng nhất.</p>
+                                </div>
+                                <ul class="list-unstyled text-white-50 small mb-4">
+                                    <li class="mb-2"><i class="fa fa-mouse-pointer me-2"></i>Chạm vào dòng học viên để mở hồ sơ nhanh.</li>
+                                    <li class="mb-2"><i class="fa fa-pen-alt me-2"></i>Cập nhật cohort, mentor, tiến độ và ghi chú trực tiếp.</li>
+                                    <li><i class="fa fa-bell me-2"></i>Đặt lịch follow-up và kích hoạt workflow nhắc học.</li>
+                                </ul>
+                                <button type="button" class="btn btn-light w-100" id="modalDemoTrigger"><i class="fa fa-play-circle me-2"></i>Xem thử với Mai Le</button>
+                            </div>
+                            <div class="gradient-card-blur"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Tương tác & nhắc học</h5>
+                                <button class="btn btn-sm btn-outline-secondary">Cấu hình workflow</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="support-card">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <strong>Playbook Onboarding</strong>
+                                                <span class="badge bg-success">Đang chạy</span>
+                                            </div>
+                                            <p class="mb-1">Email kích hoạt + checklist 5 bước đầu tiên.</p>
+                                            <small class="text-muted">Tự động gửi trong 48h đầu</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="support-card">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <strong>Reminder Assignment</strong>
+                                                <span class="badge bg-warning text-dark">Tạm dừng</span>
+                                            </div>
+                                            <p class="mb-1">Nhắc học viên nộp bài trước deadline.</p>
+                                            <small class="text-muted">Kích hoạt lại để tránh trễ tiến độ</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="support-card">
+                                            <div>
+                                                <h6 class="mb-1">Tự động chuyển cohort</h6>
+                                                <small class="text-muted">Nếu nghỉ quá 3 tuần</small>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" checked>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="support-card">
+                                            <div>
+                                                <h6 class="mb-1">Nhắc mentor follow-up</h6>
+                                                <small class="text-muted">Khi học viên tạm dừng</small>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="mt-4">
+                                    <button class="btn btn-outline-primary me-2">Xuất báo cáo tiến độ</button>
+                                    <button class="btn btn-primary">Gửi thông báo hàng loạt</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h4 class="mb-1" id="addStudentModalLabel">Thêm học viên mới</h4>
+                        <p class="text-muted small mb-0">Điền thông tin cơ bản, hệ thống sẽ gửi email onboarding tự động.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="addStudentAlert" class="alert alert-success d-none" role="alert">
+                        <strong>Đã tạo học viên!</strong> Hãy kiểm tra hộp thư để xác nhận email kích hoạt.
+                    </div>
+                    <form id="addStudentForm" class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted">Họ và tên</label>
+                            <input type="text" class="form-control" id="newStudentName" placeholder="VD: Nguyen Van A" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted">Email</label>
+                            <input type="email" class="form-control" id="newStudentEmail" placeholder="email@domain.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted">Khoá học</label>
+                            <input type="text" class="form-control" id="newStudentCourse" placeholder="VD: UI/UX Foundation" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small text-muted">Cohort</label>
+                            <input type="text" class="form-control" id="newStudentCohort" placeholder="UX-02-2026" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small text-muted">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="newStudentStart" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted">Mentor</label>
+                            <select class="form-select" id="newStudentMentor">
+                                <option selected>Chưa phân</option>
+                                <option>Minh Do</option>
+                                <option>Thao Tran</option>
+                                <option>Ken Pham</option>
+                                <option>Hieu Nguyen</option>
+                                <option>Bao Tran</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted">Mục tiêu học viên</label>
+                            <input type="text" class="form-control" id="newStudentGoal" placeholder="VD: Chuyển nghề, nâng cấp portfolio">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted">Ghi chú</label>
+                            <textarea class="form-control" id="newStudentNote" rows="3" placeholder="Thông tin bối cảnh, sản phẩm đang theo đuổi..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <div class="text-muted small">
+                        <i class="fa fa-shield-alt me-1"></i>Dữ liệu sẽ đồng bộ với CRM và gửi tài khoản học tập trong 5 phút.
+                    </div>
+                    <div class="ms-auto d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                        <button type="submit" form="addStudentForm" class="btn btn-primary">Tạo học viên</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade profile-modal" id="studentProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar-pill" id="modalStudentInitials">ML</div>
+                        <div>
+                            <h4 class="mb-0" id="modalStudentName">Mai Le</h4>
+                            <div class="d-flex flex-wrap gap-2 small text-muted">
+                                <span id="modalStudentMeta">UI/UX Foundation · UX-12-2025</span>
+                                <span class="text-muted">•</span>
+                                <span id="modalStudentEmail">mai.le@edu.vn</span>
+                            </div>
+                            <small class="text-muted">Gia nhập <span id="modalJoinDate">15/11/2025</span> · Mentor <span id="modalMentorLabel">Minh Do</span></small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-warning text-dark mb-2" id="modalStatusBadge">Tạm dừng</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body pt-4">
+                    <div class="row g-4">
+                        <div class="col-lg-5">
+                            <div class="pe-lg-4">
+                                <div class="mb-4">
+                                    <p class="text-muted text-uppercase small fw-semibold mb-2">Thông tin chung</p>
+                                    <ul class="list-unstyled modal-info-list mb-0">
+                                        <li><i class="fa fa-graduation-cap"></i><span id="modalCourseInfo">UI/UX Foundation</span></li>
+                                        <li><i class="fa fa-layer-group"></i><span id="modalCohortInfo">UX-12-2025</span></li>
+                                        <li><i class="fa fa-shield-alt"></i><span>Rủi ro: <span id="modalRiskLabel">Trung bình</span></span></li>
+                                    </ul>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <p class="text-muted text-uppercase small fw-semibold mb-0">Tiến độ</p>
+                                        <small class="text-muted" id="modalProgressLabel">38% · Module 2/6</small>
+                                    </div>
+                                    <div class="progress progress-mini bg-light">
+                                        <div class="progress-bar bg-warning" id="modalProgressBar" style="width: 38%;"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="text-muted text-uppercase small fw-semibold mb-2">Mục tiêu</p>
+                                    <div class="d-flex flex-wrap gap-2" id="modalGoals">
+                                        <span class="goal-pill">Chuyển nghề UX</span>
+                                        <span class="goal-pill">Nâng cấp portfolio</span>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="text-muted text-uppercase small fw-semibold mb-2">Dòng thời gian</p>
+                                    <ul class="list-unstyled modal-timeline" id="modalTimeline">
+                                        <li><span class="timeline-dot"></span>Hoàn thành Module 1 · 24/12</li>
+                                        <li><span class="timeline-dot"></span>Miss buổi live UX Research · 29/12</li>
+                                        <li><span class="timeline-dot"></span>Nợ Assignment 02 · 02/01</li>
+                                    </ul>
+                                </div>
+                                <div class="support-card shadow-sm">
+                                    <strong class="d-block mb-1">Ghi chú gần nhất</strong>
+                                    <p class="mb-1" id="modalNoteContent">Mentor đề xuất chuyển sang cohort FE-02-2026.</p>
+                                    <small class="text-muted" id="modalNoteMeta">Minh Do · 03/01/2026</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 ps-lg-4 modal-editor-panel">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0">Chỉnh sửa nhanh</h6>
+                                <span class="badge bg-light text-dark">Live sync</span>
+                            </div>
+                            <div id="modalUpdateAlert" class="alert alert-success d-none" role="alert">
+                                Đã lưu nháp cho <strong id="modalAlertName">Mai Le</strong>. Đừng quên nhắc mentor xác nhận.
+                            </div>
+                            <form id="studentQuickUpdateForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Trạng thái</label>
+                                        <select class="form-select" id="modalStatusSelect">
+                                            <option>Đang học</option>
+                                            <option>Tạm dừng</option>
+                                            <option>Onboarding</option>
+                                            <option>Hoàn thành</option>
+                                            <option>Nguy cơ nghỉ</option>
+                                            <option>Cần hỗ trợ</option>
+                                            <option>Sắp hoàn thành</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Mentor</label>
+                                        <select class="form-select" id="modalMentorSelect">
+                                            <option>Minh Do</option>
+                                            <option>Thao Tran</option>
+                                            <option>Ken Pham</option>
+                                            <option>Hieu Nguyen</option>
+                                            <option>Bao Tran</option>
+                                            <option>Customer Care</option>
+                                            <option>Khác</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Cohort</label>
+                                        <input type="text" class="form-control" id="modalCohortInput" placeholder="VD: UX-12-2025">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Ngày follow-up</label>
+                                        <input type="date" class="form-control" id="modalFollowUpDate">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label small text-muted">Ghi chú cho mentor</label>
+                                        <textarea class="form-control" id="modalNoteInput" rows="3" placeholder="Tóm tắt vấn đề hoặc đề xuất"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="modalAutomationToggle" checked>
+                                            <label class="form-check-label" for="modalAutomationToggle">Kích hoạt workflow nhắc nộp bài</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="d-flex flex-wrap gap-2 mt-4">
+                                <button type="button" class="btn btn-outline-secondary"><i class="fa fa-envelope me-2"></i>Gửi email</button>
+                                <button type="button" class="btn btn-outline-primary"><i class="fa fa-comments me-2"></i>Nhắn qua chat</button>
+                                <button type="button" class="btn btn-outline-success"><i class="fa fa-calendar me-2"></i>Book lịch 1:1</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <small class="text-muted">Mọi thay đổi sẽ lưu vào nhật ký hoạt động của học viên.</small>
+                    <div class="ms-auto d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" form="studentQuickUpdateForm" class="btn btn-primary">Lưu cập nhật</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="students.js"></script>
+</body>
+
+</html>
