@@ -1,194 +1,219 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layouts/ad-layout-common(pageTitle='login')}">
+      layout:decorate="~{admin/layouts/ad-layout-common(pageTitle='Students')}">
 <head>
-    <title>Students</title>
+    <title>Quản lý học viên</title>
 </head>
 
 <body>
 <div layout:fragment="content">
-
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="mb-0">Tài khoản người dùng</h2>
-            <small class="text-muted">Tạo/sửa giảng viên, quản lý hồ sơ học viên, phân quyền linh hoạt</small>
+            <h2 class="mb-0">Học viên</h2>
+            <small class="text-muted">Theo dõi tiến độ, chuyển lớp, gửi nhắc học tự động</small>
         </div>
-        <button class="btn btn-primary"><i class="fa fa-plus me-2"></i>Thêm tài khoản</button>
+        <div class="d-flex gap-3">
+            <button type="button" class="btn btn-outline-secondary" disabled>
+                <i class="fa fa-upload me-2"></i>Nhập danh sách
+            </button>
+            <button type="button" class="btn btn-primary" disabled>
+                <i class="fa fa-user-plus me-2"></i>Thêm học viên
+            </button>
+        </div>
     </div>
 
     <div class="row g-4">
         <div class="col-md-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <p class="text-muted mb-1">Giảng viên active</p>
-                    <h3 class="mb-0">18</h3>
-                    <small class="text-success">+2 mới tuần này</small>
+                    <p class="text-muted mb-1">Đang học</p>
+                    <h3 class="mb-0" id="studentActiveCount">--</h3>
+                    <small class="text-success">Đồng bộ theo enrollment mới nhất</small>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <p class="text-muted mb-1">Học viên đang học</p>
-                    <h3 class="mb-0">2,450</h3>
-                    <small class="text-success">92% đã xác thực hồ sơ</small>
+                    <p class="text-muted mb-1">Đang onboarding</p>
+                    <h3 class="mb-0" id="studentOnboardingCount">--</h3>
+                    <small class="text-warning">Học viên chưa có enrollment</small>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <p class="text-muted mb-1">Vai trò hệ thống</p>
-                    <h3 class="mb-0">4 nhóm</h3>
-                    <small class="text-muted">Admin · Instructor · Mentor · Learner</small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4 mt-1">
-        <div class="col-lg-5">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Tạo nhanh giảng viên</h5>
-                    <button class="btn btn-sm btn-outline-secondary">Nhập file</button>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">Họ tên</label>
-                            <input type="text" class="form-control" placeholder="VD: Phạm Anh Thư">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email công việc</label>
-                            <input type="email" class="form-control" placeholder="giangvien@elearning.vn">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Chuyên môn</label>
-                            <select class="form-select">
-                                <option>UI/UX</option>
-                                <option>Web Frontend</option>
-                                <option>Marketing Automation</option>
-                                <option>Data Analyst</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Phân quyền</label>
-                            <div class="d-flex flex-wrap">
-                                <span class="role-chip">Admin</span>
-                                <span class="role-chip">Instructor</span>
-                                <span class="role-chip">Mentor</span>
-                                <span class="role-chip">Learner</span>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-primary w-100">Tạo tài khoản</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-7">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Hồ sơ học viên</h5>
-                    <div>
-                        <button class="btn btn-sm btn-outline-secondary me-2">Lọc trạng thái</button>
-                        <button class="btn btn-sm btn-outline-primary">Xuất danh sách</button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead>
-                            <tr>
-                                <th>Học viên</th>
-                                <th>Khoá học</th>
-                                <th>Vai trò</th>
-                                <th>Trạng thái</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <strong>Linh Dao</strong>
-                                    <div class="text-muted small">linhdao@mail.com</div>
-                                </td>
-                                <td>Product Design</td>
-                                <td>
-                                    <span class="badge bg-light text-dark">Learner</span>
-                                </td>
-                                <td><span class="badge bg-success">Đang học</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>Hung Le</strong>
-                                    <div class="text-muted small">hung.le@mail.com</div>
-                                </td>
-                                <td>Fullstack Web</td>
-                                <td>
-                                    <span class="badge bg-info text-dark">Mentor</span>
-                                </td>
-                                <td><span class="badge bg-primary">Phân công</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>Trang Doan</strong>
-                                    <div class="text-muted small">trangd@edu.vn</div>
-                                </td>
-                                <td>Growth Marketing</td>
-                                <td>
-                                    <span class="badge bg-warning text-dark">Instructor</span>
-                                </td>
-                                <td><span class="badge bg-warning text-dark">Chờ duyệt</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
-                        <small class="text-muted">Hiển thị 1-3 / 48 hồ sơ</small>
-                        <nav>
-                            <ul class="pagination pagination-sm mb-0">
-                                <li class="page-item disabled"><span class="page-link">«</span></li>
-                                <li class="page-item active"><span class="page-link">1</span></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">»</a></li>
-                            </ul>
-                        </nav>
-                    </div>
+                    <p class="text-muted mb-1">Ticket hỗ trợ mở</p>
+                    <h3 class="mb-0" id="studentOpenTicketCount">--</h3>
+                    <small class="text-muted">Ưu tiên mentor phản hồi</small>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="card border-0 shadow-sm mt-4">
-        <div class="card-header bg-white">
-            <h5 class="mb-0">Vai trò & phân quyền rõ ràng</h5>
+        <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-1">Bộ lọc học viên</h6>
+                <small class="text-muted">Cá nhân hoá nhanh theo cohort, trạng thái, mentor và hoạt động</small>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="studentResetButton">
+                    <i class="fa fa-undo me-1"></i>Reset
+                </button>
+                <button type="button" class="btn btn-sm btn-primary" disabled>
+                    <i class="fa fa-save me-1"></i>Lưu bộ lọc
+                </button>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <h6>Admin</h6>
-                    <p class="text-muted small">Toàn quyền cấu hình hệ thống, phê duyệt khóa và phân bổ vai trò.</p>
-                    <button class="btn btn-link p-0">Chỉnh sửa vai trò</button>
+        <div class="card-body py-3">
+            <div class="filter-toolbar p-2 p-md-3 mb-3">
+                <div class="row g-2 align-items-center mb-2">
+                    <div class="col-md-5">
+                        <p class="text-muted small mb-1">Nhóm trạng thái chính</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="button" class="filter-pill py-1 px-3 small active student-status-pill" data-status="">
+                                Tất cả
+                            </button>
+                            <button type="button" class="filter-pill py-1 px-3 small student-status-pill" data-status="ACTIVE">
+                                Đang học
+                            </button>
+                            <button type="button" class="filter-pill py-1 px-3 small student-status-pill" data-status="ONBOARDING">
+                                Onboarding
+                            </button>
+                            <button type="button" class="filter-pill py-1 px-3 small" disabled>
+                                Tạm dừng
+                            </button>
+                            <button type="button" class="filter-pill py-1 px-3 small" disabled>
+                                Hoàn thành
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-muted small mb-1">Cảnh báo</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark small">Nợ bài (0)</span>
+                            <span class="badge bg-light text-dark small">Miss live (0)</span>
+                            <span class="badge bg-light text-dark small">
+                                Ticket mở (<span id="studentOpenTicketBadge">--</span>)
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-md-end">
+                        <p class="text-muted small mb-1">Hiển thị</p>
+                        <div class="form-check form-switch d-inline-flex align-items-center small mb-0">
+                            <input class="form-check-input" type="checkbox" checked disabled>
+                            <label class="form-check-label ms-2">Chỉ khoá active</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <h6>Instructor</h6>
-                    <p class="text-muted small">Tạo nội dung khoá học, quản lý lớp, theo dõi điểm danh.</p>
-                    <button class="btn btn-link p-0">Thiết lập quyền</button>
+
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label small mb-1" for="studentKeyword">Tìm kiếm nâng cao</label>
+                        <div class="position-relative">
+                            <i class="fa fa-search input-icon"></i>
+                            <input type="search" class="form-control form-control-sm input-icon-field"
+                                   id="studentKeyword"
+                                   placeholder="Tên, email hoặc mã học viên">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small mb-1" for="studentCohort">Cohort</label>
+                        <select class="form-select form-select-sm" id="studentCohort" disabled>
+                            <option>Tất cả cohort</option>
+                            <option>UX-01-2026</option>
+                            <option>PD-01-2026</option>
+                            <option>FE-12-2025</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small mb-1" for="studentMentor">Mentor phụ trách</label>
+                        <select class="form-select form-select-sm" id="studentMentor" disabled>
+                            <option>Tất cả</option>
+                            <option>Minh Do</option>
+                            <option>Thao Tran</option>
+                            <option>Ken Pham</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1" for="studentPageSize">Tiến độ / size</label>
+                        <div class="d-flex gap-2">
+                            <select class="form-select form-select-sm" id="studentProgress" disabled>
+                                <option>0-25%</option>
+                                <option>25-50%</option>
+                                <option selected>50-75%</option>
+                                <option>75-100%</option>
+                            </select>
+                            <select class="form-select form-select-sm" id="studentPageSize">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <h6>Mentor</h6>
-                    <p class="text-muted small">Kèm cặp học viên, phản hồi bài tập, mở lịch coaching.</p>
-                    <button class="btn btn-link p-0">Cập nhật quyền</button>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
+                <span class="text-muted small">Đã lưu:</span>
+                <span class="saved-filter small">Live Class No-show</span>
+                <span class="saved-filter small">Career Switch Cohort</span>
+                <button type="button" class="btn btn-sm btn-link text-decoration-none" disabled>Quản lý bộ lọc</button>
+                <button type="button" class="btn btn-sm btn-primary ms-auto" id="studentSearchButton">
+                    <i class="fa fa-search me-1"></i>Tìm kiếm
+                </button>
+            </div>
+
+            <hr class="my-3">
+
+            <div class="alert alert-light border-start border-4 border-primary shadow-sm mb-3" role="alert">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="modal-icon-bubble bg-white text-primary">
+                        <i class="fa fa-pen"></i>
+                    </div>
+                    <div>
+                        <strong>Hồ sơ nhanh trong modal</strong>
+                        <div class="small text-muted">Chọn bất kỳ học viên nào trong bảng để mở modal chỉnh sửa và cập nhật trạng thái.</div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <h6>Learner</h6>
-                    <p class="text-muted small">Truy cập nội dung học, gửi bài tập, nhận thông báo.</p>
-                    <button class="btn btn-link p-0">Xem chi tiết</button>
-                </div>
+            </div>
+
+            <div id="studentApiError" class="alert alert-danger d-none" role="alert"></div>
+
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                    <tr>
+                        <th>Học viên</th>
+                        <th>Khóa học</th>
+                        <th>Cohort</th>
+                        <th>Tiến độ</th>
+                        <th>Trạng thái</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">Đang tải dữ liệu...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap mt-3 gap-2">
+                <small class="text-muted" id="studentPaginationSummary">Hiển thị 0-0 / 0 học viên</small>
+                <nav aria-label="Student pagination">
+                    <ul class="pagination pagination-sm mb-0" id="studentPagination"></ul>
+                </nav>
             </div>
         </div>
     </div>
+
+    <script th:src="@{/js/ad-03-students.js}"></script>
 </div>
 </body>
+</html>

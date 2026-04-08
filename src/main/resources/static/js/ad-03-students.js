@@ -1,256 +1,295 @@
 $(function () {
-    const $modal = $('#studentProfileModal');
-    if (!$modal.length) {
-        return;
-    }
+    const $keyword = $('#studentKeyword');
+    const $pageSize = $('#studentPageSize');
+    const $searchButton = $('#studentSearchButton');
+    const $resetButton = $('#studentResetButton');
+    const $tableBody = $('#studentTableBody');
+    const $pagination = $('#studentPagination');
+    const $paginationSummary = $('#studentPaginationSummary');
+    const $apiError = $('#studentApiError');
+    const $activeCount = $('#studentActiveCount');
+    const $onboardingCount = $('#studentOnboardingCount');
+    const $openTicketCount = $('#studentOpenTicketCount');
+    const $openTicketBadge = $('#studentOpenTicketBadge');
+    const $currentPage = $('#studentCurrentPage');
+    const $pageSizeCard = $('#studentPageSizeCard');
+    const $statusPills = $('.student-status-pill');
 
-    const profileModal = new bootstrap.Modal($modal[0]);
-    const studentRowSelector = '.student-row';
-    const getStudentRows = () => $(studentRowSelector);
-
-    const ui = {
-        name: $('#modalStudentName'),
-        meta: $('#modalStudentMeta'),
-        email: $('#modalStudentEmail'),
-        join: $('#modalJoinDate'),
-        mentorLabel: $('#modalMentorLabel'),
-        statusBadge: $('#modalStatusBadge'),
-        initials: $('#modalStudentInitials'),
-        progressLabel: $('#modalProgressLabel'),
-        progressBar: $('#modalProgressBar'),
-        goals: $('#modalGoals'),
-        timeline: $('#modalTimeline'),
-        noteContent: $('#modalNoteContent'),
-        noteMeta: $('#modalNoteMeta'),
-        courseInfo: $('#modalCourseInfo'),
-        cohortInfo: $('#modalCohortInfo'),
-        riskLabel: $('#modalRiskLabel'),
-        alertName: $('#modalAlertName'),
-        statusSelect: $('#modalStatusSelect'),
-        mentorSelect: $('#modalMentorSelect'),
-        cohortInput: $('#modalCohortInput'),
-        noteInput: $('#modalNoteInput'),
-        followUpDate: $('#modalFollowUpDate')
+    const state = {
+        page: 0,
+        size: Number($pageSize.val()) || 10,
+        keyword: '',
+        status: ''
     };
-
-    const fillModal = (data) => {
-        const name = data.name || '';
-        const course = data.course || '';
-        const cohort = data.cohort || '';
-        const progress = data.progress || 0;
-        const moduleLabel = data.module || '';
-
-        ui.name.text(name);
-        ui.meta.text(`${course} · ${cohort}`);
-        ui.email.text(data.email || '');
-        ui.join.text(data.join || '');
-        ui.mentorLabel.text(data.mentor || '');
-        ui.courseInfo.text(course);
-        ui.cohortInfo.text(cohort);
-        ui.riskLabel.text(data.risk || 'Chưa xác định');
-        ui.statusBadge.text(data.status || '').attr('class', `badge ${data.statusClass || 'bg-secondary'}`);
-        ui.alertName.text(name);
-
-        const initials = name
-            .split(' ')
-            .filter(Boolean)
-            .map((chunk) => chunk.charAt(0))
-            .join('')
-            .slice(0, 2)
-            .toUpperCase();
-        ui.initials.text(initials || '');
-
-        ui.progressLabel.text(`${progress}% · ${moduleLabel}`);
-        ui.progressBar
-            .css('width', `${progress}%`)
-            .attr('class', `progress-bar ${data.progressClass || 'bg-primary'}`);
-
-        ui.goals.empty();
-        if (data.goals) {
-            data.goals.split('|').forEach((goal) => {
-                const value = goal.trim();
-                if (!value) {
-                    return;
-                }
-                $('<span>').addClass('goal-pill').text(value).appendTo(ui.goals);
-            });
-        } else {
-            $('<small>').addClass('text-muted').text('Chưa có mục tiêu nào').appendTo(ui.goals);
-        }
-
-        ui.timeline.empty();
-        if (data.timeline) {
-            data.timeline.split('|').forEach((event) => {
-                $('<li>').html(`<span class="timeline-dot"></span>${event.trim()}`).appendTo(ui.timeline);
-            });
-        } else {
-            $('<li>').addClass('text-muted').text('Chưa có hoạt động nào').appendTo(ui.timeline);
-        }
-
-        ui.noteContent.text(data.note || 'Chưa có ghi chú');
-        ui.noteMeta.text(data.noteUpdated || '—');
-
-        if (ui.statusSelect.length) {
-            const hasStatusOption = ui.statusSelect.find('option').filter((_, option) => $(option).val() === data.status)
-                .length;
-            ui.statusSelect.val(hasStatusOption ? data.status : '');
-        }
-
-        if (ui.mentorSelect.length) {
-            const hasMentorOption = ui.mentorSelect.find('option').filter((_, option) => $(option).val() === data.mentor)
-                .length;
-            ui.mentorSelect.val(hasMentorOption ? data.mentor : 'Khác');
-        }
-
-        ui.cohortInput.val(cohort);
-        ui.noteInput.val(data.note || '');
-        ui.followUpDate.val(data.followup || '');
-
-        profileModal.show();
-    };
-
-    $(document).on('click', studentRowSelector, function (event) {
-        if ($(event.target).closest('button').length) {
-            return;
-        }
-        fillModal($(this).data());
-    });
-
-    const $demoTrigger = $('#modalDemoTrigger');
-    if ($demoTrigger.length) {
-        $demoTrigger.on('click', () => {
-            const $target = $('.student-row[data-student-id="mai-le"]').first();
-            const $row = $target.length ? $target : getStudentRows().first();
-            if ($row.length) {
-                fillModal($row.data());
-            }
-        });
-    }
-
-    const $quickForm = $('#studentQuickUpdateForm');
-    if ($quickForm.length) {
-        $quickForm.on('submit', (event) => {
-            event.preventDefault();
-            const $alert = $('#modalUpdateAlert');
-            if ($alert.length) {
-                $alert.removeClass('d-none');
-                setTimeout(() => $alert.addClass('d-none'), 2600);
-            }
-        });
-    }
-
-    const $addStudentModal = $('#addStudentModal');
-    const addStudentModalInstance = $addStudentModal.length ? new bootstrap.Modal($addStudentModal[0]) : null;
-    const $addStudentForm = $('#addStudentForm');
-    const $studentTableBody = $('.table.align-middle tbody').first();
-
-    const slugify = (text) => text
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-
-    const escapeAttr = (value = '') => String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
 
     const escapeHtml = (value = '') => String(value)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 
-    if ($addStudentForm.length) {
-        $addStudentForm.on('submit', (event) => {
-            event.preventDefault();
+    const formatDateTime = (value) => {
+        if (!value) {
+            return 'N/A';
+        }
 
-            const name = $('#newStudentName').val().trim();
-            const email = $('#newStudentEmail').val().trim();
-            const course = $('#newStudentCourse').val().trim();
-            const cohort = $('#newStudentCohort').val().trim();
-            const startDate = $('#newStudentStart').val();
-            const mentor = $('#newStudentMentor').val();
-            const goalsInput = $('#newStudentGoal').val().trim();
-            const note = $('#newStudentNote').val().trim();
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+            return value;
+        }
 
-            if (!name || !email || !course || !cohort || !startDate) {
-                return;
-            }
+        return date.toLocaleString('vi-VN');
+    };
 
-            const goalDataset = goalsInput
-                ? goalsInput.split(',').map((item) => item.trim()).filter(Boolean).join('|')
-                : '';
-            const slug = slugify(`${name}-${Date.now()}`) || `student-${Date.now()}`;
+    const renderRows = (items) => {
+        if (!items.length) {
+            $tableBody.html(`
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">Không có học viên phù hợp.</td>
+                </tr>
+            `);
+            return;
+        }
 
-            if ($studentTableBody.length) {
-                const safeName = escapeAttr(name);
-                const safeEmail = escapeAttr(email);
-                const safeCourse = escapeAttr(course);
-                const safeCohort = escapeAttr(cohort);
-                const safeMentor = escapeAttr(mentor);
-                const safeGoals = escapeAttr(goalDataset);
-                const safeTimeline = escapeAttr(`Vừa tạo tài khoản · ${startDate}`);
-                const safeNote = escapeAttr(note);
-                const safeJoin = escapeAttr(startDate);
-                const safeFollow = escapeAttr(startDate);
-                const noteStamp = escapeAttr(`System · ${new Date().toLocaleDateString('vi-VN')}`);
+        const rowsHtml = items.map((item) => {
+            const progressPercent = Number(item.progressPercent) || 0;
+            const progressClass = progressPercent >= 100
+                ? 'bg-primary'
+                : progressPercent >= 50
+                    ? 'bg-success'
+                    : progressPercent >= 25
+                        ? 'bg-warning'
+                        : 'bg-info';
+            const progressLabel = escapeHtml(item.progressLabel || 'Chưa có dữ liệu');
+            const statusClass = item.status === 'ACTIVE'
+                ? 'bg-success'
+                : item.status === 'ONBOARDING'
+                    ? 'bg-info text-dark'
+                    : 'bg-light text-dark';
 
-                const rowHtml = `
-                        <tr class="student-row" data-student-id="${slug}" 
-                                            data-name="${safeName}" 
-                                            data-email="${safeEmail}" 
-                                            data-course="${safeCourse}" 
-                                            data-cohort="${safeCohort}" 
-                                            data-progress="0" 
-                                            data-module="Module 0/1" 
-                                            data-status="Onboarding" 
-                                            data-status-class="bg-info text-dark" 
-                                            data-join="${safeJoin}" 
-                                            data-mentor="${safeMentor}" 
-                                            data-goals="${safeGoals}" 
-                                            data-timeline="${safeTimeline}" 
-                                            data-note="${safeNote}" 
-                                            data-note-updated="${noteStamp}" 
-                                            data-risk="Thấp" 
-                                            data-progress-class="bg-info" 
-                                            data-followup="${safeFollow}">
-                        <td>
-                            <strong>${escapeHtml(name)}</strong>
-                            <div class="text-muted small">${escapeHtml(email)}</div>
-                        </td>
-                        <td>${escapeHtml(course)}</td>
-                        <td>${escapeHtml(cohort)}</td>
-                        <td style="min-width:140px;">
-                            <div class="d-flex justify-content-between small">
-                                <span>0%</span>
-                                <span>Module 0/1</span>
-                            </div>
-                            <div class="progress progress-mini bg-light">
-                                <div class="progress-bar bg-info" style="width:0%;"></div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-info text-dark">Onboarding</span></td>
-                        <td class="text-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary me-2">Gửi tài liệu</button>
-                            <button type="button" class="btn btn-sm btn-outline-primary">Nhắc kích hoạt</button>
-                        </td>
-                    </tr>`;
-                $studentTableBody.prepend(rowHtml);
-            }
+            return `
+                <tr class="student-row">
+                    <td>
+                        <strong>${escapeHtml(item.fullName || '')}</strong>
+                        <div class="text-muted small">${escapeHtml(item.email || '')}</div>
+                    </td>
+                    <td>${escapeHtml(item.courseName || 'Chưa ghi danh')}</td>
+                    <td>${escapeHtml(item.cohortCode || '--')}</td>
+                    <td style="min-width:140px;">
+                        <div class="d-flex justify-content-between small">
+                            <span>${progressPercent}%</span>
+                            <span>${progressLabel}</span>
+                        </div>
+                        <div class="progress progress-mini bg-light">
+                            <div class="progress-bar ${progressClass}" style="width:${progressPercent}%;"></div>
+                        </div>
+                    </td>
+                    <td><span class="badge ${statusClass}">${escapeHtml(item.statusLabel || item.status || '')}</span></td>
+                    <td class="text-end">
+                        <button type="button" class="btn btn-sm btn-outline-secondary me-2" disabled>Chi tiết</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" disabled>Gửi nhắc</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
 
-            const $alert = $('#addStudentAlert');
-            if ($alert.length) {
-                $alert.removeClass('d-none');
-                setTimeout(() => $alert.addClass('d-none'), 3000);
-            }
+        $tableBody.html(rowsHtml);
+    };
 
-            $addStudentForm[0].reset();
+    const renderPagination = (pageData) => {
+        $pagination.empty();
 
-            if (addStudentModalInstance) {
-                setTimeout(() => addStudentModalInstance.hide(), 600);
+        if (!pageData.totalPages || pageData.totalPages <= 1) {
+            return;
+        }
+
+        const prevDisabled = pageData.hasPrevious ? '' : ' disabled';
+        const nextDisabled = pageData.hasNext ? '' : ' disabled';
+
+        $pagination.append(`
+            <li class="page-item${prevDisabled}">
+                <button class="page-link" type="button" data-page="${pageData.page - 1}">«</button>
+            </li>
+        `);
+
+        for (let i = 0; i < pageData.totalPages; i += 1) {
+            const active = i === pageData.page ? ' active' : '';
+            $pagination.append(`
+                <li class="page-item${active}">
+                    <button class="page-link" type="button" data-page="${i}">${i + 1}</button>
+                </li>
+            `);
+        }
+
+        $pagination.append(`
+            <li class="page-item${nextDisabled}">
+                <button class="page-link" type="button" data-page="${pageData.page + 1}">»</button>
+            </li>
+        `);
+    };
+
+    const renderSummary = (pageData) => {
+        const startRow = pageData.totalElements === 0 ? 0 : (pageData.page * pageData.size) + 1;
+        const endRow = Math.min(pageData.totalElements, (pageData.page + 1) * pageData.size);
+
+        $paginationSummary.text(`Hiển thị ${startRow}-${endRow} / ${pageData.totalElements} học viên`);
+        $currentPage.text(pageData.totalPages === 0 ? 0 : pageData.page + 1);
+        $pageSizeCard.text(pageData.size);
+    };
+
+    const renderCardSummary = (summaryData) => {
+        $activeCount.text(summaryData.activeStudents ?? 0);
+        $onboardingCount.text(summaryData.onboardingStudents ?? 0);
+        $openTicketCount.text(summaryData.openSupportTickets ?? 0);
+        $openTicketBadge.text(summaryData.openSupportTickets ?? 0);
+    };
+
+    const showError = (message) => {
+        $apiError.text(message).removeClass('d-none');
+    };
+
+    const hideError = () => {
+        $apiError.addClass('d-none').text('');
+    };
+
+    const loadStudents = () => {
+        hideError();
+        $tableBody.html(`
+            <tr>
+                <td colspan="6" class="text-center text-muted py-4">Đang tải dữ liệu...</td>
+            </tr>
+        `);
+
+        $.ajax({
+            url: '/api/admin/students',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                keyword: state.keyword || null,
+                status: state.status || null,
+                page: state.page,
+                size: state.size
+            },
+            success: function (response) {
+                const pageData = response && response.data ? response.data : null;
+                if (!pageData) {
+                    showError('Không nhận được dữ liệu học viên hợp lệ từ server.');
+                    renderRows([]);
+                    renderPagination({ totalPages: 0 });
+                    renderSummary({
+                        totalElements: 0,
+                        page: 0,
+                        size: state.size,
+                        totalPages: 0
+                    });
+                    return;
+                }
+
+                renderRows(pageData.content || []);
+                renderPagination(pageData);
+                renderSummary(pageData);
+            },
+            error: function (xhr) {
+                const message = xhr.responseText || 'Không thể tải danh sách học viên.';
+                showError(message);
+                renderRows([]);
+                renderPagination({ totalPages: 0 });
+                renderSummary({
+                    totalElements: 0,
+                    page: 0,
+                    size: state.size,
+                    totalPages: 0
+                });
             }
         });
-    }
+    };
+
+    const loadStudentSummary = () => {
+        $.ajax({
+            url: '/api/admin/students/summary',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                const summaryData = response && response.data ? response.data : null;
+                if (!summaryData) {
+                    renderCardSummary({
+                        activeStudents: 0,
+                        onboardingStudents: 0,
+                        openSupportTickets: 0
+                    });
+                    return;
+                }
+
+                renderCardSummary(summaryData);
+            },
+            error: function () {
+                renderCardSummary({
+                    activeStudents: 0,
+                    onboardingStudents: 0,
+                    openSupportTickets: 0
+                });
+            }
+        });
+    };
+
+    $statusPills.on('click', function () {
+        const $pill = $(this);
+        $statusPills.removeClass('active');
+        $pill.addClass('active');
+        state.status = $pill.data('status') || '';
+        state.page = 0;
+        loadStudents();
+    });
+
+    $searchButton.on('click', function () {
+        state.keyword = $keyword.val().trim();
+        state.page = 0;
+        state.size = Number($pageSize.val()) || 10;
+        loadStudents();
+    });
+
+    $resetButton.on('click', function () {
+        $keyword.val('');
+        $pageSize.val('10');
+        state.status = '';
+        state.keyword = '';
+        state.page = 0;
+        state.size = 10;
+        $statusPills.removeClass('active');
+        $statusPills.filter('[data-status=""]').addClass('active');
+        loadStudents();
+    });
+
+    $keyword.on('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            $searchButton.trigger('click');
+        }
+    });
+
+    $pageSize.on('change', function () {
+        state.size = Number($(this).val()) || 10;
+        state.page = 0;
+        loadStudents();
+    });
+
+    $pagination.on('click', '.page-link', function () {
+        const $button = $(this);
+        const $pageItem = $button.closest('.page-item');
+        if ($pageItem.hasClass('disabled') || $pageItem.hasClass('active')) {
+            return;
+        }
+
+        const nextPage = Number($button.data('page'));
+        if (Number.isNaN(nextPage) || nextPage < 0) {
+            return;
+        }
+
+        state.page = nextPage;
+        loadStudents();
+    });
+
+    loadStudentSummary();
+    loadStudents();
 });
