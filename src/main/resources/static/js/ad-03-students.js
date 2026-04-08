@@ -22,13 +22,6 @@ $(function () {
         status: ''
     };
 
-    const escapeHtml = (value = '') => String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-
     const formatDateTime = (value) => {
         if (!value) {
             return 'N/A';
