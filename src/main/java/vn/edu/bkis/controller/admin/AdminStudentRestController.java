@@ -1,12 +1,21 @@
 package vn.edu.bkis.controller.admin;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.edu.bkis.dto.ApiResponse;
+import vn.edu.bkis.dto.admin.AdminStudentCreateRequest;
+import vn.edu.bkis.dto.admin.AdminStudentCreateResponseDto;
+import vn.edu.bkis.dto.admin.AdminStudentFormOptionsDto;
 import vn.edu.bkis.dto.admin.AdminStudentListPageDto;
 import vn.edu.bkis.dto.admin.AdminStudentSummaryDto;
+import vn.edu.bkis.service.admin.AdminStudentCommandService;
 import vn.edu.bkis.service.admin.AdminStudentQueryService;
 
 /**
@@ -15,6 +24,7 @@ import vn.edu.bkis.service.admin.AdminStudentQueryService;
 @RestController
 @RequestMapping("/api/admin/students")
 public class AdminStudentRestController {
+    private final AdminStudentCommandService adminStudentCommandService;
     private final AdminStudentQueryService adminStudentQueryService;
 
     /**
@@ -22,7 +32,11 @@ public class AdminStudentRestController {
      *
      * @param adminStudentQueryService the query service
      */
-    public AdminStudentRestController(AdminStudentQueryService adminStudentQueryService) {
+    public AdminStudentRestController(
+        AdminStudentCommandService adminStudentCommandService,
+        AdminStudentQueryService adminStudentQueryService
+    ) {
+        this.adminStudentCommandService = adminStudentCommandService;
         this.adminStudentQueryService = adminStudentQueryService;
     }
 
@@ -53,5 +67,37 @@ public class AdminStudentRestController {
     @GetMapping("/summary")
     public ApiResponse<AdminStudentSummaryDto> getStudentSummary() {
         return ApiResponse.success(adminStudentQueryService.getStudentSummary());
+    }
+
+    /**
+     * Get course and mentor options for the add-student modal.
+     *
+     * @return form options
+     */
+    @GetMapping("/form-options")
+    public ApiResponse<AdminStudentFormOptionsDto> getFormOptions() {
+        return ApiResponse.success(adminStudentCommandService.getFormOptions());
+    }
+
+    /**
+     * Create a new student from the admin modal.
+     *
+     * @param request submitted payload
+     * @return created student response
+     */
+    @PostMapping
+    public ApiResponse<AdminStudentCreateResponseDto> createStudent(@RequestBody AdminStudentCreateRequest request) {
+        return ApiResponse.success(adminStudentCommandService.createStudent(request));
+    }
+
+    /**
+     * Convert simple validation errors to readable 400 responses for AJAX calls.
+     *
+     * @param ex raised exception
+     * @return response body with the error text
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

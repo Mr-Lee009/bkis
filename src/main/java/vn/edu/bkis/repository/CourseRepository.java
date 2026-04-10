@@ -14,6 +14,12 @@ import vn.edu.bkis.model.Course;
  */
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
+    /**
+     * Retrieve active courses ordered alphabetically for admin select options.
+     *
+     * @return active course list
+     */
+    List<Course> findByActiveFlagTrueOrderByTitleAsc();
 
     /**
      * Retrieve top 6 active courses ordered by creation date (newest first).

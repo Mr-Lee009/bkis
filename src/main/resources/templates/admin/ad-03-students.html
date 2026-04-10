@@ -17,7 +17,7 @@
             <button type="button" class="btn btn-outline-secondary" disabled>
                 <i class="fa fa-upload me-2"></i>Nhập danh sách
             </button>
-            <button type="button" class="btn btn-primary" disabled>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
                 <i class="fa fa-user-plus me-2"></i>Thêm học viên
             </button>
         </div>
@@ -214,6 +214,71 @@
     </div>
 
     <script th:src="@{/js/ad-03-students.js}"></script>
+
+    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h4 class="mb-1" id="addStudentModalLabel">Thêm học viên mới</h4>
+                        <p class="text-muted small mb-0">Điền thông tin cơ bản theo mock UI, hệ thống sẽ tạo tài khoản và ghi danh khóa học đầu tiên.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="addStudentAlert" class="alert alert-success d-none" role="alert"></div>
+                    <div id="addStudentError" class="alert alert-danger d-none" role="alert"></div>
+                    <form id="addStudentForm" class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted" for="newStudentName">Họ và tên</label>
+                            <input type="text" class="form-control" id="newStudentName" placeholder="VD: Nguyen Van A" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted" for="newStudentEmail">Email</label>
+                            <input type="email" class="form-control" id="newStudentEmail" placeholder="email@domain.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted" for="newStudentCourse">Khóa học</label>
+                            <select class="form-select" id="newStudentCourse" required>
+                                <option value="">Chọn khóa học</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small text-muted" for="newStudentCohort">Cohort</label>
+                            <input type="text" class="form-control" id="newStudentCohort" placeholder="UX-02-2026">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small text-muted" for="newStudentStart">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="newStudentStart" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted" for="newStudentMentor">Mentor</label>
+                            <select class="form-select" id="newStudentMentor">
+                                <option value="">Chưa phân</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted" for="newStudentGoal">Mục tiêu học viên</label>
+                            <input type="text" class="form-control" id="newStudentGoal" placeholder="VD: Chuyển nghề, nâng cấp portfolio">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted" for="newStudentNote">Ghi chú</label>
+                            <textarea class="form-control" id="newStudentNote" rows="3" placeholder="Thông tin bối cảnh, nhu cầu học viên..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <div class="text-muted small">
+                        <i class="fa fa-shield-alt me-1"></i>Form dùng API backend, không còn mock submit tĩnh.
+                    </div>
+                    <div class="ms-auto d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                        <button type="submit" form="addStudentForm" class="btn btn-primary" id="addStudentSubmitButton">Tạo học viên</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

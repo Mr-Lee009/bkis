@@ -31,6 +31,14 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmail(String email);
 
     /**
+     * Find all users that belong to the provided roles ordered by name.
+     *
+     * @param roles roles to include
+     * @return ordered user list
+     */
+    List<User> findByRoleInOrderByFullNameAsc(List<UserRole> roles);
+
+    /**
      * Count all accounts that belong to a specific role.
      *
      * @param role the role to count

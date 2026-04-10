@@ -14,6 +14,20 @@ $(function () {
     const $currentPage = $('#studentCurrentPage');
     const $pageSizeCard = $('#studentPageSizeCard');
     const $statusPills = $('.student-status-pill');
+    const $addStudentForm = $('#addStudentForm');
+    const $addStudentAlert = $('#addStudentAlert');
+    const $addStudentError = $('#addStudentError');
+    const $addStudentSubmitButton = $('#addStudentSubmitButton');
+    const $newStudentName = $('#newStudentName');
+    const $newStudentEmail = $('#newStudentEmail');
+    const $newStudentCourse = $('#newStudentCourse');
+    const $newStudentCohort = $('#newStudentCohort');
+    const $newStudentStart = $('#newStudentStart');
+    const $newStudentMentor = $('#newStudentMentor');
+    const $newStudentGoal = $('#newStudentGoal');
+    const $newStudentNote = $('#newStudentNote');
+    const addStudentModalElement = document.getElementById('addStudentModal');
+    const addStudentModal = addStudentModalElement ? new bootstrap.Modal(addStudentModalElement) : null;
 
     const state = {
         page: 0,
@@ -22,17 +36,60 @@ $(function () {
         status: ''
     };
 
-    const formatDateTime = (value) => {
-        if (!value) {
-            return 'N/A';
+    const showError = (message) => {
+        $apiError.text(message).removeClass('d-none');
+    };
+
+    const hideError = () => {
+        $apiError.addClass('d-none').text('');
+    };
+
+    const showCreateError = (message) => {
+        $addStudentError.text(message).removeClass('d-none');
+    };
+
+    const hideCreateError = () => {
+        $addStudentError.addClass('d-none').text('');
+    };
+
+    const showCreateSuccess = (message) => {
+        $addStudentAlert.text(message).removeClass('d-none');
+    };
+
+    const hideCreateSuccess = () => {
+        $addStudentAlert.addClass('d-none').text('');
+    };
+
+    const resetCreateForm = () => {
+        if ($addStudentForm.length) {
+            $addStudentForm[0].reset();
+        }
+        $newStudentMentor.val('');
+        hideCreateError();
+        hideCreateSuccess();
+    };
+
+    const setCreateSubmitting = (submitting) => {
+        if (!$addStudentSubmitButton.length) {
+            return;
         }
 
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) {
-            return value;
+        $addStudentSubmitButton.prop('disabled', submitting);
+        $addStudentSubmitButton.html(submitting
+            ? '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang tạo'
+            : 'Tạo học viên');
+    };
+
+    const populateSelectOptions = ($select, options, placeholder) => {
+        if (!$select.length) {
+            return;
         }
 
-        return date.toLocaleString('vi-VN');
+        const optionHtml = (options || []).map((item) => `
+            <option value="${escapeHtml(item.value || '')}">${escapeHtml(item.label || '')}</option>
+        `).join('');
+
+        $select.html(`<option value="">${escapeHtml(placeholder)}</option>${optionHtml}`);
     };
 
     const renderRows = (items) => {
@@ -138,14 +195,6 @@ $(function () {
         $openTicketBadge.text(summaryData.openSupportTickets ?? 0);
     };
 
-    const showError = (message) => {
-        $apiError.text(message).removeClass('d-none');
-    };
-
-    const hideError = () => {
-        $apiError.addClass('d-none').text('');
-    };
-
     const loadStudents = () => {
         hideError();
         $tableBody.html(`
@@ -226,6 +275,102 @@ $(function () {
         });
     };
 
+    const loadFormOptions = () => {
+        if (!$addStudentForm.length) {
+            return;
+        }
+
+        $.ajax({
+            url: '/api/admin/students/form-options',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                const data = response && response.data ? response.data : {};
+                populateSelectOptions($newStudentCourse, data.courses || [], 'Chọn khóa học');
+                populateSelectOptions($newStudentMentor, data.mentors || [], 'Chưa phân');
+            },
+            error: function () {
+                showCreateError('Không thể tải dữ liệu khóa học hoặc mentor cho form.');
+            }
+        });
+    };
+
+    const submitCreateStudent = () => {
+        const fullName = $newStudentName.val().trim();
+        const email = $newStudentEmail.val().trim();
+        const courseId = Number($newStudentCourse.val());
+        const startDate = $newStudentStart.val();
+        const goal = $newStudentGoal.val().trim();
+
+        hideCreateError();
+        hideCreateSuccess();
+
+        if (!fullName) {
+            showCreateError('Vui lòng nhập họ và tên.');
+            $newStudentName.trigger('focus');
+            return;
+        }
+
+        if (!email) {
+            showCreateError('Vui lòng nhập email.');
+            $newStudentEmail.trigger('focus');
+            return;
+        }
+
+        if (!courseId) {
+            showCreateError('Vui lòng chọn khóa học.');
+            $newStudentCourse.trigger('focus');
+            return;
+        }
+
+        if (!startDate) {
+            showCreateError('Vui lòng chọn ngày bắt đầu.');
+            $newStudentStart.trigger('focus');
+            return;
+        }
+
+        setCreateSubmitting(true);
+
+        $.ajax({
+            url: '/api/admin/students',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                fullName: fullName,
+                email: email,
+                courseId: courseId,
+                cohortCode: $newStudentCohort.val().trim() || null,
+                startDate: startDate,
+                mentorId: $newStudentMentor.val() || null,
+                goals: goal ? goal.split(',').map((item) => item.trim()).filter(Boolean) : [],
+                note: $newStudentNote.val().trim() || null
+            }),
+            success: function (response) {
+                const created = response && response.data ? response.data : null;
+                const name = created && created.fullName ? created.fullName : fullName;
+                showCreateSuccess(`Đã tạo học viên ${name}. Danh sách sẽ được làm mới ngay.`);
+                loadStudentSummary();
+                state.page = 0;
+                loadStudents();
+
+                window.setTimeout(function () {
+                    resetCreateForm();
+                    if (addStudentModal) {
+                        addStudentModal.hide();
+                    }
+                }, 900);
+            },
+            error: function (xhr) {
+                const message = xhr.responseText || 'Không thể tạo học viên.';
+                showCreateError(message);
+            },
+            complete: function () {
+                setCreateSubmitting(false);
+            }
+        });
+    };
+
     $statusPills.on('click', function () {
         const $pill = $(this);
         $statusPills.removeClass('active');
@@ -283,6 +428,18 @@ $(function () {
         loadStudents();
     });
 
+    $addStudentForm.on('submit', function (event) {
+        event.preventDefault();
+        submitCreateStudent();
+    });
+
+    if (addStudentModalElement) {
+        addStudentModalElement.addEventListener('hidden.bs.modal', function () {
+            resetCreateForm();
+        });
+    }
+
+    loadFormOptions();
     loadStudentSummary();
     loadStudents();
 });
