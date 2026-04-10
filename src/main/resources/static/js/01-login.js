@@ -33,7 +33,6 @@ $(function () {
             $captchaInput.focus();
         } else {
             $captchaInput.removeClass('is-invalid');
-            alert('Xác thực thành công!');
         }
     });
 
