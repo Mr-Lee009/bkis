@@ -18,6 +18,7 @@ $(function () {
     const $addStudentAlert = $('#addStudentAlert');
     const $addStudentError = $('#addStudentError');
     const $addStudentSubmitButton = $('#addStudentSubmitButton');
+    const $studentDetailError = $('#studentDetailError');
     const $newStudentName = $('#newStudentName');
     const $newStudentEmail = $('#newStudentEmail');
     const $newStudentCourse = $('#newStudentCourse');
@@ -28,6 +29,8 @@ $(function () {
     const $newStudentNote = $('#newStudentNote');
     const addStudentModalElement = document.getElementById('addStudentModal');
     const addStudentModal = addStudentModalElement ? new bootstrap.Modal(addStudentModalElement) : null;
+    const studentProfileModalElement = document.getElementById('studentProfileModal');
+    const studentProfileModal = studentProfileModalElement ? new bootstrap.Modal(studentProfileModalElement) : null;
 
     const state = {
         page: 0,
@@ -35,6 +38,13 @@ $(function () {
         keyword: '',
         status: ''
     };
+
+    const escapeHtml = (value = '') => String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 
     const showError = (message) => {
         $apiError.text(message).removeClass('d-none');
@@ -59,6 +69,59 @@ $(function () {
     const hideCreateSuccess = () => {
         $addStudentAlert.addClass('d-none').text('');
     };
+
+    const showDetailError = (message) => {
+        $studentDetailError.text(message).removeClass('d-none');
+    };
+
+    const hideDetailError = () => {
+        $studentDetailError.addClass('d-none').text('');
+    };
+
+    const statusClassFor = (status) => {
+        if (status === 'ACTIVE') {
+            return 'bg-success';
+        }
+        if (status === 'NOT_ENROLLED' || status === 'ONBOARDING') {
+            return 'bg-info text-dark';
+        }
+        if (status === 'CANCELLED' || status === 'EXPIRED') {
+            return 'bg-warning text-dark';
+        }
+        return 'bg-light text-dark';
+    };
+
+    const progressClassFor = (progressPercent) => {
+        if (progressPercent >= 100) {
+            return 'bg-primary';
+        }
+        if (progressPercent >= 50) {
+            return 'bg-success';
+        }
+        if (progressPercent >= 25) {
+            return 'bg-warning';
+        }
+        return 'bg-info';
+    };
+
+    const formatDateTime = (value) => {
+        if (!value) {
+            return '--';
+        }
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+            return value;
+        }
+        return date.toLocaleDateString('vi-VN');
+    };
+
+    const initialsOf = (name) => (name || '')
+        .split(' ')
+        .filter(Boolean)
+        .map((chunk) => chunk.charAt(0))
+        .join('')
+        .slice(0, 2)
+        .toUpperCase();
 
     const resetCreateForm = () => {
         if ($addStudentForm.length) {
@@ -104,22 +167,12 @@ $(function () {
 
         const rowsHtml = items.map((item) => {
             const progressPercent = Number(item.progressPercent) || 0;
-            const progressClass = progressPercent >= 100
-                ? 'bg-primary'
-                : progressPercent >= 50
-                    ? 'bg-success'
-                    : progressPercent >= 25
-                        ? 'bg-warning'
-                        : 'bg-info';
+            const progressClass = progressClassFor(progressPercent);
             const progressLabel = escapeHtml(item.progressLabel || 'Chưa có dữ liệu');
-            const statusClass = item.status === 'ACTIVE'
-                ? 'bg-success'
-                : item.status === 'ONBOARDING'
-                    ? 'bg-info text-dark'
-                    : 'bg-light text-dark';
+            const statusClass = statusClassFor(item.status);
 
             return `
-                <tr class="student-row">
+                <tr class="student-row" data-student-id="${escapeHtml(item.id || '')}">
                     <td>
                         <strong>${escapeHtml(item.fullName || '')}</strong>
                         <div class="text-muted small">${escapeHtml(item.email || '')}</div>
@@ -137,7 +190,7 @@ $(function () {
                     </td>
                     <td><span class="badge ${statusClass}">${escapeHtml(item.statusLabel || item.status || '')}</span></td>
                     <td class="text-end">
-                        <button type="button" class="btn btn-sm btn-outline-secondary me-2" disabled>Chi tiết</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary me-2 student-detail-button">Chi tiết</button>
                         <button type="button" class="btn btn-sm btn-outline-primary" disabled>Gửi nhắc</button>
                     </td>
                 </tr>
@@ -371,6 +424,86 @@ $(function () {
         });
     };
 
+    const fillStudentDetailModal = (student) => {
+        const progressPercent = Number(student.progressPercent) || 0;
+        const progressClass = progressClassFor(progressPercent);
+        const statusClass = statusClassFor(student.status);
+        const goals = Array.isArray(student.goals) ? student.goals.filter(Boolean) : [];
+
+        $('#modalStudentInitials').text(initialsOf(student.fullName) || 'HV');
+        $('#modalStudentName').text(student.fullName || '--');
+        $('#modalStudentMeta').text(`${student.courseName || 'Chua ghi danh'} · ${student.cohortCode || '--'}`);
+        $('#modalStudentEmail').text(student.email || '--');
+        $('#modalJoinDate').text(formatDateTime(student.joinedAt));
+        $('#modalMentorLabel').text(student.mentorId || 'Chua phan');
+        $('#modalStatusBadge').attr('class', `badge ${statusClass} mb-2`).text(student.statusLabel || student.status || '--');
+        $('#modalCourseInfo').text(student.courseName || 'Chua ghi danh');
+        $('#modalCohortInfo').text(student.cohortCode || '--');
+        $('#modalRiskLabel').text(student.locked ? 'Tai khoan bi khoa' : 'Binh thuong');
+        $('#modalProgressLabel').text(`${progressPercent}% · ${student.progressLabel || 'Chua co bai hoc'}`);
+        $('#modalProgressBar').attr('class', `progress-bar ${progressClass}`).css('width', `${progressPercent}%`);
+        $('#modalNoteContent').text(student.note || student.bio || 'Chua co ghi chu');
+        $('#modalNoteMeta').text(student.lastActivityAt
+            ? `Cap nhat gan nhat ${formatDateTime(student.lastActivityAt)}`
+            : 'Chua co hoat dong hoc tap');
+        $('#modalStatusSelect').val(student.status || '');
+        $('#modalMentorSelect').val(student.mentorId || '');
+        $('#modalCohortInput').val(student.cohortCode || '');
+        $('#modalFollowUpDate').val('');
+        $('#modalNoteInput').val(student.note || '');
+        $('#modalAlertName').text(student.fullName || '--');
+
+        const $goals = $('#modalGoals');
+        $goals.empty();
+        if (goals.length) {
+            goals.forEach((goal) => {
+                $('<span>').addClass('goal-pill').text(goal).appendTo($goals);
+            });
+        } else {
+            $('<small>').addClass('text-muted').text('Chua co muc tieu').appendTo($goals);
+        }
+
+        const $timeline = $('#modalTimeline');
+        $timeline.empty();
+        [
+            `Tao tai khoan · ${formatDateTime(student.joinedAt)}`,
+            student.enrolledAt ? `Ghi danh khoa hoc · ${formatDateTime(student.enrolledAt)}` : null,
+            student.lastActivityAt ? `Hoat dong hoc gan nhat · ${formatDateTime(student.lastActivityAt)}` : null
+        ].filter(Boolean).forEach((eventText) => {
+            $('<li>').append($('<span>').addClass('timeline-dot')).append(document.createTextNode(eventText)).appendTo($timeline);
+        });
+    };
+
+    const loadStudentDetail = (studentId) => {
+        if (!studentId || !studentProfileModal) {
+            return;
+        }
+
+        hideDetailError();
+        $('#modalStudentInitials').text('...');
+        $('#modalStudentName').text('Dang tai...');
+        $('#modalStudentMeta').text('--');
+        $('#modalStudentEmail').text('--');
+        studentProfileModal.show();
+
+        $.ajax({
+            url: `/api/admin/students/${encodeURIComponent(studentId)}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                const student = response && response.data ? response.data : null;
+                if (!student) {
+                    showDetailError('Khong nhan duoc thong tin hoc vien hop le tu server.');
+                    return;
+                }
+                fillStudentDetailModal(student);
+            },
+            error: function (xhr) {
+                showDetailError(xhr.responseText || 'Khong the tai thong tin chi tiet hoc vien.');
+            }
+        });
+    };
+
     $statusPills.on('click', function () {
         const $pill = $(this);
         $statusPills.removeClass('active');
@@ -426,6 +559,19 @@ $(function () {
 
         state.page = nextPage;
         loadStudents();
+    });
+
+    $tableBody.on('click', '.student-row', function (event) {
+        if ($(event.target).closest('button').length) {
+            return;
+        }
+        loadStudentDetail($(this).data('student-id'));
+    });
+
+    $tableBody.on('click', '.student-detail-button', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        loadStudentDetail($(this).closest('.student-row').data('student-id'));
     });
 
     $addStudentForm.on('submit', function (event) {

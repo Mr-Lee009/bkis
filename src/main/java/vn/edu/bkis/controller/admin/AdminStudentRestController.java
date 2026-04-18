@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.edu.bkis.dto.ApiResponse;
 import vn.edu.bkis.dto.admin.AdminStudentCreateRequest;
 import vn.edu.bkis.dto.admin.AdminStudentCreateResponseDto;
+import vn.edu.bkis.dto.admin.AdminStudentDetailDto;
 import vn.edu.bkis.dto.admin.AdminStudentFormOptionsDto;
 import vn.edu.bkis.dto.admin.AdminStudentListPageDto;
 import vn.edu.bkis.dto.admin.AdminStudentSummaryDto;
@@ -67,6 +69,17 @@ public class AdminStudentRestController {
     @GetMapping("/summary")
     public ApiResponse<AdminStudentSummaryDto> getStudentSummary() {
         return ApiResponse.success(adminStudentQueryService.getStudentSummary());
+    }
+
+    /**
+     * Get one student profile for the detail modal.
+     *
+     * @param studentId requested student id
+     * @return student detail profile
+     */
+    @GetMapping("/{studentId}")
+    public ApiResponse<AdminStudentDetailDto> getStudentDetail(@PathVariable String studentId) {
+        return ApiResponse.success(adminStudentQueryService.getStudentDetail(studentId));
     }
 
     /**

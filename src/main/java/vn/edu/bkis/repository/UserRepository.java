@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
+import vn.edu.bkis.dto.admin.AdminStudentDetailProjection;
 import vn.edu.bkis.dto.admin.AdminStudentListProjection;
 import vn.edu.bkis.model.UserRole;
 import vn.edu.bkis.model.User;
@@ -110,6 +111,8 @@ public interface UserRepository extends JpaRepository<User, String> {
             u.full_name AS fullName,
             u.email AS email,
             c.title AS courseName,
+            COALESCE(progress_stats.completed_videos, 0) AS completedVideos,
+            COALESCE(video_stats.total_videos, 0) AS totalVideos,
             en.status AS enrollmentStatus,
             u.created_at AS joinedAt,
             u.locked AS locked
@@ -122,6 +125,20 @@ public interface UserRepository extends JpaRepository<User, String> {
             LIMIT 1
         )
         LEFT JOIN courses c ON c.id = en.course_id
+        LEFT JOIN (
+            SELECT l.course_id AS course_id, COUNT(lv.id) AS total_videos
+            FROM lessons l
+            JOIN lesson_videos lv ON lv.lesson_id = l.id
+            GROUP BY l.course_id
+        ) video_stats ON video_stats.course_id = c.id
+        LEFT JOIN (
+            SELECT l.course_id AS course_id, p.student_id AS student_id, COUNT(DISTINCT p.lesson_video_id) AS completed_videos
+            FROM progress p
+            JOIN lesson_videos lv ON lv.id = p.lesson_video_id
+            JOIN lessons l ON l.id = lv.lesson_id
+            WHERE p.is_completed = TRUE
+            GROUP BY l.course_id, p.student_id
+        ) progress_stats ON progress_stats.course_id = c.id AND progress_stats.student_id = u.id
         WHERE u.role = 'STUDENT'
           AND (:keyword IS NULL OR :keyword = ''
             OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
@@ -159,6 +176,61 @@ public interface UserRepository extends JpaRepository<User, String> {
     Page<AdminStudentListProjection> searchAdminStudents(@Param("keyword") String keyword,
                                                          @Param("status") String status,
                                                          Pageable pageable);
+
+    /**
+     * Load one student profile for the admin detail modal.
+     *
+     * @param studentId requested student id
+     * @return detail projection when the student exists
+     */
+    @Query(value = """
+        SELECT
+            u.id AS id,
+            u.username AS username,
+            u.full_name AS fullName,
+            u.email AS email,
+            u.profile_picture_url AS profilePictureUrl,
+            u.bio AS bio,
+            u.locked AS locked,
+            u.created_at AS joinedAt,
+            c.id AS courseId,
+            c.title AS courseName,
+            en.status AS enrollmentStatus,
+            en.enrolled_at AS enrolledAt,
+            en.expires_at AS expiresAt,
+            COALESCE(progress_stats.completed_videos, 0) AS completedVideos,
+            COALESCE(video_stats.total_videos, 0) AS totalVideos,
+            progress_stats.last_activity_at AS lastActivityAt
+        FROM users u
+        LEFT JOIN enrollments en ON en.id = (
+            SELECT e2.id
+            FROM enrollments e2
+            WHERE e2.student_id = u.id
+            ORDER BY e2.enrolled_at DESC, e2.id DESC
+            LIMIT 1
+        )
+        LEFT JOIN courses c ON c.id = en.course_id
+        LEFT JOIN (
+            SELECT l.course_id AS course_id, COUNT(lv.id) AS total_videos
+            FROM lessons l
+            JOIN lesson_videos lv ON lv.lesson_id = l.id
+            GROUP BY l.course_id
+        ) video_stats ON video_stats.course_id = c.id
+        LEFT JOIN (
+            SELECT
+                l.course_id AS course_id,
+                p.student_id AS student_id,
+                COUNT(DISTINCT CASE WHEN p.is_completed = TRUE THEN p.lesson_video_id END) AS completed_videos,
+                MAX(p.updated_at) AS last_activity_at
+            FROM progress p
+            JOIN lesson_videos lv ON lv.id = p.lesson_video_id
+            JOIN lessons l ON l.id = lv.lesson_id
+            GROUP BY l.course_id, p.student_id
+        ) progress_stats ON progress_stats.course_id = c.id AND progress_stats.student_id = u.id
+        WHERE u.role = 'STUDENT'
+          AND u.id = :studentId
+        """, nativeQuery = true)
+    Optional<AdminStudentDetailProjection> findAdminStudentDetailById(@Param("studentId") String studentId);
 
     /**
      * Count students whose latest enrollment is active.

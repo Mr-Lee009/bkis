@@ -213,6 +213,119 @@
         </div>
     </div>
 
+    <div class="modal fade profile-modal" id="studentProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar-pill" id="modalStudentInitials">HV</div>
+                        <div>
+                            <h4 class="mb-0" id="modalStudentName">Thông tin học viên</h4>
+                            <div class="d-flex flex-wrap gap-2 small text-muted">
+                                <span id="modalStudentMeta">--</span>
+                                <span class="text-muted">·</span>
+                                <span id="modalStudentEmail">--</span>
+                            </div>
+                            <small class="text-muted">Gia nhập <span id="modalJoinDate">--</span> · Mentor <span id="modalMentorLabel">--</span></small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-light text-dark mb-2" id="modalStatusBadge">--</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body pt-4">
+                    <div id="studentDetailError" class="alert alert-danger d-none" role="alert"></div>
+                    <div class="row g-4">
+                        <div class="col-lg-5">
+                            <div class="pe-lg-4">
+                                <div class="mb-4">
+                                    <p class="text-muted text-uppercase small fw-semibold mb-2">Thông tin chung</p>
+                                    <ul class="list-unstyled modal-info-list mb-0">
+                                        <li><i class="fa fa-graduation-cap"></i><span id="modalCourseInfo">--</span></li>
+                                        <li><i class="fa fa-layer-group"></i><span id="modalCohortInfo">--</span></li>
+                                        <li><i class="fa fa-shield-alt"></i><span>Rủi ro: <span id="modalRiskLabel">--</span></span></li>
+                                    </ul>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <p class="text-muted text-uppercase small fw-semibold mb-0">Tiến độ</p>
+                                        <small class="text-muted" id="modalProgressLabel">--</small>
+                                    </div>
+                                    <div class="progress progress-mini bg-light">
+                                        <div class="progress-bar bg-info" id="modalProgressBar" style="width:0%;"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="text-muted text-uppercase small fw-semibold mb-2">Mục tiêu</p>
+                                    <div class="d-flex flex-wrap gap-2" id="modalGoals">
+                                        <small class="text-muted">--</small>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="text-muted text-uppercase small fw-semibold mb-2">Dòng thời gian</p>
+                                    <ul class="list-unstyled modal-timeline" id="modalTimeline"></ul>
+                                </div>
+                                <div class="support-card shadow-sm">
+                                    <strong class="d-block mb-1">Ghi chú gần nhất</strong>
+                                    <p class="mb-1" id="modalNoteContent">--</p>
+                                    <small class="text-muted" id="modalNoteMeta">--</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 ps-lg-4 modal-editor-panel">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0">Chỉnh sửa nhanh</h6>
+                                <span class="badge bg-light text-dark">Read only</span>
+                            </div>
+                            <div id="modalUpdateAlert" class="alert alert-success d-none" role="alert">
+                                Đã lưu nháp cho <strong id="modalAlertName">--</strong>.
+                            </div>
+                            <form id="studentQuickUpdateForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted" for="modalStatusSelect">Trạng thái</label>
+                                        <select class="form-select" id="modalStatusSelect" disabled>
+                                            <option value="ACTIVE">Đang học</option>
+                                            <option value="NOT_ENROLLED">Chưa ghi danh</option>
+                                            <option value="CANCELLED">Đã hủy</option>
+                                            <option value="EXPIRED">Hết hạn</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted" for="modalMentorSelect">Mentor</label>
+                                        <input type="text" class="form-control" id="modalMentorSelect" disabled>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted" for="modalCohortInput">Cohort</label>
+                                        <input type="text" class="form-control" id="modalCohortInput" disabled>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted" for="modalFollowUpDate">Ngày follow-up</label>
+                                        <input type="date" class="form-control" id="modalFollowUpDate" disabled>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label small text-muted" for="modalNoteInput">Ghi chú cho mentor</label>
+                                        <textarea class="form-control" id="modalNoteInput" rows="3" disabled></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="d-flex flex-wrap gap-2 mt-4">
+                                <button type="button" class="btn btn-outline-secondary" disabled><i class="fa fa-envelope me-2"></i>Gửi email</button>
+                                <button type="button" class="btn btn-outline-primary" disabled><i class="fa fa-comments me-2"></i>Nhắn qua chat</button>
+                                <button type="button" class="btn btn-outline-success" disabled><i class="fa fa-calendar me-2"></i>Book lịch 1:1</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <small class="text-muted">Thông tin được lấy trực tiếp từ dữ liệu tài khoản, enrollment và tiến độ học.</small>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script th:src="@{/js/ad-03-students.js}"></script>
 
     <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
