@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layouts/ad-layout-common(pageTitle='Courses')}">
+<head>
+    <title>Chi tiết khóa học</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <a th:href="@{/admin/courses/}" class="btn btn-sm btn-outline-secondary mb-3">
+                <i class="fa fa-arrow-left me-2"></i>Quay lại danh sách
+            </a>
+            <h2 class="mb-1" th:text="${course.title}">UX Writing Master</h2>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <span th:class="${course.visible} ? 'badge bg-success' : 'badge bg-dark'"
+                      th:text="${course.statusLabel}">Published</span>
+                <small class="text-muted">Cập nhật <span th:text="${course.updatedAt}">04/01/2026</span></small>
+                <small class="text-muted">Năm <span th:text="${course.year ?: '--'}">2026</span></small>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-outline-secondary" type="button" disabled><i class="fa fa-eye me-2"></i>Xem landing</button>
+            <button class="btn btn-primary" type="submit" form="courseEditForm"><i class="fa fa-save me-2"></i>Lưu cập nhật</button>
+            <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteCourseModal">
+                <i class="fa fa-trash me-2"></i>Xoá khóa học
+            </button>
+        </div>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Học viên</p>
+                    <h3 class="mb-0" th:text="${course.enrolledStudents}">1248</h3>
+                    <small class="text-success">Theo bảng enrollments</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Doanh thu</p>
+                    <h3 class="mb-0" th:text="${course.revenue}">842000000</h3>
+                    <small class="text-muted">Payment completed</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Hoàn thiện</p>
+                    <h3 class="mb-0"><span th:text="${course.completionPercent}">86</span>%</h3>
+                    <small class="text-success">Theo metadata và giáo trình</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Đánh giá</p>
+                    <h3 class="mb-0" th:text="${course.rating ?: '--'}">4.8</h3>
+                    <small class="text-warning">Từ reviews khi nối sâu hơn</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Thông tin khóa học</h5>
+                </div>
+                <div class="card-body">
+                    <form id="courseEditForm"
+                          th:action="@{/admin/courses/{id}/update(id=${course.id})}"
+                          th:object="${courseUpdateForm}"
+                          method="post"
+                          class="row g-3">
+                        <input type="hidden" th:field="*{id}">
+                        <div class="col-md-8">
+                            <label class="form-label" for="title">Tên khóa học</label>
+                            <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="status">Trạng thái</label>
+                            <select class="form-select" id="status" th:field="*{status}">
+                                <option value="PUBLISHED">Published</option>
+                                <option value="HIDDEN">Hidden</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="teacherId">Giảng viên</label>
+                            <select class="form-select" id="teacherId" th:field="*{teacherId}" required>
+                                <option value="">Chọn giảng viên</option>
+                                <option th:each="teacher : ${teacherOptions}"
+                                        th:value="${teacher.value}"
+                                        th:text="${teacher.label}">Minh Do</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="price">Giá bán</label>
+                            <input type="number" min="0" step="1000" class="form-control" id="price" th:field="*{price}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Năm</label>
+                            <input type="text" class="form-control" th:value="${course.year ?: '--'}" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="tag">Danh mục / tag</label>
+                            <input type="text" class="form-control" id="tag" th:field="*{tag}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="imageUrl">Ảnh bìa</label>
+                            <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="description">Mô tả</label>
+                            <textarea class="form-control" id="description" rows="4" th:field="*{description}"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="highlights">Điểm nổi bật</label>
+                            <textarea class="form-control" id="highlights" rows="3" th:field="*{highlights}"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="visible" th:field="*{visible}">
+                                <label class="form-check-label" for="visible">Hiển thị khóa học trên trang public</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Kiểm tra xuất bản</h5>
+                    <span th:class="${course.completionPercent >= 80} ? 'badge bg-success' : 'badge bg-warning text-dark'"
+                          th:text="${course.completionPercent >= 80} ? 'Ready' : 'Needs work'">Ready</span>
+                </div>
+                <div class="card-body">
+                    <div class="course-check-item">
+                        <i th:class="${course.imageUrl != null && !#strings.isEmpty(course.imageUrl)} ? 'fa fa-check-circle text-success' : 'fa fa-exclamation-circle text-warning'"></i>
+                        <span>Ảnh bìa và mô tả landing</span>
+                    </div>
+                    <div class="course-check-item">
+                        <i th:class="${course.moduleCount > 0} ? 'fa fa-check-circle text-success' : 'fa fa-exclamation-circle text-warning'"></i>
+                        <span>Giáo trình có module</span>
+                    </div>
+                    <div class="course-check-item">
+                        <i th:class="${course.videoCount > 0} ? 'fa fa-check-circle text-success' : 'fa fa-exclamation-circle text-warning'"></i>
+                        <span>Có video bài học</span>
+                    </div>
+                    <div class="course-check-item">
+                        <i th:class="${course.teacherId != null && !#strings.isEmpty(course.teacherId)} ? 'fa fa-check-circle text-success' : 'fa fa-exclamation-circle text-warning'"></i>
+                        <span>Đã phân công giảng viên</span>
+                    </div>
+                    <hr>
+                    <button class="btn btn-outline-primary w-100" type="button" disabled>Gửi duyệt lại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0">Module khóa học</h5>
+                        <small class="text-muted">Theo bảng lessons</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#addModuleModal">Thêm module</button>
+                </div>
+                <div class="card-body">
+                    <div th:if="${#lists.isEmpty(course.modules)}" class="text-muted text-center py-4">
+                        Chưa có module nào cho khóa học này.
+                    </div>
+                    <div class="module-item course-module-item"
+                         th:each="module, iterStat : ${course.modules}"
+                         th:classappend="${iterStat.index == 0} ? ' active' : ''"
+                         th:attr="data-module-id=${module.id}, data-module-title=${module.title}, data-module-position=${module.position}, data-module-videos=${module.videoCount}, data-module-description=${module.description ?: ''}"
+                         data-module-item>
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+                            <button type="button" class="btn p-0 text-start flex-grow-1 border-0 bg-transparent" data-module-toggle>
+                                <i class="fa fa-grip-lines me-2 text-muted"></i>
+                                <strong>Module <span th:text="${module.position}">1</span> · <span th:text="${module.title}">Foundation</span></strong>
+                                <small class="d-block text-muted ms-4" th:text="${module.description ?: 'Chưa có mô tả module'}">Module description</small>
+                            </button>
+                            <span class="badge bg-light text-dark"><span th:text="${module.videoCount}">15</span> video</span>
+                        </div>
+                        <div class="d-flex gap-3 mt-2 small ms-4">
+                            <button class="btn btn-sm btn-link p-0 text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#editModuleModal"
+                                    th:attr="data-module-id=${module.id}, data-module-title=${module.title}, data-module-position=${module.position}, data-module-description=${module.description ?: ''}">Sửa module</button>
+                            <button class="btn btn-sm btn-link p-0 text-danger text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#deleteModuleModal"
+                                    th:attr="data-module-id=${module.id}, data-module-title=${module.title}">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-start gap-3">
+                    <div>
+                        <h5 class="mb-0" id="moduleVideoTitle"
+                            th:text="${#lists.isEmpty(course.modules)} ? 'Video bài học' : |Module ${course.modules[0].position} · ${course.modules[0].title}|">Module 01 · Foundation</h5>
+                        <small class="text-muted" id="moduleVideoSubtitle"
+                               th:text="${#lists.isEmpty(course.modules)} ? 'Chọn module để xem video.' : |${course.modules[0].videoCount} video từ bảng lesson_videos|">15 video từ bảng lesson_videos</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#addVideoModal" th:disabled="${#lists.isEmpty(course.modules)}">Thêm video</button>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-light border small mb-3" role="alert">
+                        Video đang lấy từ bảng <strong>lesson_videos</strong>. Tài liệu PDF/slide cần bảng tài nguyên riêng khi triển khai upload thật.
+                    </div>
+                    <div th:if="${#lists.isEmpty(course.modules)}" class="text-muted text-center py-4">
+                        Chưa có dữ liệu video.
+                    </div>
+                    <div class="module-video-panel"
+                         th:each="module, iterStat : ${course.modules}"
+                         th:classappend="${iterStat.index != 0} ? ' d-none' : ''"
+                         th:attr="data-video-panel=${module.id}">
+                        <div th:if="${#lists.isEmpty(module.videos)}" class="text-muted text-center py-4">
+                            Module này chưa có video.
+                        </div>
+                        <div class="lesson-video-item d-flex align-items-start gap-3" th:each="video : ${module.videos}">
+                            <div class="video-position" th:text="${video.position}">1</div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                                    <div>
+                                        <h6 class="mb-1" th:text="${video.title}">Intro to the course</h6>
+                                        <small class="text-muted" th:text="${video.videoUrl ?: 'Chưa có URL video'}">https://cdn.example/video.mp4</small>
+                                    </div>
+                                    <span class="badge bg-success" th:text="${video.statusLabel}">Published</span>
+                                </div>
+                                <div class="d-flex flex-wrap align-items-center gap-3 mt-2 small text-muted">
+                                    <span><i class="fa fa-clock me-1"></i><span th:text="${video.durationLabel}">08:30</span></span>
+                                    <button class="btn btn-sm btn-link p-0 text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#editVideoModal"
+                                            th:attr="data-module-id=${module.id}, data-video-id=${video.id}, data-video-title=${video.title}, data-video-url=${video.videoUrl}, data-video-duration=${video.duration}, data-video-position=${video.position}">Sửa video</button>
+                                    <button class="btn btn-sm btn-link p-0 text-danger text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#deleteVideoModal"
+                                            th:attr="data-module-id=${module.id}, data-video-id=${video.id}, data-video-title=${video.title}">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-line mt-4">
+                        <p class="mb-3"><span class="dot"></span>Cập nhật gần nhất · <span th:text="${course.updatedAt}">04/01/2026</span></p>
+                        <p class="mb-3"><span class="dot"></span>Tạo khóa học · <span th:text="${course.createdAt}">18/11/2025</span></p>
+                        <p class="mb-0"><span class="dot"></span>Trạng thái hiện tại · <span th:text="${course.statusLabel}">Published</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Tải tài nguyên bài học</h5>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" disabled>Lịch sử</button>
+                </div>
+                <div class="card-body">
+                    <div class="upload-dropzone mb-3">
+                        <i class="fa fa-cloud-upload-alt fa-2x text-primary mb-2"></i>
+                        <p class="mb-1">Kéo thả file PDF, video hoặc slide vào đây</p>
+                        <small class="text-muted">Sẽ nối với upload S3 theo module của khóa hiện tại.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="resourceModuleSelect">Chọn module</label>
+                        <select class="form-select" id="resourceModuleSelect">
+                            <option th:each="module : ${course.modules}"
+                                    th:text="|Module ${module.position} · ${module.title}|">Module 01 · Foundation</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary w-100" type="button" disabled><i class="fa fa-upload me-2"></i>Tải lên khóa này</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Bật/tắt hiển thị tự động</h5>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" disabled>Quy tắc</button>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-6 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Ẩn khi thiếu tài nguyên</h6>
+                                <small class="text-muted">Bật nếu module dưới 80% nội dung</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" checked disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Hiển thị landing</h6>
+                                <small class="text-muted">Đồng bộ với active_flag</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" th:checked="${course.visible}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Khóa nội bộ</h6>
+                                <small class="text-muted">Cần schema riêng nếu triển khai thật</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Cho phép enrollment mới</h6>
+                                <small class="text-muted">Hiện đang phụ thuộc public visibility</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" th:checked="${course.visible}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addModuleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title">Thêm module</h5>
+                        <p class="text-muted small mb-0">Tạo lesson mới cho khóa học hiện tại.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/admin/courses/{id}/modules(id=${course.id})}" method="post">
+                    <div class="modal-body row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label" for="addModuleTitle">Tên module</label>
+                            <input type="text" class="form-control" id="addModuleTitle" name="title" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="addModulePosition">Thứ tự</label>
+                            <input type="number" min="1" class="form-control" id="addModulePosition" name="position" th:value="${course.moduleCount + 1}" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="addModuleDescription">Mô tả</label>
+                            <textarea class="form-control" id="addModuleDescription" name="description" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                        <button type="submit" class="btn btn-primary">Thêm module</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editModuleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title">Sửa module</h5>
+                        <p class="text-muted small mb-0">Cập nhật title, mô tả và thứ tự lesson.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editModuleForm" method="post" th:attr="data-action-template=@{/admin/courses/{courseId}/modules/MODULE_ID/update(courseId=${course.id})}">
+                    <div class="modal-body row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label" for="editModuleTitle">Tên module</label>
+                            <input type="text" class="form-control" id="editModuleTitle" name="title" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="editModulePosition">Thứ tự</label>
+                            <input type="number" min="1" class="form-control" id="editModulePosition" name="position" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="editModuleDescription">Mô tả</label>
+                            <textarea class="form-control" id="editModuleDescription" name="description" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                        <button type="submit" class="btn btn-primary">Lưu module</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModuleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Xóa module</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-1">Module <strong id="deleteModuleTitle">này</strong> và các video bên trong sẽ bị xóa nếu chưa có progress.</p>
+                    <small class="text-muted">Nếu học viên đã có progress, hệ thống sẽ chặn thao tác xóa.</small>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                    <form id="deleteModuleForm" method="post" th:attr="data-action-template=@{/admin/courses/{courseId}/modules/MODULE_ID/delete(courseId=${course.id})}">
+                        <button type="submit" class="btn btn-danger">Xóa module</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addVideoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title">Thêm video</h5>
+                        <p class="text-muted small mb-0">Video sẽ được thêm vào module đang chọn.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addVideoForm" method="post" th:attr="data-action-template=@{/admin/courses/{courseId}/modules/MODULE_ID/videos(courseId=${course.id})}">
+                    <div class="modal-body row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label" for="addVideoTitle">Tên video</label>
+                            <input type="text" class="form-control" id="addVideoTitle" name="title" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="addVideoPosition">Thứ tự</label>
+                            <input type="number" min="1" class="form-control" id="addVideoPosition" name="position" required>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label" for="addVideoUrl">Video URL</label>
+                            <input type="url" class="form-control" id="addVideoUrl" name="videoUrl" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="addVideoDuration">Thời lượng giây</label>
+                            <input type="number" min="0" class="form-control" id="addVideoDuration" name="duration" value="0">
+                        </div>
+                        <div class="col-12">
+                            <div class="alert alert-light border small mb-0">Module đích: <strong id="addVideoModuleLabel">Module đang chọn</strong></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                        <button type="submit" class="btn btn-primary">Thêm video</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editVideoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title">Sửa video</h5>
+                        <p class="text-muted small mb-0">Cập nhật dữ liệu trong bảng lesson_videos.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editVideoForm" method="post" th:attr="data-action-template=@{/admin/courses/{courseId}/modules/MODULE_ID/videos/VIDEO_ID/update(courseId=${course.id})}">
+                    <div class="modal-body row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label" for="editVideoTitle">Tên video</label>
+                            <input type="text" class="form-control" id="editVideoTitle" name="title" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="editVideoPosition">Thứ tự</label>
+                            <input type="number" min="1" class="form-control" id="editVideoPosition" name="position" required>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label" for="editVideoUrl">Video URL</label>
+                            <input type="url" class="form-control" id="editVideoUrl" name="videoUrl" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="editVideoDuration">Thời lượng giây</label>
+                            <input type="number" min="0" class="form-control" id="editVideoDuration" name="duration">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                        <button type="submit" class="btn btn-primary">Lưu video</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteVideoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Xóa video</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-1">Video <strong id="deleteVideoTitle">này</strong> sẽ bị xóa nếu chưa có progress.</p>
+                    <small class="text-muted">Nếu học viên đã xem video này, hệ thống sẽ chặn thao tác xóa.</small>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                    <form id="deleteVideoForm" method="post" th:attr="data-action-template=@{/admin/courses/{courseId}/modules/MODULE_ID/videos/VIDEO_ID/delete(courseId=${course.id})}">
+                        <button type="submit" class="btn btn-danger">Xóa video</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteCourseModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Xoá khóa học</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-1">Nếu khóa đã có enrollment hoặc payment, hệ thống sẽ ẩn khóa thay vì xóa thật.</p>
+                    <small class="text-muted">
+                        Khóa hiện có <span th:text="${course.enrolledStudents}">0</span> enrollment và
+                        <span th:text="${course.paymentCount}">0</span> payment.
+                    </small>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                    <form th:action="@{/admin/courses/{id}/delete(id=${course.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">Xác nhận xoá</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let activeModuleId = document.querySelector('[data-module-item]')?.dataset.moduleId || '';
+        let activeModuleTitle = document.querySelector('[data-module-item]')?.dataset.moduleTitle || '';
+        let activeModuleVideos = document.querySelector('[data-module-item]')?.dataset.moduleVideos || '0';
+
+        function buildAction(form, values) {
+            let action = form?.dataset.actionTemplate || '';
+            Object.entries(values).forEach(([key, value]) => {
+                action = action.replace(key, encodeURIComponent(value || ''));
+            });
+            return action;
+        }
+
+        function activateModule(item) {
+            activeModuleId = item.dataset.moduleId;
+            activeModuleTitle = item.dataset.moduleTitle || '';
+            activeModuleVideos = item.dataset.moduleVideos || '0';
+
+            document.querySelectorAll('[data-module-item]').forEach((moduleItem) => {
+                moduleItem.classList.toggle('active', moduleItem === item);
+            });
+            document.querySelectorAll('[data-video-panel]').forEach((panel) => {
+                panel.classList.toggle('d-none', panel.dataset.videoPanel !== activeModuleId);
+            });
+
+            const title = document.getElementById('moduleVideoTitle');
+            const subtitle = document.getElementById('moduleVideoSubtitle');
+            if (title) {
+                title.textContent = `Module ${item.dataset.modulePosition || "--"} · ${activeModuleTitle}`;
+            }
+            if (subtitle) {
+                subtitle.textContent = `${activeModuleVideos} video từ bảng lesson_videos`;
+            }
+        }
+
+        document.querySelectorAll('[data-module-toggle]').forEach((button) => {
+            button.addEventListener('click', () => activateModule(button.closest('[data-module-item]')));
+        });
+
+        document.getElementById('addVideoModal')?.addEventListener('show.bs.modal', () => {
+            const form = document.getElementById('addVideoForm');
+            form.action = buildAction(form, { 'MODULE_ID': activeModuleId });
+            document.getElementById('addVideoModuleLabel').textContent = activeModuleTitle || 'Module đang chọn';
+            document.getElementById('addVideoPosition').value = Number(activeModuleVideos || 0) + 1;
+        });
+
+        document.getElementById('editModuleModal')?.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget;
+            const form = document.getElementById('editModuleForm');
+            form.action = buildAction(form, { 'MODULE_ID': button.dataset.moduleId });
+            document.getElementById('editModuleTitle').value = button.dataset.moduleTitle || '';
+            document.getElementById('editModulePosition').value = button.dataset.modulePosition || '1';
+            document.getElementById('editModuleDescription').value = button.dataset.moduleDescription || '';
+        });
+
+        document.getElementById('deleteModuleModal')?.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget;
+            const form = document.getElementById('deleteModuleForm');
+            form.action = buildAction(form, { 'MODULE_ID': button.dataset.moduleId });
+            document.getElementById('deleteModuleTitle').textContent = button.dataset.moduleTitle || 'này';
+        });
+
+        document.getElementById('editVideoModal')?.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget;
+            const form = document.getElementById('editVideoForm');
+            form.action = buildAction(form, {
+                'MODULE_ID': button.dataset.moduleId,
+                'VIDEO_ID': button.dataset.videoId
+            });
+            document.getElementById('editVideoTitle').value = button.dataset.videoTitle || '';
+            document.getElementById('editVideoUrl').value = button.dataset.videoUrl || '';
+            document.getElementById('editVideoDuration').value = button.dataset.videoDuration || '0';
+            document.getElementById('editVideoPosition').value = button.dataset.videoPosition || '1';
+        });
+
+        document.getElementById('deleteVideoModal')?.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget;
+            const form = document.getElementById('deleteVideoForm');
+            form.action = buildAction(form, {
+                'MODULE_ID': button.dataset.moduleId,
+                'VIDEO_ID': button.dataset.videoId
+            });
+            document.getElementById('deleteVideoTitle').textContent = button.dataset.videoTitle || 'này';
+        });
+    </script>
+</div>
+</body>
+</html>

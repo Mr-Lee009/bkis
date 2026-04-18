@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layouts/ad-layout-common(pageTitle='Courses')}">
+<head>
+    <title>Quản lý khóa học</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="mb-0">Danh mục khoá học</h2>
+            <small class="text-muted">Tìm kiếm theo năm, kiểm tra trạng thái xuất bản và mở trang chi tiết để cập nhật.</small>
+        </div>
+        <button class="btn btn-primary" type="button" disabled>
+            <i class="fa fa-pen me-2"></i>Tạo khoá nháp
+        </button>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Khoá năm nay</p>
+                    <h3 class="mb-0" th:text="${coursePage.summary.currentYearCourses}">18</h3>
+                    <small class="text-success">Theo ngày tạo/cập nhật</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Published</p>
+                    <h3 class="mb-0" th:text="${coursePage.summary.publishedCourses}">32</h3>
+                    <small class="text-success">active_flag = true</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Hidden</p>
+                    <h3 class="mb-0" th:text="${coursePage.summary.hiddenCourses}">5</h3>
+                    <small class="text-muted">active_flag = false</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Tổng khóa</p>
+                    <h3 class="mb-0" th:text="${coursePage.summary.totalCourses}">48</h3>
+                    <small class="text-muted">Toàn bộ dữ liệu courses</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Bảng xuất bản</h5>
+                    <span class="badge bg-light text-dark">Dựa trên active_flag</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="kanban-column">
+                                <h6 class="text-muted">Published</h6>
+                                <p class="mb-2" th:each="course : ${coursePage.courses}" th:if="${course.visible}">
+                                    <strong th:text="${course.title}">UX Writing Master</strong>
+                                </p>
+                                <p class="text-muted small mb-0" th:if="${#lists.isEmpty(coursePage.courses)}">Không có dữ liệu.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="kanban-column">
+                                <h6 class="text-muted">Hidden</h6>
+                                <p class="mb-2" th:each="course : ${coursePage.courses}" th:if="${!course.visible}">
+                                    <strong th:text="${course.title}">SQL for Analyst</strong>
+                                </p>
+                                <p class="text-muted small mb-0" th:if="${#lists.isEmpty(coursePage.courses)}">Không có dữ liệu.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Phân bổ theo năm</h5>
+                    <button class="btn btn-sm btn-outline-primary" type="button" disabled>Xem báo cáo</button>
+                </div>
+                <div class="card-body">
+                    <div class="module-item d-flex justify-content-between align-items-center" th:each="year : ${coursePage.years}">
+                        <span><i class="fa fa-calendar-alt me-2 text-muted"></i>Năm <span th:text="${year}">2026</span></span>
+                        <a class="badge bg-light text-dark text-decoration-none"
+                           th:href="@{/admin/courses/(year=${year},keyword=${courseFilter.keyword},status=${courseFilter.status})}">Lọc</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-white">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <div>
+                    <h5 class="mb-0">Danh sách khoá học theo năm</h5>
+                    <small class="text-muted">Dữ liệu lấy từ bảng courses, enrollments, payments và curriculum.</small>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" type="button" disabled>Xuất CSV</button>
+            </div>
+            <form class="row g-2" th:action="@{/admin/courses/}" method="get">
+                <input type="hidden" name="page" value="0">
+                <div class="col-md-4">
+                    <label class="form-label small mb-1" for="courseKeyword">Tìm khóa học</label>
+                    <input type="search" class="form-control form-control-sm" id="courseKeyword" name="keyword"
+                           th:value="${courseFilter.keyword}" placeholder="Tên khóa, giảng viên, tag">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small mb-1" for="courseYear">Năm</label>
+                    <select class="form-select form-select-sm" id="courseYear" name="year">
+                        <option value="">Tất cả năm</option>
+                        <option th:each="year : ${coursePage.years}"
+                                th:value="${year}"
+                                th:text="${year}"
+                                th:selected="${courseFilter.year == year}">2026</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small mb-1" for="courseStatus">Trạng thái</label>
+                    <select class="form-select form-select-sm" id="courseStatus" name="status">
+                        <option value="">Tất cả</option>
+                        <option value="PUBLISHED" th:selected="${courseFilter.status == 'PUBLISHED'}">Published</option>
+                        <option value="HIDDEN" th:selected="${courseFilter.status == 'HIDDEN'}">Hidden</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small mb-1" for="coursePageSize">Size</label>
+                    <select class="form-select form-select-sm" id="coursePageSize" name="size">
+                        <option value="10" th:selected="${coursePage.pageSize == 10}">10</option>
+                        <option value="20" th:selected="${coursePage.pageSize == 20}">20</option>
+                        <option value="50" th:selected="${coursePage.pageSize == 50}">50</option>
+                    </select>
+                </div>
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <a th:href="@{/admin/courses/}" class="btn btn-sm btn-outline-secondary">Reset</a>
+                    <button type="submit" class="btn btn-sm btn-primary">Lọc</button>
+                </div>
+            </form>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                    <tr>
+                        <th>Khoá học</th>
+                        <th>Năm</th>
+                        <th>Giảng viên</th>
+                        <th>Học viên</th>
+                        <th>Giáo trình</th>
+                        <th>Trạng thái</th>
+                        <th>Hiển thị</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(coursePage.courses)}">
+                        <td colspan="8" class="text-center text-muted py-4">Không có khoá học phù hợp.</td>
+                    </tr>
+                    <tr class="course-row" th:each="course : ${coursePage.courses}">
+                        <td>
+                            <strong th:text="${course.title}">UX Writing Master</strong>
+                            <div class="text-muted small">
+                                <span th:text="${course.tag ?: 'Chưa phân loại'}">Content Design</span>
+                                <span> · Cập nhật </span>
+                                <span th:text="${course.updatedAt}">04/01/2026</span>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-light text-dark" th:text="${course.year ?: '--'}">2026</span></td>
+                        <td th:text="${course.teacherName}">Minh Do</td>
+                        <td th:text="${course.enrolledStudents}">1248</td>
+                        <td>
+                            <span th:text="${course.moduleCount}">4</span> module
+                            <div class="text-muted small"><span th:text="${course.videoCount}">15</span> video</div>
+                        </td>
+                        <td>
+                            <span th:class="${course.visible} ? 'badge bg-success' : 'badge bg-dark'"
+                                  th:text="${course.statusLabel}">Published</span>
+                        </td>
+                        <td>
+                            <span th:if="${course.visible}" class="badge bg-success">Public</span>
+                            <span th:unless="${course.visible}" class="badge bg-secondary">Hidden</span>
+                        </td>
+                        <td class="text-end">
+                            <a th:href="@{/admin/courses/{id}(id=${course.id})}"
+                               class="btn btn-sm btn-outline-secondary">Chi tiết</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
+                <small class="text-muted">
+                    Hiển thị <span th:text="${coursePage.startRow}">1</span>-<span th:text="${coursePage.endRow}">10</span> /
+                    <span th:text="${coursePage.totalItems}">48</span> khoá
+                </small>
+                <nav th:if="${coursePage.totalPages > 0}">
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item" th:classappend="${!coursePage.hasPrevious} ? ' disabled'">
+                            <a th:if="${coursePage.hasPrevious}" class="page-link"
+                               th:href="@{/admin/courses/(page=${coursePage.currentPage - 1},size=${coursePage.pageSize},keyword=${courseFilter.keyword},year=${courseFilter.year},status=${courseFilter.status})}">«</a>
+                            <span th:unless="${coursePage.hasPrevious}" class="page-link">«</span>
+                        </li>
+                        <li class="page-item"
+                            th:each="pageNumber : ${#numbers.sequence(1, coursePage.totalPages)}"
+                            th:classappend="${pageNumber == coursePage.displayPage} ? ' active'">
+                            <a class="page-link"
+                               th:href="@{/admin/courses/(page=${pageNumber - 1},size=${coursePage.pageSize},keyword=${courseFilter.keyword},year=${courseFilter.year},status=${courseFilter.status})}"
+                               th:text="${pageNumber}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${!coursePage.hasNext} ? ' disabled'">
+                            <a th:if="${coursePage.hasNext}" class="page-link"
+                               th:href="@{/admin/courses/(page=${coursePage.currentPage + 1},size=${coursePage.pageSize},keyword=${courseFilter.keyword},year=${courseFilter.year},status=${courseFilter.status})}">»</a>
+                            <span th:unless="${coursePage.hasNext}" class="page-link">»</span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

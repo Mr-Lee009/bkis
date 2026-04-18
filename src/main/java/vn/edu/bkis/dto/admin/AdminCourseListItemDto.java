@@ -1,0 +1,26 @@
+package vn.edu.bkis.dto.admin;
+
+import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+ * One row in the admin courses table.
+ */
+@Getter
+@AllArgsConstructor
+public class AdminCourseListItemDto {
+    private final Long id;
+    private final String title;
+    private final String tag;
+    private final Integer year;
+    private final String teacherName;
+    private final long enrolledStudents;
+    private final BigDecimal revenue;
+    private final long moduleCount;
+    private final long videoCount;
+    private final String status;
+    private final String statusLabel;
+    private final boolean visible;
+    private final String updatedAt;
+}
