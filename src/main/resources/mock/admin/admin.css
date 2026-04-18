@@ -107,6 +107,23 @@ body {
     text-align: center;
 }
 
+.course-row {
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.course-row:hover {
+    background: #f7f9ff;
+    transform: translateY(-1px);
+}
+
+.course-check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.6rem 0;
+    color: #181d38;
+}
+
 /* Students */
 .progress-mini {
     height: 6px;
