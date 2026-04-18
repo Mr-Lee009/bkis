@@ -27,10 +27,18 @@ $(function () {
     const $newStudentMentor = $('#newStudentMentor');
     const $newStudentGoal = $('#newStudentGoal');
     const $newStudentNote = $('#newStudentNote');
+    const common = window.BkisCommon || {};
+    const escapeHtml = common.escapeHtml || ((value = '') => String(value));
+    const formatDateTime = common.formatDateTime || ((value) => value || '--');
+    const initialsOf = common.initialsOf || ((name) => (name || '').slice(0, 2).toUpperCase());
     const addStudentModalElement = document.getElementById('addStudentModal');
-    const addStudentModal = addStudentModalElement ? new bootstrap.Modal(addStudentModalElement) : null;
+    const addStudentModal = common.getBootstrapModal
+        ? common.getBootstrapModal(addStudentModalElement)
+        : (addStudentModalElement ? new bootstrap.Modal(addStudentModalElement) : null);
     const studentProfileModalElement = document.getElementById('studentProfileModal');
-    const studentProfileModal = studentProfileModalElement ? new bootstrap.Modal(studentProfileModalElement) : null;
+    const studentProfileModal = common.getBootstrapModal
+        ? common.getBootstrapModal(studentProfileModalElement)
+        : (studentProfileModalElement ? new bootstrap.Modal(studentProfileModalElement) : null);
 
     const state = {
         page: 0,
@@ -39,43 +47,36 @@ $(function () {
         status: ''
     };
 
-    const escapeHtml = (value = '') => String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-
     const showError = (message) => {
-        $apiError.text(message).removeClass('d-none');
+        common.showAlert ? common.showAlert($apiError, message) : $apiError.text(message).removeClass('d-none');
     };
 
     const hideError = () => {
-        $apiError.addClass('d-none').text('');
+        common.hideAlert ? common.hideAlert($apiError) : $apiError.addClass('d-none').text('');
     };
 
     const showCreateError = (message) => {
-        $addStudentError.text(message).removeClass('d-none');
+        common.showAlert ? common.showAlert($addStudentError, message) : $addStudentError.text(message).removeClass('d-none');
     };
 
     const hideCreateError = () => {
-        $addStudentError.addClass('d-none').text('');
+        common.hideAlert ? common.hideAlert($addStudentError) : $addStudentError.addClass('d-none').text('');
     };
 
     const showCreateSuccess = (message) => {
-        $addStudentAlert.text(message).removeClass('d-none');
+        common.showAlert ? common.showAlert($addStudentAlert, message) : $addStudentAlert.text(message).removeClass('d-none');
     };
 
     const hideCreateSuccess = () => {
-        $addStudentAlert.addClass('d-none').text('');
+        common.hideAlert ? common.hideAlert($addStudentAlert) : $addStudentAlert.addClass('d-none').text('');
     };
 
     const showDetailError = (message) => {
-        $studentDetailError.text(message).removeClass('d-none');
+        common.showAlert ? common.showAlert($studentDetailError, message) : $studentDetailError.text(message).removeClass('d-none');
     };
 
     const hideDetailError = () => {
-        $studentDetailError.addClass('d-none').text('');
+        common.hideAlert ? common.hideAlert($studentDetailError) : $studentDetailError.addClass('d-none').text('');
     };
 
     const statusClassFor = (status) => {
@@ -103,25 +104,6 @@ $(function () {
         }
         return 'bg-info';
     };
-
-    const formatDateTime = (value) => {
-        if (!value) {
-            return '--';
-        }
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) {
-            return value;
-        }
-        return date.toLocaleDateString('vi-VN');
-    };
-
-    const initialsOf = (name) => (name || '')
-        .split(' ')
-        .filter(Boolean)
-        .map((chunk) => chunk.charAt(0))
-        .join('')
-        .slice(0, 2)
-        .toUpperCase();
 
     const resetCreateForm = () => {
         if ($addStudentForm.length) {
