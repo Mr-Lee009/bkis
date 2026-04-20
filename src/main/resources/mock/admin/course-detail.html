@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <title>Chi tiết khóa học - eLEARNING</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../img/favicon.ico" rel="icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="admin.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-3 col-lg-2 sidebar py-4">
+                <div class="px-3 mb-4">
+                    <h4 class="text-white mb-0"><i class="fa fa-graduation-cap me-2"></i>eLEARNING</h4>
+                    <small class="text-muted">Admin Panel</small>
+                </div>
+                <div class="sidebar-user text-center">
+                    <img src="../img/testimonial-1.jpg" alt="Admin Avatar" class="sidebar-avatar">
+                    <strong class="d-block">Nguyen Admin</strong>
+                    <span class="user-role-pill">Super Admin</span>
+                    <small>admin@elearning.vn</small>
+                </div>
+                <a href="dashboard.html"><i class="fa fa-chart-line me-2"></i>Dashboard</a>
+                <a href="accounts.html"><i class="fa fa-users-cog me-2"></i>Tài khoản</a>
+                <a href="student.html"><i class="fa fa-user-graduate me-2"></i>Học viên</a>
+                <a href="courses.html" class="active"><i class="fa fa-book-open me-2"></i>Khoá học</a>
+                <a href="payments.html"><i class="fa fa-credit-card me-2"></i>Thanh toán</a>
+                <a href="settings.html"><i class="fa fa-cog me-2"></i>Cài đặt</a>
+            </aside>
+
+            <main class="col-md-9 col-lg-10 p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                    <div>
+                        <a href="courses.html" class="btn btn-sm btn-outline-secondary mb-3">
+                            <i class="fa fa-arrow-left me-2"></i>Quay lại danh sách
+                        </a>
+                        <h2 class="mb-1" id="courseTitle">UX Writing Master</h2>
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <span class="badge bg-success" id="courseStatusBadge">Published</span>
+                            <small class="text-muted">Cập nhật <span id="courseUpdatedAt">04/01/2026</span></small>
+                            <small class="text-muted">Năm <span id="courseYearLabel">2026</span></small>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-secondary"><i class="fa fa-eye me-2"></i>Xem landing</button>
+                        <button class="btn btn-primary" id="saveCourseButton"><i class="fa fa-save me-2"></i>Lưu cập nhật</button>
+                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteCourseModal">
+                            <i class="fa fa-trash me-2"></i>Xoá khoá học
+                        </button>
+                    </div>
+                </div>
+
+                <div id="courseSavedAlert" class="alert alert-success d-none" role="alert">
+                    Đã lưu nháp thay đổi cho khóa học.
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Học viên</p>
+                                <h3 class="mb-0" id="courseStudents">1,248</h3>
+                                <small class="text-success">+84 trong 30 ngày</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Doanh thu</p>
+                                <h3 class="mb-0" id="courseRevenue">842M</h3>
+                                <small class="text-muted">Mock theo enrollment</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Hoàn thiện</p>
+                                <h3 class="mb-0" id="courseCompletion">86%</h3>
+                                <small class="text-success">Đủ điều kiện xuất bản</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-muted mb-1">Đánh giá</p>
+                                <h3 class="mb-0" id="courseRating">4.8</h3>
+                                <small class="text-warning">128 review</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Thông tin khóa học</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="courseEditForm" class="row g-3">
+                                    <div class="col-md-8">
+                                        <label class="form-label" for="courseNameInput">Tên khóa học</label>
+                                        <input type="text" class="form-control" id="courseNameInput">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="courseYearInput">Năm xuất bản</label>
+                                        <select class="form-select" id="courseYearInput">
+                                            <option>2026</option>
+                                            <option>2025</option>
+                                            <option>2024</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="courseStatusInput">Trạng thái</label>
+                                        <select class="form-select" id="courseStatusInput">
+                                            <option>Published</option>
+                                            <option>Review</option>
+                                            <option>Draft</option>
+                                            <option>Hidden</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="courseTeacherInput">Giảng viên</label>
+                                        <input type="text" class="form-control" id="courseTeacherInput">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="coursePriceInput">Giá bán</label>
+                                        <input type="text" class="form-control" id="coursePriceInput">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="courseCategoryInput">Danh mục</label>
+                                        <input type="text" class="form-control" id="courseCategoryInput">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="courseTagInput">Tag tìm kiếm</label>
+                                        <input type="text" class="form-control" id="courseTagInput">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label" for="courseDescriptionInput">Mô tả</label>
+                                        <textarea class="form-control" id="courseDescriptionInput" rows="4"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label" for="courseHighlightsInput">Điểm nổi bật</label>
+                                        <textarea class="form-control" id="courseHighlightsInput" rows="3"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="courseVisibleInput" checked>
+                                            <label class="form-check-label" for="courseVisibleInput">Hiển thị khóa học trên trang public</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Kiểm tra xuất bản</h5>
+                                <span class="badge bg-success">Ready</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="course-check-item">
+                                    <i class="fa fa-check-circle text-success"></i>
+                                    <span>Đủ ảnh bìa và mô tả landing</span>
+                                </div>
+                                <div class="course-check-item">
+                                    <i class="fa fa-check-circle text-success"></i>
+                                    <span>Giáo trình có ít nhất 4 module</span>
+                                </div>
+                                <div class="course-check-item">
+                                    <i class="fa fa-exclamation-circle text-warning"></i>
+                                    <span>2 video chưa có phụ đề</span>
+                                </div>
+                                <div class="course-check-item">
+                                    <i class="fa fa-check-circle text-success"></i>
+                                    <span>Mentor đã xác nhận lịch live</span>
+                                </div>
+                                <hr>
+                                <button class="btn btn-outline-primary w-100">Gửi duyệt lại</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-5">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Module khóa học</h5>
+                                    <small class="text-muted">Theo bảng lessons</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#addModuleModal">
+                                    Thêm module
+                                </button>
+                            </div>
+                            <div class="card-body" id="moduleList">
+                                <div class="module-item course-module-item active d-flex justify-content-between align-items-center" data-module-item data-module-id="foundation">
+                                    <span>
+                                        <i class="fa fa-grip-lines me-2 text-muted"></i>
+                                        <strong>Module 01 · Foundation</strong>
+                                        <small class="d-block text-muted ms-4">Khung tư duy và cấu trúc khóa học</small>
+                                    </span>
+                                    <span class="badge bg-light text-dark">3 video</span>
+                                </div>
+                                <div class="module-item course-module-item d-flex justify-content-between align-items-center" data-module-item data-module-id="research">
+                                    <span>
+                                        <i class="fa fa-grip-lines me-2 text-muted"></i>
+                                        <strong>Module 02 · Research</strong>
+                                        <small class="d-block text-muted ms-4">User research và insight synthesis</small>
+                                    </span>
+                                    <span class="badge bg-light text-dark">4 video</span>
+                                </div>
+                                <div class="module-item course-module-item d-flex justify-content-between align-items-center" data-module-item data-module-id="prototype">
+                                    <span>
+                                        <i class="fa fa-grip-lines me-2 text-muted"></i>
+                                        <strong>Module 03 · Prototype</strong>
+                                        <small class="d-block text-muted ms-4">Prototype nội dung và luồng trải nghiệm</small>
+                                    </span>
+                                    <span class="badge bg-light text-dark">3 video</span>
+                                </div>
+                                <div class="module-item course-module-item d-flex justify-content-between align-items-center" data-module-item data-module-id="usability-test">
+                                    <span>
+                                        <i class="fa fa-grip-lines me-2 text-muted"></i>
+                                        <strong>Module 04 · Usability Test</strong>
+                                        <small class="d-block text-muted ms-4">Kiểm thử, đo lường và tối ưu</small>
+                                    </span>
+                                    <span class="badge bg-light text-dark">2 video</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0" id="moduleVideoTitle">Video của Module 01</h5>
+                                    <small class="text-muted" id="moduleVideoSubtitle">Dữ liệu mock theo bảng lesson_videos</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary" type="button" id="addVideoButton" data-bs-toggle="modal" data-bs-target="#addVideoModal">
+                                    Thêm video
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="moduleVideoList"></div>
+                                <div class="alert alert-light border mt-3 mb-0">
+                                    <i class="fa fa-info-circle me-2 text-primary"></i>
+                                    <small>Thiết kế DB hiện có chỉ lưu video trong bảng <strong>lesson_videos</strong>. PDF, slide hoặc bài tập cần bảng tài nguyên riêng nếu muốn lưu backend.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-5">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Tải tài nguyên bài học</h5>
+                                <button class="btn btn-sm btn-outline-secondary">Lịch sử</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="upload-dropzone mb-3">
+                                    <i class="fa fa-cloud-upload-alt fa-2x text-primary mb-2"></i>
+                                    <p class="mb-1">Kéo thả file PDF, video hoặc slide vào đây</p>
+                                    <small class="text-muted">Giới hạn 500MB · Auto gắn watermark theo khóa hiện tại</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="resourceModuleSelect">Chọn module</label>
+                                    <select class="form-select" id="resourceModuleSelect">
+                                        <option>Module 01 · Foundation</option>
+                                        <option>Module 02 · Research</option>
+                                        <option>Module 03 · Prototype</option>
+                                        <option>Module 04 · Usability Test</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Loại tài nguyên</label>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-outline-primary btn-sm">Video</button>
+                                        <button class="btn btn-outline-primary btn-sm">Slide</button>
+                                        <button class="btn btn-outline-primary btn-sm">Bài tập</button>
+                                        <button class="btn btn-outline-primary btn-sm">Tài liệu</button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100"><i class="fa fa-upload me-2"></i>Tải lên khóa này</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Bật/tắt hiển thị tự động</h5>
+                                <button class="btn btn-sm btn-outline-secondary">Quy tắc</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-md-6 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">Ẩn khi thiếu tài nguyên</h6>
+                                            <small class="text-muted">Bật nếu module dưới 80% nội dung</small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" checked>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">Hiển thị landing</h6>
+                                            <small class="text-muted">Cho phép học viên xem preview</small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" checked>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">Khóa nội bộ</h6>
+                                            <small class="text-muted">Chỉ hiển thị với nhân sự công ty</small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">Khoá enrollment mới</h6>
+                                            <small class="text-muted">Cho phép học viên đăng ký trong năm hiện tại</small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addModuleModal" tabindex="-1" aria-labelledby="addModuleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h4 class="mb-1" id="addModuleModalLabel">Thêm module cho khóa học</h4>
+                        <p class="text-muted small mb-0">Tạo module mới, gán mục tiêu học tập và chuẩn bị nơi tải tài nguyên bài học.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="addModuleAlert" class="alert alert-success d-none" role="alert">
+                        Đã thêm module vào giáo trình mock.
+                    </div>
+                    <form id="addModuleForm" class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label small text-muted" for="newModuleTitle">Tên module</label>
+                            <input type="text" class="form-control" id="newModuleTitle" placeholder="VD: Content Testing & QA" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted" for="newModulePosition">Thứ tự</label>
+                            <input type="number" class="form-control" id="newModulePosition" min="1" value="5" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted" for="newModuleType">Loại nội dung chính</label>
+                            <select class="form-select" id="newModuleType">
+                                <option>Video bài giảng</option>
+                                <option>Live session</option>
+                                <option>Bài tập thực hành</option>
+                                <option>Tài liệu đọc</option>
+                                <option>Capstone</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted" for="newModuleEstimate">Khối lượng dự kiến</label>
+                            <input type="text" class="form-control" id="newModuleEstimate" placeholder="VD: 6 video · 2 bài tập" value="0 tài nguyên">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted" for="newModuleOutcome">Mục tiêu học tập</label>
+                            <textarea class="form-control" id="newModuleOutcome" rows="3" placeholder="Sau module này học viên có thể..."></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="support-card h-100 mb-0">
+                                <strong class="d-block mb-2">Thiết lập xuất bản</strong>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="newModuleVisible" checked>
+                                    <label class="form-check-label" for="newModuleVisible">Hiển thị trong giáo trình</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="newModuleDrip">
+                                    <label class="form-check-label" for="newModuleDrip">Mở theo lịch học</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="support-card h-100 mb-0">
+                                <strong class="d-block mb-2">Tài nguyên khởi tạo</strong>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark">Video</span>
+                                    <span class="badge bg-light text-dark">Slide</span>
+                                    <span class="badge bg-light text-dark">Bài tập</span>
+                                    <span class="badge bg-light text-dark">Checklist</span>
+                                </div>
+                                <small class="text-muted d-block mt-2">Sau khi tạo module, admin tải file ở khối tài nguyên bên dưới.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <small class="text-muted">Mock chỉ thêm vào giao diện hiện tại, chưa lưu vào backend.</small>
+                    <div class="ms-auto d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                        <button type="submit" form="addModuleForm" class="btn btn-primary">Thêm module</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addVideoModal" tabindex="-1" aria-labelledby="addVideoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h4 class="mb-1" id="addVideoModalLabel">Thêm video bài học</h4>
+                        <p class="text-muted small mb-0">Gắn video vào module đang chọn và xem trước cách dữ liệu map với bảng lesson_videos.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="addVideoAlert" class="alert alert-success d-none" role="alert">
+                        Đã thêm video vào module đang chọn trong mock.
+                    </div>
+                    <form id="addVideoForm" class="row g-3">
+                        <div class="col-lg-8">
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <label class="form-label small text-muted" for="newVideoTitle">Tên video</label>
+                                    <input type="text" class="form-control" id="newVideoTitle" placeholder="VD: Viết empty state cho checkout" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small text-muted" for="newVideoPosition">Thứ tự</label>
+                                    <input type="number" class="form-control" id="newVideoPosition" min="1" value="4" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small text-muted" for="newVideoUrl">Video URL</label>
+                                    <input type="url" class="form-control" id="newVideoUrl" placeholder="https://example.com/videos/module-video.mp4" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small text-muted" for="newVideoDuration">Thời lượng</label>
+                                    <input type="text" class="form-control" id="newVideoDuration" placeholder="VD: 09:45" value="09:45">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small text-muted" for="newVideoStatus">Trạng thái</label>
+                                    <select class="form-select" id="newVideoStatus">
+                                        <option>Published</option>
+                                        <option>Review</option>
+                                        <option>Draft</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small text-muted" for="newVideoProvider">Nguồn video</label>
+                                    <select class="form-select" id="newVideoProvider">
+                                        <option>CDN URL</option>
+                                        <option>YouTube private</option>
+                                        <option>Vimeo</option>
+                                        <option>S3 object</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small text-muted" for="newVideoNote">Ghi chú nội bộ</label>
+                                    <textarea class="form-control" id="newVideoNote" rows="3" placeholder="Ghi chú trạng thái quay, phụ đề, thumbnail hoặc checklist QA."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="support-card h-100 mb-0">
+                                <strong class="d-block mb-2">Module đích</strong>
+                                <div class="p-3 bg-light rounded-3 mb-3">
+                                    <span class="badge bg-primary mb-2">Đang chọn</span>
+                                    <h6 class="mb-1" id="addVideoModuleLabel">Module 01 · Foundation</h6>
+                                    <small class="text-muted">Video mới sẽ được thêm vào danh sách đang mở.</small>
+                                </div>
+                                <strong class="d-block mb-2">Trường DB liên quan</strong>
+                                <ul class="modal-info-list list-unstyled mb-0">
+                                    <li><i class="fa fa-database"></i><span>lesson_id lấy từ module đang chọn</span></li>
+                                    <li><i class="fa fa-heading"></i><span>title là tên video hiển thị</span></li>
+                                    <li><i class="fa fa-link"></i><span>video_url là đường dẫn phát video</span></li>
+                                    <li><i class="fa fa-sort-numeric-down"></i><span>position quyết định thứ tự bài học</span></li>
+                                    <li><i class="fa fa-clock"></i><span>duration lưu thời lượng video</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <small class="text-muted">Mock chỉ thêm video vào giao diện hiện tại, chưa lưu vào backend.</small>
+                    <div class="ms-auto d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                        <button type="submit" form="addVideoForm" class="btn btn-primary">Thêm video</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteCourseModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Xoá khóa học</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-1">Khóa học sẽ được đưa vào trạng thái chờ xoá trong mock.</p>
+                    <small class="text-muted">Khi nối backend, thao tác này nên kiểm tra enrollment, payment và quyền admin trước khi xoá thật.</small>
+                    <div id="deleteCourseAlert" class="alert alert-danger d-none mt-3 mb-0" role="alert">
+                        Đã đánh dấu xoá khóa học trong mock.
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huỷ</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteCourseButton">Xác nhận xoá</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const courses = {
+            'ux-writing-master': {
+                title: 'UX Writing Master',
+                status: 'Published',
+                year: '2026',
+                updatedAt: '04/01/2026',
+                teacher: 'Minh Do',
+                price: '3,900,000 VND',
+                category: 'Content Design',
+                tag: 'UX, writing, product content',
+                students: '1,248',
+                revenue: '842M',
+                completion: '86%',
+                rating: '4.8',
+                visible: true,
+                description: 'Thực hành viết microcopy, user flow content và content testing cho sản phẩm số.',
+                highlights: 'Case study thật, review bài hàng tuần, template handoff cho designer và PM.'
+            },
+            'ai-for-marketer': {
+                title: 'AI For Marketer',
+                status: 'Review',
+                year: '2026',
+                updatedAt: '03/01/2026',
+                teacher: 'Thao Tran',
+                price: '4,500,000 VND',
+                category: 'Marketing Automation',
+                tag: 'AI, marketing, prompt, automation',
+                students: '326',
+                revenue: '214M',
+                completion: '72%',
+                rating: '4.6',
+                visible: false,
+                description: 'Ứng dụng AI trong nghiên cứu khách hàng, tạo nội dung, chạy chiến dịch và đo lường.',
+                highlights: 'Prompt library, workflow tự động, dashboard đo lường sau chiến dịch.'
+            },
+            'frontend-sprint': {
+                title: 'Frontend Sprint',
+                status: 'Draft',
+                year: '2025',
+                updatedAt: '28/12/2025',
+                teacher: 'Ken Pham',
+                price: '5,200,000 VND',
+                category: 'Web Development',
+                tag: 'React, JavaScript, frontend',
+                students: '842',
+                revenue: '506M',
+                completion: '58%',
+                rating: '4.7',
+                visible: false,
+                description: 'Sprint 8 tuần để củng cố React, API integration, performance và review code.',
+                highlights: 'Capstone cá nhân, review PR, bộ checklist tối ưu hiệu năng.'
+            },
+            'product-discovery': {
+                title: 'Product Discovery',
+                status: 'Published',
+                year: '2025',
+                updatedAt: '18/12/2025',
+                teacher: 'Minh Do',
+                price: '4,900,000 VND',
+                category: 'Product Management',
+                tag: 'Product, research, discovery',
+                students: '1,904',
+                revenue: '1.1B',
+                completion: '94%',
+                rating: '4.9',
+                visible: true,
+                description: 'Từ problem framing tới user interview, insight synthesis và opportunity mapping.',
+                highlights: 'Interview script, assumption map, mentor review discovery plan.'
+            },
+            'sql-for-analyst': {
+                title: 'SQL for Analyst',
+                status: 'Hidden',
+                year: '2024',
+                updatedAt: '09/10/2024',
+                teacher: 'Hieu Nguyen',
+                price: '2,900,000 VND',
+                category: 'Data Analytics',
+                tag: 'SQL, analytics, database',
+                students: '618',
+                revenue: '178M',
+                completion: '64%',
+                rating: '4.5',
+                visible: false,
+                description: 'Truy vấn dữ liệu, join, window function và phân tích chỉ số kinh doanh.',
+                highlights: 'Dataset thực hành, bài tập phân tích cohort, dashboard SQL challenge.'
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const course = courses[params.get('id')] || courses['ux-writing-master'];
+        const statusClass = {
+            Published: 'bg-success',
+            Review: 'bg-warning text-dark',
+            Draft: 'bg-secondary',
+            Hidden: 'bg-dark'
+        };
+
+        const moduleVideos = {
+            'foundation': {
+                title: 'Module 01 · Foundation',
+                summary: '3 video · Tổng thời lượng 31 phút',
+                videos: [
+                    { title: 'Course map & learning outcome', duration: '08:30', position: 1, url: 'https://example.com/videos/uxw-foundation-01.mp4', status: 'Published' },
+                    { title: 'Vai trò UX Writing trong product team', duration: '12:15', position: 2, url: 'https://example.com/videos/uxw-foundation-02.mp4', status: 'Published' },
+                    { title: 'Checklist microcopy cơ bản', duration: '10:40', position: 3, url: 'https://example.com/videos/uxw-foundation-03.mp4', status: 'Draft' }
+                ]
+            },
+            'research': {
+                title: 'Module 02 · Research',
+                summary: '4 video · Tổng thời lượng 48 phút',
+                videos: [
+                    { title: 'Chuẩn bị user interview cho content', duration: '11:20', position: 1, url: 'https://example.com/videos/uxw-research-01.mp4', status: 'Published' },
+                    { title: 'Phân tích voice of customer', duration: '14:05', position: 2, url: 'https://example.com/videos/uxw-research-02.mp4', status: 'Published' },
+                    { title: 'Content audit theo journey', duration: '13:10', position: 3, url: 'https://example.com/videos/uxw-research-03.mp4', status: 'Review' },
+                    { title: 'Tổng hợp insight thành writing principle', duration: '09:25', position: 4, url: 'https://example.com/videos/uxw-research-04.mp4', status: 'Draft' }
+                ]
+            },
+            'prototype': {
+                title: 'Module 03 · Prototype',
+                summary: '3 video · Tổng thời lượng 39 phút',
+                videos: [
+                    { title: 'Prototype content state', duration: '12:00', position: 1, url: 'https://example.com/videos/uxw-prototype-01.mp4', status: 'Published' },
+                    { title: 'Viết empty state và error state', duration: '15:30', position: 2, url: 'https://example.com/videos/uxw-prototype-02.mp4', status: 'Published' },
+                    { title: 'Handoff copy cho designer', duration: '11:45', position: 3, url: 'https://example.com/videos/uxw-prototype-03.mp4', status: 'Review' }
+                ]
+            },
+            'usability-test': {
+                title: 'Module 04 · Usability Test',
+                summary: '2 video · Tổng thời lượng 27 phút',
+                videos: [
+                    { title: 'Thiết kế test script cho microcopy', duration: '13:50', position: 1, url: 'https://example.com/videos/uxw-test-01.mp4', status: 'Published' },
+                    { title: 'Đọc kết quả và ưu tiên sửa copy', duration: '13:20', position: 2, url: 'https://example.com/videos/uxw-test-02.mp4', status: 'Draft' }
+                ]
+            }
+        };
+
+        const videoStatusClass = {
+            Published: 'bg-success',
+            Review: 'bg-warning text-dark',
+            Draft: 'bg-secondary'
+        };
+
+        let activeModuleId = 'foundation';
+
+        function renderModuleVideos(moduleId) {
+            const module = moduleVideos[moduleId];
+            const list = document.getElementById('moduleVideoList');
+            if (!module) {
+                document.getElementById('moduleVideoTitle').textContent = 'Chưa có video';
+                document.getElementById('moduleVideoSubtitle').textContent = 'Module mới chưa có lesson_videos';
+                list.innerHTML = '<div class="text-center text-muted py-4">Chưa có video nào trong module này.</div>';
+                return;
+            }
+
+            document.getElementById('moduleVideoTitle').textContent = module.title;
+            document.getElementById('moduleVideoSubtitle').textContent = module.summary;
+            list.innerHTML = module.videos.map((video) => `
+                <div class="lesson-video-item d-flex gap-3 align-items-start">
+                    <div class="video-position">${String(video.position).padStart(2, '0')}</div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex flex-wrap justify-content-between gap-2">
+                            <strong>${video.title}</strong>
+                            <span class="badge ${videoStatusClass[video.status] || 'bg-light text-dark'}">${video.status}</span>
+                        </div>
+                        <div class="text-muted small mt-1">
+                            <i class="fa fa-clock me-1"></i>${video.duration}
+                            <span class="mx-2">·</span>
+                            <span>${video.url}</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-secondary" type="button">Sửa</button>
+                        <button class="btn btn-sm btn-outline-danger" type="button">Xóa</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function activateModule(moduleId) {
+            activeModuleId = moduleId;
+            document.querySelectorAll('[data-module-item]').forEach((item) => {
+                item.classList.toggle('active', item.dataset.moduleId === moduleId);
+            });
+            renderModuleVideos(moduleId);
+        }
+
+        function updateModuleVideoBadge(moduleId) {
+            const module = moduleVideos[moduleId];
+            const moduleItem = document.querySelector(`[data-module-item][data-module-id="${moduleId}"]`);
+            if (!module || !moduleItem) {
+                return;
+            }
+
+            const badge = moduleItem.querySelector('.badge');
+            if (badge) {
+                badge.className = 'badge bg-light text-dark';
+                badge.textContent = `${module.videos.length} video`;
+            }
+        }
+
+        function fillCourseDetail() {
+            document.getElementById('courseTitle').textContent = course.title;
+            document.getElementById('courseStatusBadge').className = `badge ${statusClass[course.status] || 'bg-light text-dark'}`;
+            document.getElementById('courseStatusBadge').textContent = course.status;
+            document.getElementById('courseUpdatedAt').textContent = course.updatedAt;
+            document.getElementById('courseYearLabel').textContent = course.year;
+            document.getElementById('courseStudents').textContent = course.students;
+            document.getElementById('courseRevenue').textContent = course.revenue;
+            document.getElementById('courseCompletion').textContent = course.completion;
+            document.getElementById('courseRating').textContent = course.rating;
+            document.getElementById('courseNameInput').value = course.title;
+            document.getElementById('courseYearInput').value = course.year;
+            document.getElementById('courseStatusInput').value = course.status;
+            document.getElementById('courseTeacherInput').value = course.teacher;
+            document.getElementById('coursePriceInput').value = course.price;
+            document.getElementById('courseCategoryInput').value = course.category;
+            document.getElementById('courseTagInput').value = course.tag;
+            document.getElementById('courseDescriptionInput').value = course.description;
+            document.getElementById('courseHighlightsInput').value = course.highlights;
+            document.getElementById('courseVisibleInput').checked = course.visible;
+        }
+
+        document.getElementById('saveCourseButton').addEventListener('click', () => {
+            const alert = document.getElementById('courseSavedAlert');
+            alert.classList.remove('d-none');
+            setTimeout(() => alert.classList.add('d-none'), 2600);
+        });
+
+        document.getElementById('confirmDeleteCourseButton').addEventListener('click', () => {
+            document.getElementById('deleteCourseAlert').classList.remove('d-none');
+        });
+
+        document.getElementById('addModuleForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const position = document.getElementById('newModulePosition').value || '5';
+            const title = document.getElementById('newModuleTitle').value.trim();
+            const estimate = document.getElementById('newModuleEstimate').value.trim() || '0 tài nguyên';
+            const visible = document.getElementById('newModuleVisible').checked;
+
+            if (!title) {
+                document.getElementById('newModuleTitle').focus();
+                return;
+            }
+
+            const moduleList = document.getElementById('moduleList');
+            const moduleItem = document.createElement('div');
+            const moduleId = `module-${Date.now()}`;
+            moduleVideos[moduleId] = {
+                title: `Module ${String(position).padStart(2, '0')} · ${title}`,
+                summary: '0 video · Module mới chưa có lesson_videos',
+                videos: []
+            };
+            moduleItem.className = 'module-item course-module-item d-flex justify-content-between align-items-center';
+            moduleItem.setAttribute('data-module-item', '');
+            moduleItem.dataset.moduleId = moduleId;
+            moduleItem.innerHTML = `
+                <span>
+                    <i class="fa fa-grip-lines me-2 text-muted"></i>
+                    <strong>Module ${String(position).padStart(2, '0')} · ${title}</strong>
+                    <small class="d-block text-muted ms-4">Module mới từ modal</small>
+                </span>
+                <span class="badge ${visible ? 'bg-light text-dark' : 'bg-secondary'}">${estimate}</span>
+            `;
+            moduleItem.addEventListener('click', () => activateModule(moduleId));
+            moduleList.appendChild(moduleItem);
+
+            const option = document.createElement('option');
+            option.textContent = `Module ${String(position).padStart(2, '0')} · ${title}`;
+            document.getElementById('resourceModuleSelect').appendChild(option);
+
+            const alert = document.getElementById('addModuleAlert');
+            alert.classList.remove('d-none');
+            setTimeout(() => {
+                alert.classList.add('d-none');
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('addModuleModal')).hide();
+                document.getElementById('addModuleForm').reset();
+                document.getElementById('newModulePosition').value = Number(position) + 1;
+            }, 700);
+        });
+
+        document.querySelectorAll('[data-module-item]').forEach((item) => {
+            item.addEventListener('click', () => activateModule(item.dataset.moduleId));
+        });
+
+        document.getElementById('addVideoModal').addEventListener('show.bs.modal', () => {
+            const module = moduleVideos[activeModuleId];
+            const nextPosition = module ? module.videos.length + 1 : 1;
+            document.getElementById('addVideoModuleLabel').textContent = module ? module.title : 'Module chưa chọn';
+            document.getElementById('newVideoPosition').value = nextPosition;
+        });
+
+        document.getElementById('addVideoForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const module = moduleVideos[activeModuleId];
+            if (!module) {
+                return;
+            }
+
+            const title = document.getElementById('newVideoTitle').value.trim();
+            const url = document.getElementById('newVideoUrl').value.trim();
+            const position = Number(document.getElementById('newVideoPosition').value || module.videos.length + 1);
+            const duration = document.getElementById('newVideoDuration').value.trim() || '--';
+            const status = document.getElementById('newVideoStatus').value;
+
+            if (!title || !url) {
+                document.getElementById(!title ? 'newVideoTitle' : 'newVideoUrl').focus();
+                return;
+            }
+
+            module.videos.push({ title, duration, position, url, status });
+            module.videos.sort((first, second) => first.position - second.position);
+            module.summary = `${module.videos.length} video · Cập nhật từ modal thêm video`;
+
+            renderModuleVideos(activeModuleId);
+            updateModuleVideoBadge(activeModuleId);
+
+            const alert = document.getElementById('addVideoAlert');
+            alert.classList.remove('d-none');
+            setTimeout(() => {
+                alert.classList.add('d-none');
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('addVideoModal')).hide();
+                document.getElementById('addVideoForm').reset();
+            }, 700);
+        });
+
+        fillCourseDetail();
+        renderModuleVideos('foundation');
+    </script>
+</body>
+
+</html>

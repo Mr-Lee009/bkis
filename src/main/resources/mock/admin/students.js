@@ -109,11 +109,23 @@ $(function () {
         profileModal.show();
     };
 
+    const openStudentProfile = ($row) => {
+        if ($row.length) {
+            fillModal($row.data());
+        }
+    };
+
     $(document).on('click', studentRowSelector, function (event) {
         if ($(event.target).closest('button').length) {
             return;
         }
-        fillModal($(this).data());
+        openStudentProfile($(this));
+    });
+
+    $(document).on('click', `${studentRowSelector} td.text-end button:first-child`, function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        openStudentProfile($(this).closest(studentRowSelector));
     });
 
     const $demoTrigger = $('#modalDemoTrigger');
@@ -121,9 +133,7 @@ $(function () {
         $demoTrigger.on('click', () => {
             const $target = $('.student-row[data-student-id="mai-le"]').first();
             const $row = $target.length ? $target : getStudentRows().first();
-            if ($row.length) {
-                fillModal($row.data());
-            }
+            openStudentProfile($row);
         });
     }
 

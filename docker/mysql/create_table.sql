@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS courses (
     price DECIMAL(19,2) NOT NULL,
     total_students INT,
     active_flag BIT DEFAULT b'1',
+    course_status VARCHAR(20),
     tag VARCHAR(100),
     image_url VARCHAR(500),
     rating INT,
@@ -173,14 +174,15 @@ ON DUPLICATE KEY UPDATE
     profile_picture_url = VALUES(profile_picture_url),
     updated_at = NOW();
 
-INSERT INTO courses (id, title, description, highlights, teacher_id, price, total_students, active_flag, tag, image_url, rating, created_by, updated_by, created_at, updated_at)
+INSERT INTO courses (id, title, description, highlights, teacher_id, price, total_students, active_flag, course_status, tag, image_url, rating, created_by, updated_by, created_at, updated_at)
 VALUES
-    (1, 'Web Design & Development A-Z', 'Complete web design and development journey.', 'UI foundations||Responsive layouts||JavaScript interactions||Final project', '00000000-0000-0000-0000-000000000002', 149.00, 230, b'1', '#java', '/img/course-1.jpg', 5, 'system', 'system', NOW(), NOW()),
-    (2, 'Spring Boot for Beginners', 'Build backend applications using Spring Boot.', 'REST API||JPA||Security basics||Deployment', '00000000-0000-0000-0000-000000000002', 129.00, 180, b'1', '#java', '/img/course-2.jpg', 5, 'system', 'system', NOW(), NOW())
+    (1, 'Web Design & Development A-Z', 'Complete web design and development journey.', 'UI foundations||Responsive layouts||JavaScript interactions||Final project', '00000000-0000-0000-0000-000000000002', 149.00, 230, b'1', 'PUBLISHED', '#java', '/img/course-1.jpg', 5, 'system', 'system', NOW(), NOW()),
+    (2, 'Spring Boot for Beginners', 'Build backend applications using Spring Boot.', 'REST API||JPA||Security basics||Deployment', '00000000-0000-0000-0000-000000000002', 129.00, 180, b'1', 'PUBLISHED', '#java', '/img/course-2.jpg', 5, 'system', 'system', NOW(), NOW())
 ON DUPLICATE KEY UPDATE
     title = VALUES(title),
     description = VALUES(description),
     highlights = VALUES(highlights),
+    course_status = VALUES(course_status),
     updated_at = NOW();
 
 INSERT INTO lessons (id, course_id, title, description, position, created_by, updated_by, created_at, updated_at)

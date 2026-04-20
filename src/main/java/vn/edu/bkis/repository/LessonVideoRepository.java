@@ -2,6 +2,7 @@ package vn.edu.bkis.repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import vn.edu.bkis.model.LessonVideo;
@@ -21,4 +22,10 @@ public interface LessonVideoRepository extends JpaRepository<LessonVideo, Long> 
     List<LessonVideo> findByLessonIdOrderByPositionAsc(Long lessonId);
 
     List<LessonVideo> findByLessonIdInOrderByPositionAsc(Collection<Long> lessonIds);
+
+    Optional<LessonVideo> findByIdAndLessonId(Long id, Long lessonId);
+
+    long countByLessonId(Long lessonId);
+
+    void deleteByLessonId(Long lessonId);
 }

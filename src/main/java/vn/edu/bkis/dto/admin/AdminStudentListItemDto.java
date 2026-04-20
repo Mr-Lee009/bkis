@@ -15,6 +15,8 @@ public class AdminStudentListItemDto {
     private final String fullName;
     private final String email;
     private final String courseName;
+    private final Integer progressPercent;
+    private final String progressLabel;
     private final String status;
     private final String statusLabel;
     private final LocalDateTime joinedAt;

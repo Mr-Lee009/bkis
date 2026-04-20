@@ -1,6 +1,10 @@
 const CHUNK_SIZE = 1024 * 1024 * 10; // 10MB
 const MAX_RETRY = 3;
 const MAX_CONCURRENT = 4; // ⚡ số chunk upload song song
+const uploadCommon = window.BkisCommon || {};
+uploadCommon.sleep = uploadCommon.sleep || ((ms) => new Promise((resolve) => window.setTimeout(resolve, ms)));
+uploadCommon.formatElapsedTime = uploadCommon.formatElapsedTime || ((ms) => `${Math.floor(ms / 60000)}m ${Math.floor((ms % 60000) / 1000)}s`);
+uploadCommon.runWithConcurrency = uploadCommon.runWithConcurrency || (async (tasks) => { await Promise.all(tasks.map((task) => task())); });
 
 async function startUpload() {
     const fileInput = document.getElementById("fileInput");
@@ -58,7 +62,7 @@ async function startUpload() {
         }
 
         // 🔥 chạy pool
-        await runWithConcurrency(tasks, MAX_CONCURRENT);
+        await uploadCommon.runWithConcurrency(tasks, MAX_CONCURRENT);
 
         // COMPLETE
         setStatus("Merging file on server...");
@@ -69,7 +73,7 @@ async function startUpload() {
 
         if (!completeRes.ok) throw new Error("Merge failed");
 
-        const totalTime = formatTime(Date.now() - startTime);
+        const totalTime = uploadCommon.formatElapsedTime(Date.now() - startTime);
 
         setStatus(`✅ Upload completed in ${totalTime}`);
     } catch (err) {
@@ -78,24 +82,6 @@ async function startUpload() {
     } finally {
         toggleButton(false);
     }
-}
-
-async function runWithConcurrency(tasks, limit) {
-    const executing = [];
-
-    for (const task of tasks) {
-        const p = task().then(() => {
-            executing.splice(executing.indexOf(p), 1);
-        });
-
-        executing.push(p);
-
-        if (executing.length >= limit) {
-            await Promise.race(executing);
-        }
-    }
-
-    await Promise.all(executing);
 }
 
 async function uploadChunkWithRetry(formData, chunkIndex) {
@@ -115,13 +101,9 @@ async function uploadChunkWithRetry(formData, chunkIndex) {
             }
 
             console.warn(`Retry chunk ${chunkIndex} - attempt ${attempt}`);
-            await sleep(500 * attempt); // backoff nhẹ
+            await uploadCommon.sleep(500 * attempt); // backoff nhẹ
         }
     }
-}
-
-function sleep(ms) {
-    return new Promise(resolve =>  (resolve, ms));
 }
 
 function updateProgress(done, total, startTime) {
@@ -133,7 +115,7 @@ function updateProgress(done, total, startTime) {
 
     // ⏱️ update thời gian
     const elapsed = Date.now() - startTime;
-    document.getElementById("time").innerText = formatTime(elapsed);
+    document.getElementById("time").innerText = uploadCommon.formatElapsedTime(elapsed);
 }
 
 function setStatus(message) {
@@ -144,10 +126,3 @@ function toggleButton(disabled) {
     document.querySelector("button").disabled = disabled;
 }
 
-function formatTime(ms) {
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-
-    return `${minutes}m ${seconds}s`;
-}

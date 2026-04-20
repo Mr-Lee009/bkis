@@ -99,12 +99,63 @@ body {
     background: #fff;
 }
 
+.course-module-item {
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+.course-module-item:hover,
+.course-module-item.active {
+    border-style: solid;
+    border-color: rgba(6, 187, 204, 0.55);
+    background: #f7fcfd;
+    transform: translateY(-1px);
+}
+
+.lesson-video-item {
+    border: 1px solid rgba(24, 29, 56, 0.08);
+    border-radius: 0.75rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.75rem;
+    background: #fff;
+}
+
+.video-position {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(6, 187, 204, 0.12);
+    color: #181d38;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex: 0 0 auto;
+}
+
 .upload-dropzone {
     border: 2px dashed rgba(24, 29, 56, 0.25);
     border-radius: 1rem;
     padding: 1.5rem;
     background: rgba(24, 29, 56, 0.03);
     text-align: center;
+}
+
+.course-row {
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.course-row:hover {
+    background: #f7f9ff;
+    transform: translateY(-1px);
+}
+
+.course-check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.6rem 0;
+    color: #181d38;
 }
 
 /* Students */

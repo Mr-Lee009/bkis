@@ -16,6 +16,10 @@ public interface AdminStudentListProjection {
 
     String getCourseName();
 
+    Long getCompletedVideos();
+
+    Long getTotalVideos();
+
     String getEnrollmentStatus();
 
     LocalDateTime getJoinedAt();
