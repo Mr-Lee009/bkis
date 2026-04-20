@@ -23,4 +23,15 @@ public class AdminCourseListItemDto {
     private final String statusLabel;
     private final boolean visible;
     private final String updatedAt;
+
+    // Trả về CSS badge phù hợp với trạng thái nghiệp vụ của khóa học trên bảng danh sách.
+    public String getStatusBadgeClass() {
+        return switch (status) {
+            case "DRAFT" -> "badge bg-secondary";
+            case "REVIEW" -> "badge bg-warning text-dark";
+            case "PUBLISHED" -> "badge bg-success";
+            case "ARCHIVED" -> "badge bg-dark";
+            default -> "badge bg-light text-dark";
+        };
+    }
 }

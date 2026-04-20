@@ -40,7 +40,9 @@
                         <h2 class="mb-0">Danh mục khoá học</h2>
                         <small class="text-muted">Tìm kiếm theo năm, kiểm tra tình trạng xuất bản và mở trang chi tiết để cập nhật.</small>
                     </div>
-                    <button class="btn btn-primary"><i class="fa fa-pen me-2"></i>Tạo khoá nháp</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCourseModal">
+                        <i class="fa fa-pen me-2"></i>Tạo khoá nháp
+                    </button>
                 </div>
 
                 <div class="row g-4">
@@ -320,6 +322,132 @@
         </div>
     </div>
 
+    <div class="modal fade" id="createCourseModal" tabindex="-1" aria-labelledby="createCourseModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <span class="badge bg-primary-subtle text-primary mb-2">Khóa nháp mới</span>
+                        <h4 class="modal-title" id="createCourseModalLabel">Thêm khóa học</h4>
+                        <p class="text-muted mb-0">Tạo hồ sơ khóa học cơ bản trước, phần giáo trình và tài nguyên sẽ cập nhật ở trang chi tiết.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createCourseForm">
+                        <div class="row g-4">
+                            <div class="col-lg-8">
+                                <div class="card border-0 bg-light h-100">
+                                    <div class="card-body">
+                                        <h6 class="mb-3">Thông tin chính</h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-8">
+                                                <label class="form-label" for="newCourseTitle">Tên khóa học</label>
+                                                <input type="text" class="form-control" id="newCourseTitle"
+                                                       placeholder="VD: Spring Boot Security Masterclass" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="newCourseYear">Năm</label>
+                                                <select class="form-select" id="newCourseYear" required>
+                                                    <option value="2026" selected>2026</option>
+                                                    <option value="2025">2025</option>
+                                                    <option value="2024">2024</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="newCourseTeacher">Giảng viên</label>
+                                                <select class="form-select" id="newCourseTeacher" required>
+                                                    <option value="">Chọn giảng viên</option>
+                                                    <option>Minh Do</option>
+                                                    <option>Thao Tran</option>
+                                                    <option>Ken Pham</option>
+                                                    <option>Hieu Nguyen</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="newCourseTag">Tag / danh mục</label>
+                                                <input type="text" class="form-control" id="newCourseTag"
+                                                       placeholder="VD: Web Development, Data Analytics" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="newCoursePrice">Giá niêm yết</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">VNĐ</span>
+                                                    <input type="number" class="form-control" id="newCoursePrice"
+                                                           min="0" step="10000" placeholder="1290000">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="newCourseImage">Ảnh bìa</label>
+                                                <input type="text" class="form-control" id="newCourseImage"
+                                                       placeholder="/img/course-1.jpg">
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label" for="newCourseDescription">Mô tả ngắn</label>
+                                                <textarea class="form-control" id="newCourseDescription" rows="4"
+                                                          placeholder="Tóm tắt lợi ích, đối tượng học viên và kết quả đầu ra của khóa học."></textarea>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label" for="newCourseHighlights">Điểm nổi bật</label>
+                                                <textarea class="form-control" id="newCourseHighlights" rows="3"
+                                                          placeholder="Mỗi ý cách nhau bằng dấu || để dễ map sang backend sau này."></textarea>
+                                                <div class="form-text">Ví dụ: Roadmap 8 tuần || Project thực tế || Mentor review mỗi tuần</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body">
+                                        <h6 class="mb-3">Xuất bản</h6>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="newCourseStatus">Trạng thái ban đầu</label>
+                                            <select class="form-select" id="newCourseStatus">
+                                                <option value="Draft" selected>Draft</option>
+                                                <option value="Review">Review</option>
+                                                <option value="Published">Published</option>
+                                                <option value="Hidden">Hidden</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-check form-switch mb-4">
+                                            <input class="form-check-input" type="checkbox" id="newCourseVisibility">
+                                            <label class="form-check-label" for="newCourseVisibility">Hiển thị public ngay</label>
+                                        </div>
+                                        <div class="alert alert-warning small mb-4">
+                                            Nếu chọn Published, backend hiện tại sẽ map thành <strong>activeFlag = true</strong>.
+                                            Draft, Review và Hidden nên giữ <strong>activeFlag = false</strong> cho đến khi có cột trạng thái riêng.
+                                        </div>
+                                        <div class="border rounded-3 p-3 bg-light">
+                                            <p class="text-muted small mb-2">Checklist trước khi xuất bản</p>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="courseCheckInfo">
+                                                <label class="form-check-label small" for="courseCheckInfo">Đủ tên, mô tả, tag và giá</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="courseCheckTeacher">
+                                                <label class="form-check-label small" for="courseCheckTeacher">Đã chọn giảng viên phụ trách</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="courseCheckCurriculum">
+                                                <label class="form-check-label small" for="courseCheckCurriculum">Giáo trình sẽ bổ sung ở trang chi tiết</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-outline-primary">Lưu nháp</button>
+                    <button type="submit" form="createCourseForm" class="btn btn-primary">Tạo khóa học</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const rows = Array.from(document.querySelectorAll('.course-row'));
@@ -328,7 +456,9 @@
         const statusSelect = document.getElementById('courseStatus');
         const summary = document.getElementById('courseResultSummary');
         const emptyRow = document.getElementById('courseEmptyRow');
+        const createCourseForm = document.getElementById('createCourseForm');
 
+        // Lọc bảng khóa học trong mock theo từ khóa, năm và trạng thái đang chọn.
         function applyCourseFilter() {
             const keyword = keywordInput.value.trim().toLowerCase();
             const year = yearSelect.value;
@@ -359,6 +489,12 @@
             yearSelect.value = '';
             statusSelect.value = '';
             applyCourseFilter();
+        });
+
+        createCourseForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('createCourseModal'));
+            modal.hide();
         });
 
         applyCourseFilter();

@@ -40,6 +40,10 @@ public class Course extends BasicEntity {
     @Column(name = "active_flag")
     private Boolean activeFlag;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "course_status", length = 20)
+    private CourseStatus courseStatus = CourseStatus.DRAFT;
+
     @Column(name = "tag", length = 100)
     private String tag;
 

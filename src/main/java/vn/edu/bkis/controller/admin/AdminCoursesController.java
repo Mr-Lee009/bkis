@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vn.edu.bkis.dto.admin.AdminCourseCreateFormDto;
 import vn.edu.bkis.dto.admin.AdminCourseDetailDto;
 import vn.edu.bkis.dto.admin.AdminCourseFilterDto;
 import vn.edu.bkis.dto.admin.AdminCourseModuleFormDto;
@@ -38,7 +39,32 @@ public class AdminCoursesController {
     public String courses(@ModelAttribute("courseFilter") AdminCourseFilterDto filter, Model model) {
         model.addAttribute("pageTitle", "Courses");
         model.addAttribute("coursePage", adminCourseManagementService.getCourseListPage(filter));
+        model.addAttribute("teacherOptions", adminCourseManagementService.getTeacherOptions());
+        if (!model.containsAttribute("courseCreateForm")) {
+            model.addAttribute("courseCreateForm", new AdminCourseCreateFormDto());
+        }
         return "admin/ad-04-courses";
+    }
+
+    /**
+     * Tạo khóa học nháp từ popup trên trang danh sách và chuyển sang trang chi tiết để bổ sung nội dung.
+     *
+     * @param form dữ liệu khóa học cơ bản
+     * @param redirectAttributes flash attributes
+     * @return redirect đến trang chi tiết khóa học vừa tạo hoặc quay lại danh sách nếu lỗi
+     */
+    @PostMapping("/draft")
+    public String createDraftCourse(@ModelAttribute("courseCreateForm") AdminCourseCreateFormDto form,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            Long courseId = adminCourseManagementService.createDraftCourse(form);
+            redirectAttributes.addFlashAttribute("successMessage", "Draft course created successfully.");
+            return "redirect:/admin/courses/" + courseId;
+        } catch (IllegalArgumentException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+            redirectAttributes.addFlashAttribute("courseCreateForm", form);
+            return "redirect:/admin/courses/";
+        }
     }
 
     /**

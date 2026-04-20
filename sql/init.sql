@@ -11,6 +11,7 @@ create table courses
     price          decimal(10, 2)                                                      not null,
     total_students int          default 0                                              null,
     active_flag    tinyint(1)   default 1                                              null,
+    course_status  varchar(20)                                                         null,
     tag            varchar(100)                                                        null,
     image_url      varchar(500) default 'https://example.com/default-course-image.jpg' null,
     rating         int          default 0                                              null,

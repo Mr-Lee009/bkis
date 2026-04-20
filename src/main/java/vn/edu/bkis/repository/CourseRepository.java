@@ -67,6 +67,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             c.tag AS tag,
             c.price AS price,
             c.active_flag AS activeFlag,
+            COALESCE(c.course_status, CASE WHEN c.active_flag = TRUE THEN 'PUBLISHED' ELSE 'HIDDEN' END) AS courseStatus,
             c.created_at AS createdAt,
             c.updated_at AS updatedAt,
             teacher.full_name AS teacherName,
@@ -103,8 +104,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             OR LOWER(COALESCE(teacher.full_name, '')) LIKE LOWER(CONCAT('%', :keyword, '%')))
           AND (:year IS NULL OR YEAR(COALESCE(c.updated_at, c.created_at)) = :year)
           AND (:status IS NULL OR :status = ''
-            OR (:status = 'PUBLISHED' AND c.active_flag = TRUE)
-            OR (:status = 'HIDDEN' AND (c.active_flag = FALSE OR c.active_flag IS NULL)))
+            OR COALESCE(c.course_status, CASE WHEN c.active_flag = TRUE THEN 'PUBLISHED' ELSE 'HIDDEN' END) = :status)
         ORDER BY COALESCE(c.updated_at, c.created_at) DESC, c.id DESC
         """,
         countQuery = """
@@ -117,8 +117,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             OR LOWER(COALESCE(teacher.full_name, '')) LIKE LOWER(CONCAT('%', :keyword, '%')))
           AND (:year IS NULL OR YEAR(COALESCE(c.updated_at, c.created_at)) = :year)
           AND (:status IS NULL OR :status = ''
-            OR (:status = 'PUBLISHED' AND c.active_flag = TRUE)
-            OR (:status = 'HIDDEN' AND (c.active_flag = FALSE OR c.active_flag IS NULL)))
+            OR COALESCE(c.course_status, CASE WHEN c.active_flag = TRUE THEN 'PUBLISHED' ELSE 'HIDDEN' END) = :status)
         """,
         nativeQuery = true)
     Page<AdminCourseListProjection> searchAdminCourses(@Param("keyword") String keyword,
@@ -144,7 +143,25 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query(value = "SELECT COUNT(*) FROM courses c WHERE c.active_flag = TRUE", nativeQuery = true)
     long countPublishedCoursesForAdmin();
 
-    @Query(value = "SELECT COUNT(*) FROM courses c WHERE c.active_flag = FALSE OR c.active_flag IS NULL", nativeQuery = true)
+    @Query(value = """
+        SELECT COUNT(*)
+        FROM courses c
+        WHERE COALESCE(c.course_status, CASE WHEN c.active_flag = TRUE THEN 'PUBLISHED' ELSE 'HIDDEN' END) = 'DRAFT'
+        """, nativeQuery = true)
+    long countDraftCoursesForAdmin();
+
+    @Query(value = """
+        SELECT COUNT(*)
+        FROM courses c
+        WHERE COALESCE(c.course_status, CASE WHEN c.active_flag = TRUE THEN 'PUBLISHED' ELSE 'HIDDEN' END) = 'PUBLISHED'
+        """, nativeQuery = true)
+    long countPublishedStatusCoursesForAdmin();
+
+    @Query(value = """
+        SELECT COUNT(*)
+        FROM courses c
+        WHERE COALESCE(c.course_status, CASE WHEN c.active_flag = TRUE THEN 'PUBLISHED' ELSE 'HIDDEN' END) = 'HIDDEN'
+        """, nativeQuery = true)
     long countHiddenCoursesForAdmin();
 
     @Query(value = """
@@ -158,6 +175,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             c.price AS price,
             c.total_students AS totalStudents,
             c.active_flag AS activeFlag,
+            COALESCE(c.course_status, CASE WHEN c.active_flag = TRUE THEN 'PUBLISHED' ELSE 'HIDDEN' END) AS courseStatus,
             c.tag AS tag,
             c.image_url AS imageUrl,
             c.rating AS rating,

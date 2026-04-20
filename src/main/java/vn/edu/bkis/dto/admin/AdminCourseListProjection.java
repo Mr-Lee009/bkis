@@ -17,6 +17,8 @@ public interface AdminCourseListProjection {
 
     Boolean getActiveFlag();
 
+    String getCourseStatus();
+
     LocalDateTime getCreatedAt();
 
     LocalDateTime getUpdatedAt();

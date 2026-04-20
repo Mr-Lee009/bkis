@@ -47,18 +47,49 @@ Trang chi tiết xử lý nghiệp vụ của một khóa cụ thể:
 - Xem hoạt động gần đây.
 - Xóa hoặc ẩn khóa học.
 
-## Trạng thái khóa học hiện tại
+## Trạng thái khóa học
 
-Ở bước này chưa thay đổi schema database. Model `Course` hiện chỉ có `activeFlag`, nên mapping trạng thái tạm thời là:
+Model `Course` cần có trạng thái nghiệp vụ riêng để tách rõ workflow soạn nội dung và trạng thái public.
 
-- `activeFlag = true`: `PUBLISHED`
-- `activeFlag = false`: `HIDDEN`
+Các trạng thái chuẩn:
 
-Các trạng thái nghiệp vụ đầy đủ hơn như `DRAFT`, `REVIEW`, `ARCHIVED` nên được bổ sung bằng một cột riêng, ví dụ `course_status`, khi cần workflow xuất bản chuẩn.
+- `DRAFT`: khóa học đang được soạn, chưa đủ dữ liệu để public.
+- `REVIEW`: khóa học đã gửi duyệt, chờ admin hoặc người có quyền kiểm tra.
+- `PUBLISHED`: khóa học đã public trên trang học viên.
+- `HIDDEN`: khóa học bị ẩn khỏi public nhưng vẫn còn dữ liệu vận hành.
+- `ARCHIVED`: khóa học đã lưu trữ, không còn dùng trong vận hành thường ngày.
+
+Mapping với `activeFlag`:
+
+- `course_status = PUBLISHED`: `activeFlag = true`
+- `course_status != PUBLISHED`: `activeFlag = false`
+
+`activeFlag` chỉ nên đại diện cho việc khóa học có hiển thị public hay không. `course_status` mới là trạng thái nghiệp vụ chính.
+
+## Quy tắc lưu nháp
+
+Chức năng `Lưu nháp` dùng để tạo hồ sơ khóa học cơ bản trước khi bổ sung giáo trình, video và tài nguyên ở trang chi tiết.
+
+Lý do cần lưu nháp:
+
+- Tránh mất dữ liệu khi admin chưa nhập đủ toàn bộ nội dung khóa học.
+- Cho phép tạo khóa học trước, sau đó vào trang chi tiết để bổ sung module/video.
+- Tránh public khóa học chưa đủ nội dung.
+- Chuẩn bị cho workflow duyệt nội dung trước khi xuất bản.
+
+Quy tắc khi tạo nháp:
+
+- Bắt buộc có `title` và `teacherId` vì schema hiện yêu cầu tên khóa và giảng viên.
+- `price` nếu bỏ trống thì mặc định là `0`.
+- `totalStudents` mặc định là `0`.
+- `rating` mặc định là `5`.
+- `course_status = DRAFT`.
+- `activeFlag = false`.
+- Sau khi tạo thành công, chuyển admin sang trang chi tiết để bổ sung nội dung.
 
 ## Quy tắc cập nhật
 
-Admin được phép cập nhật các trường hiện có trong bảng `courses`:
+Admin được phép cập nhật các trường trong bảng `courses`:
 
 - `title`
 - `description`
@@ -67,11 +98,12 @@ Admin được phép cập nhật các trường hiện có trong bảng `course
 - `price`
 - `tag`
 - `imageUrl`
+- `courseStatus`
 - `activeFlag`
 
-Nếu chọn trạng thái `PUBLISHED`, hệ thống đặt `activeFlag = true`.
+Nếu chọn trạng thái `PUBLISHED`, hệ thống đặt `course_status = PUBLISHED` và `activeFlag = true`.
 
-Nếu chọn trạng thái `HIDDEN`, hệ thống đặt `activeFlag = false`.
+Nếu chọn trạng thái khác `PUBLISHED`, hệ thống đặt `activeFlag = false`.
 
 ## Quy tắc xóa
 
@@ -108,6 +140,7 @@ Quy tắc tạm thời:
   - `AdminCourseListPageDto`
   - `AdminCourseSummaryDto`
   - `AdminCourseDetailDto`
+  - `AdminCourseCreateFormDto`
   - `AdminCourseUpdateFormDto`
   - `AdminCourseListProjection`
   - `AdminCourseDetailProjection`

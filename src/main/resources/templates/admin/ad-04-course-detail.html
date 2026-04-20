@@ -15,7 +15,7 @@
             </a>
             <h2 class="mb-1" th:text="${course.title}">UX Writing Master</h2>
             <div class="d-flex flex-wrap align-items-center gap-2">
-                <span th:class="${course.visible} ? 'badge bg-success' : 'badge bg-dark'"
+                <span th:class="${course.statusBadgeClass}"
                       th:text="${course.statusLabel}">Published</span>
                 <small class="text-muted">Cập nhật <span th:text="${course.updatedAt}">04/01/2026</span></small>
                 <small class="text-muted">Năm <span th:text="${course.year ?: '--'}">2026</span></small>
@@ -92,8 +92,11 @@
                         <div class="col-md-4">
                             <label class="form-label" for="status">Trạng thái</label>
                             <select class="form-select" id="status" th:field="*{status}">
+                                <option value="DRAFT">Draft</option>
+                                <option value="REVIEW">Review</option>
                                 <option value="PUBLISHED">Published</option>
                                 <option value="HIDDEN">Hidden</option>
+                                <option value="ARCHIVED">Archived</option>
                             </select>
                         </div>
                         <div class="col-md-6">

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.bkis.dto.admin.AdminCourseDetailDto;
 import vn.edu.bkis.dto.admin.AdminCourseDetailProjection;
+import vn.edu.bkis.dto.admin.AdminCourseCreateFormDto;
 import vn.edu.bkis.dto.admin.AdminCourseFilterDto;
 import vn.edu.bkis.dto.admin.AdminCourseListItemDto;
 import vn.edu.bkis.dto.admin.AdminCourseListPageDto;
@@ -27,6 +28,7 @@ import vn.edu.bkis.dto.admin.AdminCourseVideoFormDto;
 import vn.edu.bkis.dto.admin.AdminCourseVideoDto;
 import vn.edu.bkis.dto.admin.AdminOptionDto;
 import vn.edu.bkis.model.Course;
+import vn.edu.bkis.model.CourseStatus;
 import vn.edu.bkis.model.Lesson;
 import vn.edu.bkis.model.LessonVideo;
 import vn.edu.bkis.model.UserRole;
@@ -87,7 +89,8 @@ public class AdminCourseManagementService {
 
         AdminCourseSummaryDto summary = new AdminCourseSummaryDto(
             courseRepository.countAdminCoursesByYear(Year.now().getValue()),
-            courseRepository.countPublishedCoursesForAdmin(),
+            courseRepository.countDraftCoursesForAdmin(),
+            courseRepository.countPublishedStatusCoursesForAdmin(),
             courseRepository.countHiddenCoursesForAdmin(),
             courseRepository.count()
         );
@@ -130,8 +133,8 @@ public class AdminCourseManagementService {
             projection.getImageUrl(),
             projection.getRating(),
             resolveYear(projection.getUpdatedAt(), projection.getCreatedAt()),
-            resolveStatus(projection.getActiveFlag()),
-            resolveStatusLabel(projection.getActiveFlag()),
+            resolvePersistedStatus(projection.getCourseStatus(), projection.getActiveFlag()).name(),
+            resolveStatusLabel(resolvePersistedStatus(projection.getCourseStatus(), projection.getActiveFlag())),
             Boolean.TRUE.equals(projection.getActiveFlag()),
             safeLong(projection.getEnrolledStudents()),
             projection.getRevenue() == null ? BigDecimal.ZERO : projection.getRevenue(),
@@ -179,6 +182,36 @@ public class AdminCourseManagementService {
     }
 
     /**
+     * Tạo khóa học ở trạng thái nháp để admin bổ sung giáo trình và tài nguyên ở trang chi tiết.
+     *
+     * @param form dữ liệu khóa học cơ bản từ popup tạo nháp
+     * @return id khóa học vừa tạo
+     */
+    @Transactional
+    public Long createDraftCourse(AdminCourseCreateFormDto form) {
+        Course course = new Course();
+
+        // Gán dữ liệu bắt buộc và dữ liệu mô tả cơ bản cho hồ sơ khóa học.
+        course.setTitle(required(form.getTitle(), "Course title is required."));
+        course.setTeacherId(required(form.getTeacherId(), "Teacher is required."));
+        course.setDescription(form.getDescription());
+        course.setHighlights(form.getHighlights());
+        course.setTag(form.getTag());
+        course.setImageUrl(form.getImageUrl());
+
+        // Khóa nháp không được public cho đến khi admin chuyển sang PUBLISHED.
+        course.setPrice(form.getPrice() == null ? BigDecimal.ZERO : form.getPrice());
+        course.setTotalStudents(0);
+        course.setRating(5);
+        course.setCourseStatus(CourseStatus.DRAFT);
+        course.setActiveFlag(false);
+        course.setCreatedBy("admin");
+        course.setUpdatedBy("admin");
+
+        return courseRepository.save(course).getId();
+    }
+
+    /**
      * Update an existing course.
      *
      * @param form submitted form
@@ -199,7 +232,9 @@ public class AdminCourseManagementService {
         course.setPrice(form.getPrice() == null ? BigDecimal.ZERO : form.getPrice());
         course.setTag(form.getTag());
         course.setImageUrl(form.getImageUrl());
-        course.setActiveFlag(resolveActiveFlag(form.getStatus(), form.getVisible()));
+        CourseStatus status = resolveStatus(form.getStatus(), form.getVisible());
+        course.setCourseStatus(status);
+        course.setActiveFlag(resolveActiveFlag(status));
         course.setUpdatedBy("admin");
 
         courseRepository.save(course);
@@ -220,6 +255,7 @@ public class AdminCourseManagementService {
             || courseRepository.countPaymentsByCourseId(courseId) > 0;
         if (hasBusinessData) {
             course.setActiveFlag(false);
+            course.setCourseStatus(CourseStatus.HIDDEN);
             course.setUpdatedBy("admin");
             courseRepository.save(course);
             return false;
@@ -380,8 +416,8 @@ public class AdminCourseManagementService {
             projection.getRevenue() == null ? BigDecimal.ZERO : projection.getRevenue(),
             safeLong(projection.getModuleCount()),
             safeLong(projection.getVideoCount()),
-            resolveStatus(projection.getActiveFlag()),
-            resolveStatusLabel(projection.getActiveFlag()),
+            resolvePersistedStatus(projection.getCourseStatus(), projection.getActiveFlag()).name(),
+            resolveStatusLabel(resolvePersistedStatus(projection.getCourseStatus(), projection.getActiveFlag())),
             Boolean.TRUE.equals(projection.getActiveFlag()),
             formatDate(coalesce(projection.getUpdatedAt(), projection.getCreatedAt()))
         );
@@ -460,22 +496,40 @@ public class AdminCourseManagementService {
         return String.format(Locale.ROOT, "%02d:%02d", minutes, remainingSeconds);
     }
 
-    private Boolean resolveActiveFlag(String status, Boolean visible) {
-        if ("HIDDEN".equalsIgnoreCase(status)) {
-            return false;
-        }
-        if ("PUBLISHED".equalsIgnoreCase(status)) {
-            return true;
-        }
-        return Boolean.TRUE.equals(visible);
+    private Boolean resolveActiveFlag(CourseStatus status) {
+        return status == CourseStatus.PUBLISHED;
     }
 
-    private String resolveStatus(Boolean activeFlag) {
-        return Boolean.TRUE.equals(activeFlag) ? "PUBLISHED" : "HIDDEN";
+    private CourseStatus resolveStatus(String rawStatus, Boolean visible) {
+        if (!isBlank(rawStatus)) {
+            try {
+                return CourseStatus.valueOf(rawStatus.trim().toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException("Invalid course status: " + rawStatus);
+            }
+        }
+        return Boolean.TRUE.equals(visible) ? CourseStatus.PUBLISHED : CourseStatus.HIDDEN;
     }
 
-    private String resolveStatusLabel(Boolean activeFlag) {
-        return Boolean.TRUE.equals(activeFlag) ? "Published" : "Hidden";
+    private CourseStatus resolvePersistedStatus(String rawStatus, Boolean activeFlag) {
+        if (!isBlank(rawStatus)) {
+            try {
+                return CourseStatus.valueOf(rawStatus.trim().toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException ex) {
+                return Boolean.TRUE.equals(activeFlag) ? CourseStatus.PUBLISHED : CourseStatus.HIDDEN;
+            }
+        }
+        return Boolean.TRUE.equals(activeFlag) ? CourseStatus.PUBLISHED : CourseStatus.HIDDEN;
+    }
+
+    private String resolveStatusLabel(CourseStatus status) {
+        return switch (status) {
+            case DRAFT -> "Draft";
+            case REVIEW -> "Review";
+            case PUBLISHED -> "Published";
+            case HIDDEN -> "Hidden";
+            case ARCHIVED -> "Archived";
+        };
     }
 
     private int resolvePage(Integer page) {

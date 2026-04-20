@@ -34,4 +34,15 @@ public class AdminCourseDetailDto {
     private final String updatedAt;
     private final int completionPercent;
     private final List<AdminCourseModuleDto> modules;
+
+    // Trả về CSS badge phù hợp với trạng thái nghiệp vụ của khóa học trên trang chi tiết.
+    public String getStatusBadgeClass() {
+        return switch (status) {
+            case "DRAFT" -> "badge bg-secondary";
+            case "REVIEW" -> "badge bg-warning text-dark";
+            case "PUBLISHED" -> "badge bg-success";
+            case "ARCHIVED" -> "badge bg-dark";
+            default -> "badge bg-light text-dark";
+        };
+    }
 }

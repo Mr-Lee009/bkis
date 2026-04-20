@@ -25,6 +25,8 @@ public interface AdminCourseDetailProjection {
 
     Boolean getActiveFlag();
 
+    String getCourseStatus();
+
     String getTag();
 
     String getImageUrl();
