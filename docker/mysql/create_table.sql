@@ -20,6 +20,24 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY uk_users_email (email)
 );
 
+CREATE TABLE IF NOT EXISTS user_oauth_accounts (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    user_id VARCHAR(36) NOT NULL,
+    provider VARCHAR(20) NOT NULL,
+    provider_user_id VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    display_name VARCHAR(255),
+    profile_picture_url VARCHAR(500),
+    created_by VARCHAR(255),
+    updated_by VARCHAR(255),
+    created_at DATETIME,
+    updated_at DATETIME,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_user_oauth_accounts_provider_subject (provider, provider_user_id),
+    KEY idx_user_oauth_accounts_user_id (user_id),
+    CONSTRAINT fk_user_oauth_accounts_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 CREATE TABLE IF NOT EXISTS courses (
     id BIGINT NOT NULL AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,

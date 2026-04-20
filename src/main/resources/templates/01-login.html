@@ -58,6 +58,27 @@
                                     <button type="submit" class="btn btn-primary py-3" th:text="#{login.button}">Đăng nhập</button>
                                 </div>
                             </form>
+                            <div class="mt-4" th:if="${googleSsoEnabled or facebookSsoEnabled}">
+                                <div class="d-flex align-items-center mb-3">
+                                    <hr class="flex-grow-1">
+                                    <span class="px-3 text-muted small">Hoặc tiếp tục với</span>
+                                    <hr class="flex-grow-1">
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <a class="btn btn-outline-dark py-3"
+                                       th:if="${googleSsoEnabled}"
+                                       th:href="@{/oauth2/authorization/google}">
+                                        <i class="fab fa-google me-2"></i>
+                                        Đăng nhập với Google
+                                    </a>
+                                    <a class="btn btn-outline-primary py-3"
+                                       th:if="${facebookSsoEnabled}"
+                                       th:href="@{/oauth2/authorization/facebook}">
+                                        <i class="fab fa-facebook-f me-2"></i>
+                                        Đăng nhập với Facebook
+                                    </a>
+                                </div>
+                            </div>
                             <p class="text-center text-muted mt-3 mb-0" th:text="#{login.register}">Chưa có tài khoản?
                                 <a href="course_signup.html" class="text-primary" th:text="#{login.signup}">Đăng ký ngay</a></p>
                         </div>

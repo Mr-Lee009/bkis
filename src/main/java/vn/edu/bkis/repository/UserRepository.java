@@ -23,6 +23,14 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByUsername(String username);
 
     /**
+     * Check whether a username already exists for local or SSO-created accounts.
+     *
+     * @param username the username candidate to validate
+     * @return true when the username is already taken
+     */
+    boolean existsByUsername(String username);
+
+    /**
      * Find a user by email to prevent duplicate account creation.
      *
      * @param email the email address to search for
