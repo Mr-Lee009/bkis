@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <title>Cau hinh cong thanh toán - eLEARNING</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../img/favicon.ico" rel="icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="admin.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-3 col-lg-2 sidebar py-4">
+                <div class="px-3 mb-4">
+                    <h4 class="text-white mb-0"><i class="fa fa-graduation-cap me-2"></i>eLEARNING</h4>
+                    <small class="text-muted">Admin Panel</small>
+                </div>
+                <div class="sidebar-user text-center">
+                    <img src="../img/testimonial-1.jpg" alt="Admin Avatar" class="sidebar-avatar">
+                    <strong class="d-block">Nguyen Admin</strong>
+                    <span class="user-role-pill">Super Admin</span>
+                    <small>admin@elearning.vn</small>
+                </div>
+                <a href="dashboard.html"><i class="fa fa-chart-line me-2"></i>Dashboard</a>
+                <a href="accounts.html"><i class="fa fa-users-cog me-2"></i>Tai khoan</a>
+                <a href="student.html"><i class="fa fa-user-graduate me-2"></i>Hoc vien</a>
+                <a href="courses.html"><i class="fa fa-book-open me-2"></i>Khoa hoc</a>
+                <a href="payments.html" class="active"><i class="fa fa-credit-card me-2"></i>Thanh toan</a>
+                <a href="settings.html"><i class="fa fa-cog me-2"></i>Cai dat</a>
+            </aside>
+
+            <main class="col-md-9 col-lg-10 p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                    <div>
+                        <a href="payments.html" class="btn btn-sm btn-outline-secondary mb-3">
+                            <i class="fa fa-arrow-left me-2"></i>Quay lai thanh toan
+                        </a>
+                        <h2 class="mb-1">Cau hinh cong thanh toan</h2>
+                        <small class="text-muted">Quan ly gateway, webhook, phi giao dich va rule dinh tuyen thanh toan.</small>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-secondary" type="button"><i class="fa fa-vial me-2"></i>Test tat ca</button>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#addGatewayModal">
+                            <i class="fa fa-plus me-2"></i>Them gateway
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <div class="stat-card bg-white shadow-sm p-3">
+                            <p class="text-muted mb-1">Gateway dang bat</p>
+                            <h3 class="mb-0">4</h3>
+                            <small class="text-success">VNPay, MoMo, Stripe, Bank</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-white shadow-sm p-3">
+                            <p class="text-muted mb-1">Ty le thanh cong</p>
+                            <h3 class="mb-0">98.6%</h3>
+                            <small class="text-success">7 ngay gan nhat</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-white shadow-sm p-3">
+                            <p class="text-muted mb-1">Webhook loi</p>
+                            <h3 class="mb-0">2</h3>
+                            <small class="text-warning">Can retry trong hom nay</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-white shadow-sm p-3">
+                            <p class="text-muted mb-1">Moi truong</p>
+                            <h3 class="mb-0">Live</h3>
+                            <small class="text-muted">Sandbox bat rieng cho test</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-xl-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Danh sach gateway</h5>
+                                    <small class="text-muted">Click de xem cau hinh chi tiet</small>
+                                </div>
+                                <span class="badge bg-success">Healthy</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="gateway-item active" data-gateway-item data-gateway-id="vnpay">
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                        <div class="d-flex gap-3">
+                                            <div class="gateway-logo bg-danger text-white">VN</div>
+                                            <div>
+                                                <strong>VNPay</strong>
+                                                <small class="d-block text-muted">ATM, QR, napas</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-success">Live</span>
+                                    </div>
+                                    <div class="gateway-meta">
+                                        <span>Priority 1</span>
+                                        <span>Fee 1.1%</span>
+                                        <span>99.2%</span>
+                                    </div>
+                                </div>
+
+                                <div class="gateway-item" data-gateway-item data-gateway-id="momo">
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                        <div class="d-flex gap-3">
+                                            <div class="gateway-logo bg-primary text-white">MM</div>
+                                            <div>
+                                                <strong>MoMo</strong>
+                                                <small class="d-block text-muted">Wallet, QR, app switch</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-success">Live</span>
+                                    </div>
+                                    <div class="gateway-meta">
+                                        <span>Priority 2</span>
+                                        <span>Fee 1.3%</span>
+                                        <span>98.4%</span>
+                                    </div>
+                                </div>
+
+                                <div class="gateway-item" data-gateway-item data-gateway-id="stripe">
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                        <div class="d-flex gap-3">
+                                            <div class="gateway-logo bg-dark text-white">ST</div>
+                                            <div>
+                                                <strong>Stripe</strong>
+                                                <small class="d-block text-muted">Visa, Mastercard, Apple Pay</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-warning text-dark">Review</span>
+                                    </div>
+                                    <div class="gateway-meta">
+                                        <span>Priority 3</span>
+                                        <span>Fee 2.9%</span>
+                                        <span>96.8%</span>
+                                    </div>
+                                </div>
+
+                                <div class="gateway-item" data-gateway-item data-gateway-id="bank">
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                        <div class="d-flex gap-3">
+                                            <div class="gateway-logo bg-secondary text-white">BK</div>
+                                            <div>
+                                                <strong>Chuyen khoan</strong>
+                                                <small class="d-block text-muted">Manual verify, QR bank</small>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-info text-dark">Manual</span>
+                                    </div>
+                                    <div class="gateway-meta">
+                                        <span>Fallback</span>
+                                        <span>Fee 0%</span>
+                                        <span>92.1%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-8">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-3">
+                                <div>
+                                    <h5 class="mb-0" id="gatewayTitle">VNPay gateway</h5>
+                                    <small class="text-muted" id="gatewaySubtitle">Merchant live configuration</small>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">Test ket noi</button>
+                                    <button class="btn btn-sm btn-primary" type="button">Luu cau hinh</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-lg-7">
+                                        <div class="gateway-section">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="mb-0">Thong tin ket noi</h6>
+                                                <span class="badge bg-success">Signature OK</span>
+                                            </div>
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Merchant ID</label>
+                                                    <input class="form-control" value="BKIS_VNPAY_2026">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Terminal / Partner code</label>
+                                                    <input class="form-control" value="BKIS_TERM_01">
+                                                </div>
+                                                <div class="col-12">
+                                                    <label class="form-label">Secret key</label>
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" value="secret-key-placeholder">
+                                                        <button class="btn btn-outline-secondary" type="button">Rotate</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Payment endpoint</label>
+                                                    <input class="form-control" value="https://pay.vnpay.vn/vpcpay.html">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Return URL</label>
+                                                    <input class="form-control" value="https://elearning.vn/payments/return/vnpay">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="gateway-section h-100">
+                                            <h6 class="mb-3">Che do van hanh</h6>
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div>
+                                                    <strong>Bat gateway</strong>
+                                                    <small class="d-block text-muted">Cho phep hoc vien thanh toan qua cong nay</small>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div>
+                                                    <strong>Sandbox mode</strong>
+                                                    <small class="d-block text-muted">Dung credential test</small>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Priority routing</label>
+                                                <input type="number" class="form-control" value="1">
+                                            </div>
+                                            <div>
+                                                <label class="form-label">Transaction fee</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" value="1.1" step="0.1">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-4 mt-1">
+                                    <div class="col-lg-6">
+                                        <div class="gateway-section h-100">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="mb-0">Webhook & callback</h6>
+                                                <button class="btn btn-sm btn-outline-secondary" type="button">Copy URL</button>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Webhook URL</label>
+                                                <input class="form-control" value="https://elearning.vn/api/webhooks/vnpay">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">IP allowlist</label>
+                                                <textarea class="form-control" rows="3">203.162.4.190
+203.162.4.191</textarea>
+                                            </div>
+                                            <div class="alert alert-light border mb-0">
+                                                <i class="fa fa-shield-alt me-2 text-primary"></i>
+                                                <small>Verify signature truoc khi cap nhat payment status va enrollment.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="gateway-section h-100">
+                                            <h6 class="mb-3">Checklist bao mat</h6>
+                                            <div class="gateway-check">
+                                                <i class="fa fa-check-circle text-success"></i>
+                                                <span>Secret key da duoc ma hoa khi luu</span>
+                                            </div>
+                                            <div class="gateway-check">
+                                                <i class="fa fa-check-circle text-success"></i>
+                                                <span>Webhook yeu cau signature</span>
+                                            </div>
+                                            <div class="gateway-check">
+                                                <i class="fa fa-exclamation-circle text-warning"></i>
+                                                <span>Chua bat alert khi failed rate vuot 5%</span>
+                                            </div>
+                                            <div class="gateway-check">
+                                                <i class="fa fa-check-circle text-success"></i>
+                                                <span>Co retry queue cho callback bi loi</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-7">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Routing rule</h5>
+                                    <small class="text-muted">Dieu huong cong thanh toan theo tien te, khoa hoc va fallback</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary" type="button">Them rule</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Dieu kien</th>
+                                                <th>Gateway uu tien</th>
+                                                <th>Fallback</th>
+                                                <th>Trang thai</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>VND · khoa hoc public</td>
+                                                <td>VNPay -> MoMo</td>
+                                                <td>Chuyen khoan</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>USD · hoc vien quoc te</td>
+                                                <td>Stripe</td>
+                                                <td>VNPay</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Doanh nghiep · invoice thu cong</td>
+                                                <td>Chuyen khoan</td>
+                                                <td>None</td>
+                                                <td><span class="badge bg-secondary">Manual</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Health check gan day</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="timeline-line">
+                                    <p class="mb-3"><span class="dot"></span>VNPay test thanh cong · 09:32</p>
+                                    <p class="mb-3"><span class="dot"></span>MoMo webhook retry thanh cong · 09:10</p>
+                                    <p class="mb-3"><span class="dot"></span>Stripe can review tax setting · 08:40</p>
+                                    <p class="mb-0"><span class="dot"></span>Bank QR sync settlement file · 08:00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addGatewayModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title">Them gateway moi</h5>
+                        <p class="text-muted small mb-0">Mock tao nhanh cau hinh gateway truoc khi noi backend.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Loai gateway</label>
+                        <select class="form-select">
+                            <option>VNPay</option>
+                            <option>MoMo</option>
+                            <option>Stripe</option>
+                            <option>PayPal</option>
+                            <option>Chuyen khoan ngan hang</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Ten hien thi</label>
+                        <input class="form-control" placeholder="VD: PayPal Global">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Merchant / Partner ID</label>
+                        <input class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Secret key</label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Webhook URL</label>
+                        <input class="form-control" value="https://elearning.vn/api/webhooks/new-gateway">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huy</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tao mock gateway</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const gatewayData = {
+            vnpay: ['VNPay gateway', 'Merchant live configuration'],
+            momo: ['MoMo gateway', 'Wallet configuration & app switch'],
+            stripe: ['Stripe gateway', 'International cards and wallet review'],
+            bank: ['Chuyen khoan ngan hang', 'Manual transfer and QR reconciliation']
+        };
+
+        document.querySelectorAll('[data-gateway-item]').forEach((item) => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('[data-gateway-item]').forEach((gateway) => {
+                    gateway.classList.toggle('active', gateway === item);
+                });
+
+                const data = gatewayData[item.dataset.gatewayId] || gatewayData.vnpay;
+                document.getElementById('gatewayTitle').textContent = data[0];
+                document.getElementById('gatewaySubtitle').textContent = data[1];
+            });
+        });
+    </script>
+</body>
+
+</html>
