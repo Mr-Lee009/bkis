@@ -27,6 +27,16 @@
                     <div class="card border-0 shadow-lg wow fadeInUp" data-wow-delay="0.3s">
                         <div class="card-body p-4 p-lg-5">
                             <h4 class="mb-4" th:text="#{login.account}"></h4>
+                            <div class="alert alert-success d-flex align-items-start gap-2" role="alert"
+                                 th:if="${successMessage != null}">
+                                <i class="fa fa-check-circle mt-1"></i>
+                                <span th:text="${successMessage}">Thao tác thành công.</span>
+                            </div>
+                            <div class="alert alert-danger d-flex align-items-start gap-2" role="alert"
+                                 th:if="${errorMessage != null}">
+                                <i class="fa fa-exclamation-triangle mt-1"></i>
+                                <span th:text="${errorMessage}">Đăng nhập không thành công.</span>
+                            </div>
                             <form id="loginForm" th:action="@{/login}" method="post">
                                 <div class="mb-3">
                                     <label class="form-label" th:text="#{login.username}">UserName</label>
@@ -44,7 +54,7 @@
                                         <input class="form-check-input" type="checkbox" id="rememberMe" name="remember-me">
                                         <label class="form-check-label" for="rememberMe" th:text="#{login.remember}"></label>
                                     </div>
-                                    <a href="#" class="text-primary" th:text="#{login.forgot}">Quên mật khẩu?</a>
+                                    <a th:href="@{/forgot-password}" class="text-primary" th:text="#{login.forgot}">Quên mật khẩu?</a>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" th:text="#{login.captcha}">Captcha xác minh</label>
@@ -79,8 +89,10 @@
                                     </a>
                                 </div>
                             </div>
-                            <p class="text-center text-muted mt-3 mb-0" th:text="#{login.register}">Chưa có tài khoản?
-                                <a href="course_signup.html" class="text-primary" th:text="#{login.signup}">Đăng ký ngay</a></p>
+                            <p class="text-center text-muted mt-3 mb-0">
+                                <span th:text="#{login.register}">Chưa có tài khoản?</span>
+                                <a th:href="@{/register}" class="text-primary" th:text="#{login.signup}">Đăng ký ngay</a>
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -15,6 +15,7 @@ public class DataSeeder {
     @Bean
     CommandLineRunner seedUsers(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
+            ensureSystemAdmin(userRepository, passwordEncoder);
             createIfMissing(userRepository, passwordEncoder,
                 "admin", "System Admin", "admin@example.com", "admin123", UserRole.ADMIN);
             createIfMissing(userRepository, passwordEncoder,
@@ -23,9 +24,30 @@ public class DataSeeder {
                 "student1", "Nguyen Van A", "student1@example.com", "student123", UserRole.STUDENT);
             createIfMissing(userRepository, passwordEncoder,
                 "student2", "Tran Thi B", "student2@example.com", "student234", UserRole.STUDENT);
+            createIfMissing(userRepository, passwordEncoder,
+                "ducla", "ducla", "ducla@example.com", "ducla12345", UserRole.ADMIN);
         };
     }
 
+    // Bao dam tai khoan SA luon ton tai de dang nhap quan tri moi truong local va Docker.
+    private void ensureSystemAdmin(UserRepository repo, PasswordEncoder encoder) {
+        User systemAdmin = repo.findByUsername("SA").orElseGet(User::new);
+        if (systemAdmin.getId() == null) {
+            systemAdmin.setId(UUID.randomUUID().toString());
+            systemAdmin.setBio("System administrator account for local and Docker startup.");
+            systemAdmin.setProfilePictureUrl("/img/team-1.jpg");
+        }
+        systemAdmin.setUsername("SA");
+        systemAdmin.setFullName("System Administrator");
+        systemAdmin.setEmail("sa@bkis.local");
+        systemAdmin.setPasswordHash(encoder.encode("admin112233"));
+        systemAdmin.setRole(UserRole.ADMIN);
+        systemAdmin.setFailedLoginAttempts(0);
+        systemAdmin.setLocked(false);
+        repo.save(systemAdmin);
+    }
+
+    // Tao user mau neu he thong chua co username tuong ung.
     private void createIfMissing(UserRepository repo, PasswordEncoder encoder,
                      String username, String fullName, String email, String plainPassword, UserRole role) {
         if (repo.findByUsername(username).isEmpty()) {

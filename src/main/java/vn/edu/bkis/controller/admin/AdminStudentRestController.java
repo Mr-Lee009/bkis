@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.edu.bkis.dto.ApiResponse;
-import vn.edu.bkis.dto.admin.AdminStudentCreateRequest;
-import vn.edu.bkis.dto.admin.AdminStudentCreateResponseDto;
-import vn.edu.bkis.dto.admin.AdminStudentDetailDto;
-import vn.edu.bkis.dto.admin.AdminStudentFormOptionsDto;
-import vn.edu.bkis.dto.admin.AdminStudentListPageDto;
-import vn.edu.bkis.dto.admin.AdminStudentSummaryDto;
+import vn.edu.bkis.dto.admin.student.AdminStudentCreateRequest;
+import vn.edu.bkis.dto.admin.student.AdminStudentCreateResponseDto;
+import vn.edu.bkis.dto.admin.student.AdminStudentDetailDto;
+import vn.edu.bkis.dto.admin.student.AdminStudentFormOptionsDto;
+import vn.edu.bkis.dto.admin.student.AdminStudentListPageDto;
+import vn.edu.bkis.dto.admin.student.AdminStudentSummaryDto;
 import vn.edu.bkis.service.admin.AdminStudentCommandService;
 import vn.edu.bkis.service.admin.AdminStudentQueryService;
 

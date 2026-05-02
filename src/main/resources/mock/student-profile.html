@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <title>eLEARNING - Hồ sơ học tập</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Chi tiết thông tin học sinh, khóa học đã đăng ký và tiến độ học tập" name="description">
+
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="spinner" class="bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>eLEARNING</h2>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link">Home</a>
+                <a href="about.html" class="nav-item nav-link">About</a>
+                <a href="courses.html" class="nav-item nav-link">Courses</a>
+                <a href="course_signup.html" class="nav-item nav-link">Đăng ký</a>
+                <a href="course_learn.html" class="nav-item nav-link active">Học viên</a>
+                <a href="course_checkout.html" class="nav-item nav-link">Thanh toán</a>
+                <a href="contact.html" class="nav-item nav-link">Contact</a>
+            </div>
+            <a href="course_learn.html" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Học tiếp<i class="fa fa-arrow-right ms-3"></i></a>
+        </div>
+    </nav>
+
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Hồ sơ học tập</h1>
+                    <p class="text-white-50 mb-0">Thông tin cá nhân, khóa học đã đăng ký và tiến độ học của bạn</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="student-user-hero mb-5 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7">
+                        <div class="d-flex flex-wrap align-items-center gap-3">
+                            <img src="img/testimonial-1.jpg" alt="Student avatar" class="student-user-avatar">
+                            <div>
+                                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                    <h2 class="mb-0">Tu Nguyen</h2>
+                                    <span class="badge bg-primary">Đang học</span>
+                                </div>
+                                <p class="mb-2 text-muted">tu.nguyen@mail.com · Học viên từ 02/12/2025</p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="student-tag"><i class="fa fa-id-card me-1"></i>STU-2026-018</span>
+                                    <span class="student-tag"><i class="fa fa-user-tie me-1"></i>Mentor Minh Do</span>
+                                    <span class="student-tag"><i class="fa fa-map-marker-alt me-1"></i>Hà Nội</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="student-summary-box">
+                                    <span>Khóa đã đăng ký</span>
+                                    <strong>4</strong>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="student-summary-box">
+                                    <span>Tiến độ trung bình</span>
+                                    <strong>68%</strong>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="student-summary-box">
+                                    <span>Bài đã nộp</span>
+                                    <strong>18/22</strong>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="student-summary-box">
+                                    <span>Buổi live</span>
+                                    <strong>11/12</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-5">
+                <div class="col-lg-8">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+                        <div>
+                            <h6 class="section-title bg-white text-start text-primary pe-3">Khóa học</h6>
+                            <h2 class="mb-0">Danh sách đã đăng ký</h2>
+                        </div>
+                        <select class="form-select w-auto mt-3 mt-lg-0">
+                            <option>Tất cả khóa học</option>
+                            <option>Đang học</option>
+                            <option>Đã hoàn thành</option>
+                        </select>
+                    </div>
+
+                    <div class="student-course-card active wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-md-4">
+                                <img src="img/course-1.jpg" alt="Product Discovery" class="img-fluid rounded">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                                    <span class="badge bg-primary">Đang học</span>
+                                    <small class="text-muted">Module 5/7</small>
+                                </div>
+                                <h4 class="mb-2">Product Discovery</h4>
+                                <p class="text-muted mb-3">Cohort PD-01-2026 · Mentor Minh Do · Bắt đầu 02/12/2025</p>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tiến độ</span>
+                                    <strong>72%</strong>
+                                </div>
+                                <div class="progress student-progress mb-3">
+                                    <div class="progress-bar bg-primary" style="width:72%;"></div>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="lesson-chip done"><i class="fa fa-check"></i>Research Basics</span>
+                                    <span class="lesson-chip done"><i class="fa fa-check"></i>User Interview</span>
+                                    <span class="lesson-chip current"><i class="fa fa-play"></i>Synthesis</span>
+                                    <span class="lesson-chip"><i class="fa fa-lock"></i>Prototype Brief</span>
+                                </div>
+                                <a href="course_learn.html" class="btn btn-primary btn-sm">Tiếp tục học</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="student-course-card wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-md-4">
+                                <img src="img/course-2.jpg" alt="Frontend Sprint" class="img-fluid rounded">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                                    <span class="badge bg-success">Sắp hoàn thành</span>
+                                    <small class="text-muted">Module 8/8</small>
+                                </div>
+                                <h4 class="mb-2">Frontend Sprint</h4>
+                                <p class="text-muted mb-3">Cohort FE-11-2025 · Mentor Ken Pham · Bắt đầu 01/09/2025</p>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tiến độ</span>
+                                    <strong>94%</strong>
+                                </div>
+                                <div class="progress student-progress mb-3">
+                                    <div class="progress-bar bg-success" style="width:94%;"></div>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="lesson-chip done"><i class="fa fa-check"></i>HTML/CSS</span>
+                                    <span class="lesson-chip done"><i class="fa fa-check"></i>JavaScript</span>
+                                    <span class="lesson-chip done"><i class="fa fa-check"></i>React Basics</span>
+                                    <span class="lesson-chip current"><i class="fa fa-play"></i>Capstone Review</span>
+                                </div>
+                                <a href="course_learn.html" class="btn btn-outline-primary btn-sm">Xem tiến độ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="student-course-card wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-md-4">
+                                <img src="img/course-3.jpg" alt="Data Analytics Foundation" class="img-fluid rounded">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                                    <span class="badge bg-info text-dark">Onboarding</span>
+                                    <small class="text-muted">Module 1/6</small>
+                                </div>
+                                <h4 class="mb-2">Data Analytics Foundation</h4>
+                                <p class="text-muted mb-3">Cohort DA-02-2026 · Mentor Thao Tran · Bắt đầu 15/01/2026</p>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tiến độ</span>
+                                    <strong>12%</strong>
+                                </div>
+                                <div class="progress student-progress mb-3">
+                                    <div class="progress-bar bg-info" style="width:12%;"></div>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="lesson-chip current"><i class="fa fa-play"></i>Orientation</span>
+                                    <span class="lesson-chip"><i class="fa fa-lock"></i>Spreadsheet</span>
+                                    <span class="lesson-chip"><i class="fa fa-lock"></i>SQL Basics</span>
+                                </div>
+                                <a href="course_learn.html" class="btn btn-outline-primary btn-sm">Bắt đầu học</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="student-course-card wow fadeInUp" data-wow-delay="0.4s">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-md-4">
+                                <img src="img/cat-2.jpg" alt="UI/UX Foundation" class="img-fluid rounded">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                                    <span class="badge bg-secondary">Đã hoàn thành</span>
+                                    <small class="text-muted">Có chứng chỉ</small>
+                                </div>
+                                <h4 class="mb-2">UI/UX Foundation</h4>
+                                <p class="text-muted mb-3">Cohort UX-09-2025 · Mentor Linh Pham · Hoàn thành 20/11/2025</p>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tiến độ</span>
+                                    <strong>100%</strong>
+                                </div>
+                                <div class="progress student-progress mb-3">
+                                    <div class="progress-bar bg-secondary" style="width:100%;"></div>
+                                </div>
+                                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa fa-certificate me-2"></i>Xem chứng chỉ</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="student-side-panel mb-4 wow fadeInUp" data-wow-delay="0.1s">
+                        <h5 class="mb-3">Thông tin học sinh</h5>
+                        <ul class="list-unstyled student-info-list mb-0">
+                            <li><i class="fa fa-user text-primary"></i><span>Tu Nguyen</span></li>
+                            <li><i class="fa fa-envelope text-primary"></i><span>tu.nguyen@mail.com</span></li>
+                            <li><i class="fa fa-phone text-primary"></i><span>(+84) 912 345 678</span></li>
+                            <li><i class="fa fa-briefcase text-primary"></i><span>Product Owner · Fintech</span></li>
+                            <li><i class="fa fa-bullseye text-primary"></i><span>Nắm chắc discovery, nâng cấp portfolio</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="student-side-panel mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Deadline gần nhất</h5>
+                            <span class="badge bg-warning text-dark">2 ngày</span>
+                        </div>
+                        <p class="mb-1"><strong>Assignment 05 - Product Discovery</strong></p>
+                        <p class="text-muted mb-3">Nộp bản synthesis cuối trước 23:59, 06/01/2026.</p>
+                        <a href="course_learn.html" class="btn btn-primary w-100">Mở bài tập</a>
+                    </div>
+
+                    <div class="student-side-panel mb-4 wow fadeInUp" data-wow-delay="0.3s">
+                        <h5 class="mb-3">Hoạt động gần đây</h5>
+                        <ul class="list-unstyled student-activity mb-0">
+                            <li>
+                                <span></span>
+                                <div>
+                                    <strong>Nộp Assignment 04</strong>
+                                    <small>04/01/2026 · Đúng hạn</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span></span>
+                                <div>
+                                    <strong>Tham gia live class</strong>
+                                    <small>02/01/2026 · 92 phút</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span></span>
+                                <div>
+                                    <strong>Hoàn thành quiz React</strong>
+                                    <small>29/12/2025 · 86/100</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="student-side-panel wow fadeInUp" data-wow-delay="0.4s">
+                        <h5 class="mb-3">Hỗ trợ học tập</h5>
+                        <p class="text-muted">Mentor đang theo dõi tiến độ Product Discovery và sẽ phản hồi bài trong 24 giờ.</p>
+                        <div class="d-grid gap-2">
+                            <a href="contact.html" class="btn btn-outline-primary">Gửi câu hỏi</a>
+                            <a href="#" class="btn btn-primary">Đặt lịch 1:1</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="text-white mb-3">eLEARNING</h4>
+                    <p>Theo dõi tiến độ học tập, khóa học đã mua và hỗ trợ mentor trong một không gian học tập thống nhất.</p>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="text-white mb-3">Liên kết</h4>
+                    <a class="btn btn-link" href="course_learn.html">Khóa học của bạn</a>
+                    <a class="btn btn-link" href="courses.html">Tất cả khóa học</a>
+                    <a class="btn btn-link" href="contact.html">Hỗ trợ</a>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="text-white mb-3">Liên hệ</h4>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>mentor@example.com</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+84 912 345 678</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <script th:src="@{/js/common/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/common/bootstrap.bundle.min.js}"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

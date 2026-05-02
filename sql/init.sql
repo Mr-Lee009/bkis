@@ -96,6 +96,34 @@ create table payments
 create index course_id
     on payments (course_id);
 
+create table payment_gateways
+(
+    id                      bigint auto_increment primary key,
+    code                    varchar(50)                          not null,
+    display_name            varchar(150)                         not null,
+    provider_type           varchar(50)                          not null,
+    description             varchar(500)                         null,
+    merchant_id             varchar(150)                         null,
+    partner_code            varchar(150)                         null,
+    secret_key              varchar(500)                         null,
+    payment_endpoint        varchar(500)                         null,
+    return_url              varchar(500)                         null,
+    webhook_url             varchar(500)                         null,
+    ip_allowlist            text                                 null,
+    enabled                 tinyint(1) default 1                 null,
+    sandbox_mode            tinyint(1) default 0                 null,
+    routing_priority        int        default 99                null,
+    transaction_fee_percent decimal(8, 2) default 0              null,
+    success_rate_percent    decimal(8, 2) default 0              null,
+    status                  varchar(30)                          not null,
+    created_by              char(36)                             null,
+    updated_by              char(36)                             null,
+    created_at              timestamp  default CURRENT_TIMESTAMP null,
+    updated_at              timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    constraint uq_payment_gateways_code unique (code)
+)
+    comment 'Store payment gateway configuration for checkout and webhooks';
+
 create table progress
 (
     id               bigint auto_increment primary key,
@@ -135,6 +163,24 @@ create table users
 )
     comment 'Store system users including studentDtos, teachers, and admins';
 
+create table password_reset_tokens
+(
+    id         bigint auto_increment primary key,
+    user_id    char(36)                             not null,
+    token      varchar(100)                         not null,
+    expires_at timestamp                            not null,
+    used_at    timestamp                            null,
+    created_by char(36)                             null,
+    updated_by char(36)                             null,
+    created_at timestamp  default CURRENT_TIMESTAMP null,
+    updated_at timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    constraint uq_password_reset_tokens_token unique (token),
+    constraint fk_password_reset_tokens_user foreign key (user_id) references users (id)
+)
+    comment 'Store one-time tokens for password reset flow';
+
+create index idx_password_reset_tokens_user_id
+    on password_reset_tokens (user_id);
 
 -- Link courses.teacher_id to users
 alter table courses

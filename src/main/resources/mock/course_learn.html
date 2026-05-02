@@ -33,7 +33,7 @@
 
 <body>
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div id="spinner" class="bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
@@ -67,7 +67,30 @@
                 </div>
                 <a href="contact.html" class="nav-item nav-link">Contact</a>
             </div>
-            <a href="course_learn.html" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Học tiếp<i class="fa fa-arrow-right ms-3"></i></a>
+            <div class="nav-item dropdown me-lg-4">
+                <button class="btn user-menu-toggle d-flex align-items-center gap-2 px-3 py-3 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="img/testimonial-1.jpg" alt="Nguyen Van A" class="user-menu-avatar">
+                    <span class="d-none d-xl-flex flex-column text-start lh-sm">
+                        <strong>Nguyen Van A</strong>
+                        <small class="text-muted">student1@example.com</small>
+                    </span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end user-menu-dropdown">
+                    <div class="user-menu-header p-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="img/testimonial-1.jpg" alt="Nguyen Van A" class="user-menu-avatar">
+                            <div>
+                                <strong class="d-block">Nguyen Van A</strong>
+                                <small>Học viên</small>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="dropdown-item" href="course_learn.html"><i class="fa fa-book-open me-2"></i>Khóa học của bạn</a>
+                    <a class="dropdown-item" href="course_checkout.html"><i class="fa fa-receipt me-2"></i>Lịch sử thanh toán</a>
+                    <div class="dropdown-divider my-1"></div>
+                    <a class="dropdown-item text-danger" href="login.html"><i class="fa fa-sign-out-alt me-2"></i>Đăng xuất</a>
+                </div>
+            </div>
         </div>
     </nav>
     <!-- Navbar End -->
@@ -90,6 +113,72 @@
     <!-- Learn Dashboard Start -->
     <div class="container-xxl py-5">
         <div class="container">
+            <div class="row g-4 mb-5">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+                        <div>
+                            <h2 class="mb-1">Khóa học đã đăng ký</h2>
+                            <p class="text-muted mb-0">Bấm vào từng khóa học để quay lại trang detail và tiếp tục học.</p>
+                        </div>
+                        <span class="badge bg-primary rounded-pill px-3 py-2">3 khóa học ACTIVE</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <a href="courses_detail.html" class="text-decoration-none text-dark">
+                        <div class="course-item bg-light h-100">
+                            <div class="position-relative overflow-hidden">
+                                <img class="img-fluid" src="img/course-1.jpg" alt="Web Design & Development">
+                                <span class="badge bg-success position-absolute top-0 end-0 m-3">Đang học</span>
+                            </div>
+                            <div class="p-4">
+                                <h5 class="mb-2">Web Design & Development A-Z</h5>
+                                <p class="text-muted mb-3">Tiếp tục từ Module 3: JavaScript tương tác.</p>
+                                <div class="progress mb-2" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" style="width: 60%;"></div>
+                                </div>
+                                <small class="text-muted">60% hoàn thành</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <a href="courses_detail.html" class="text-decoration-none text-dark">
+                        <div class="course-item bg-light h-100">
+                            <div class="position-relative overflow-hidden">
+                                <img class="img-fluid" src="img/course-2.jpg" alt="Spring Boot for Beginners">
+                                <span class="badge bg-info position-absolute top-0 end-0 m-3">Mới đăng ký</span>
+                            </div>
+                            <div class="p-4">
+                                <h5 class="mb-2">Spring Boot for Beginners</h5>
+                                <p class="text-muted mb-3">Bắt đầu với REST API, JPA và Security basics.</p>
+                                <div class="progress mb-2" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" style="width: 15%;"></div>
+                                </div>
+                                <small class="text-muted">15% hoàn thành</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <a href="courses_detail.html" class="text-decoration-none text-dark">
+                        <div class="course-item bg-light h-100">
+                            <div class="position-relative overflow-hidden">
+                                <img class="img-fluid" src="img/course-3.jpg" alt="UI UX Foundation">
+                                <span class="badge bg-secondary position-absolute top-0 end-0 m-3">Hoàn thành</span>
+                            </div>
+                            <div class="p-4">
+                                <h5 class="mb-2">UI/UX Foundation</h5>
+                                <p class="text-muted mb-3">Đã hoàn thành, có thể xem lại video và tài liệu.</p>
+                                <div class="progress mb-2" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" style="width: 100%;"></div>
+                                </div>
+                                <small class="text-muted">100% hoàn thành</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
             <div class="row g-5">
                 <div class="col-lg-8">
                     <div class="bg-light rounded p-4 mb-4">

@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
-import vn.edu.bkis.dto.admin.AdminStudentDetailProjection;
-import vn.edu.bkis.dto.admin.AdminStudentListProjection;
+import vn.edu.bkis.dto.admin.student.AdminStudentDetailProjection;
+import vn.edu.bkis.dto.admin.student.AdminStudentListProjection;
 import vn.edu.bkis.model.UserRole;
 import vn.edu.bkis.model.User;
 

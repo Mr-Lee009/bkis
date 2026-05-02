@@ -16,11 +16,13 @@ import vn.edu.bkis.dto.CourseLessonDto;
 import vn.edu.bkis.dto.CourseLessonVideoDto;
 import vn.edu.bkis.dto.HomeCourseDto;
 import vn.edu.bkis.model.Course;
+import vn.edu.bkis.model.EnrollmentStatus;
 import vn.edu.bkis.model.Lesson;
 import vn.edu.bkis.model.LessonVideo;
 import vn.edu.bkis.model.User;
 import vn.edu.bkis.repository.CourseRepository;
 import vn.edu.bkis.repository.CourseReviewRepository;
+import vn.edu.bkis.repository.EnrollmentRepository;
 import vn.edu.bkis.repository.LessonRepository;
 import vn.edu.bkis.repository.LessonVideoRepository;
 import vn.edu.bkis.repository.UserRepository;
@@ -40,6 +42,7 @@ public class CourseDetailService {
   private final CourseReviewRepository courseReviewRepository;
   private final LessonRepository lessonRepository;
   private final LessonVideoRepository lessonVideoRepository;
+  private final EnrollmentRepository enrollmentRepository;
 
   /**
    * Constructor for dependency injection.
@@ -51,12 +54,13 @@ public class CourseDetailService {
    */
   public CourseDetailService(CourseRepository courseRepository, UserRepository userRepository,
       CourseReviewRepository courseReviewRepository, LessonRepository lessonRepository,
-      LessonVideoRepository lessonVideoRepository) {
+      LessonVideoRepository lessonVideoRepository, EnrollmentRepository enrollmentRepository) {
     this.courseRepository = courseRepository;
     this.userRepository = userRepository;
     this.courseReviewRepository = courseReviewRepository;
     this.lessonRepository = lessonRepository;
     this.lessonVideoRepository = lessonVideoRepository;
+    this.enrollmentRepository = enrollmentRepository;
   }
 
   /**
@@ -67,6 +71,11 @@ public class CourseDetailService {
    * @throws IllegalArgumentException if the course is not found or inactive
    */
   public CourseDetailPageDto getCourseDetail(Long courseId) {
+    return getCourseDetail(courseId, null);
+  }
+
+  // Lấy chi tiết khóa học kèm trạng thái đăng ký của học viên hiện tại nếu có đăng nhập.
+  public CourseDetailPageDto getCourseDetail(Long courseId, User currentUser) {
     Course course =
         courseRepository.findById(courseId).filter(c -> Boolean.TRUE.equals(c.getActiveFlag()))
             .orElseThrow(() -> new IllegalArgumentException("Course not found: " + courseId));
@@ -76,6 +85,7 @@ public class CourseDetailService {
     Map<Long, List<CourseLessonVideoDto>> lessonVideos = loadLessonVideos(lessons);
     long totalReviews = courseReviewRepository.countByCourseId(course.getId());
     Double avgRating = courseReviewRepository.findAverageRatingByCourseId(course.getId());
+    boolean enrolled = isEnrolled(currentUser, course.getId());
 
     return new CourseDetailPageDto(course.getId(), course.getTitle(), course.getDescription(),
         teacher == null ? "BKIS Instructor" : teacher.getFullName(),
@@ -88,7 +98,16 @@ public class CourseDetailService {
         estimateDurationHours(lessons.size()), defaultHighlights(course.getHighlights()),
         lessons.stream().map(
                 lesson -> toLessonDto(lesson, lessonVideos.getOrDefault(lesson.getId(), List.of())))
-            .toList(), getRelatedCourses(course));
+            .toList(), getRelatedCourses(course), enrolled);
+  }
+
+  // Kiểm tra học viên hiện tại đã có enrollment ACTIVE cho khóa học hay chưa.
+  private boolean isEnrolled(User currentUser, Long courseId) {
+    if (currentUser == null || currentUser.getId() == null) {
+      return false;
+    }
+    return enrollmentRepository.existsByStudentIdAndCourseIdAndStatus(
+        currentUser.getId(), courseId, EnrollmentStatus.ACTIVE);
   }
 
   /**

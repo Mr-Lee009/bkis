@@ -1,13 +1,32 @@
-<aside class="col-md-3 col-lg-2 sidebar py-4" th:fragment="ad-sidebar">
+<aside class="col-md-3 col-lg-2 sidebar py-4"
+       xmlns:th="http://www.thymeleaf.org"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+       th:fragment="ad-sidebar">
     <div class="px-3 mb-4">
         <h4 class="text-white mb-0"><i class="fa fa-graduation-cap me-2"></i>eLEARNING</h4>
         <small class="text-muted">Admin Panel</small>
     </div>
-    <div class="sidebar-user text-center">
-        <img th:src="@{/img/testimonial-1.jpg}" alt="Admin Avatar" class="sidebar-avatar">
-        <strong class="d-block">Nguyen Admin</strong>
-        <span class="user-role-pill">Super Admin</span>
-        <small>admin@elearning.vn</small>
+    <div sec:authorize="isAuthenticated()"
+         th:with="currentUser=${#authentication.principal.user},
+                  displayName=${#strings.isEmpty(#authentication.principal.user.fullName) ? (#strings.isEmpty(#authentication.principal.user.username) ? #authentication.principal.user.email : #authentication.principal.user.username) : #authentication.principal.user.fullName},
+                  avatarUrl=${#authentication.principal.user.profilePictureUrl},
+                  avatarInitial=${#strings.isEmpty(displayName) ? 'U' : #strings.substring(displayName, 0, 1)}"
+         class="sidebar-user text-center">
+        <img th:if="${!#strings.isEmpty(avatarUrl)}"
+             th:src="${avatarUrl}"
+             th:alt="${displayName}"
+             class="sidebar-avatar">
+        <span th:if="${#strings.isEmpty(avatarUrl)}"
+              class="sidebar-avatar sidebar-avatar-fallback"
+              th:text="${avatarInitial}">U</span>
+        <strong class="d-block" th:text="${displayName}">User Name</strong>
+        <span class="user-role-pill" th:text="${currentUser.role}">ADMIN</span>
+        <small th:text="${currentUser.email}">user@example.com</small>
+        <form th:action="@{/logout}" method="post" class="w-100 mt-2">
+            <button type="submit" class="btn btn-outline-light btn-sm w-100">
+                <i class="fa fa-sign-out-alt me-1"></i>Đăng xuất
+            </button>
+        </form>
     </div>
     <a th:href="@{/admin/dashboard/}" th:classappend="${pageTitle == 'Dashboard'} ? ' active'">
         <i class="fa fa-chart-line me-2"></i>Dashboard
@@ -21,7 +40,7 @@
     <a th:href="@{/admin/courses/}" th:classappend="${pageTitle == 'Courses'} ? ' active'">
         <i class="fa fa-book-open me-2"></i>Khoá học
     </a>
-    <a href="#" th:classappend="${pageTitle == 'Payments'} ? ' active'">
+    <a th:href="@{/admin/payment-gateways/}" th:classappend="${pageTitle == 'Payment Gateways'} ? ' active'">
         <i class="fa fa-credit-card me-2"></i>Thanh toán
     </a>
     <a href="#" th:classappend="${pageTitle == 'Settings'} ? ' active'">

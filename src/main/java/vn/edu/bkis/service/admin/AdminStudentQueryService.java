@@ -8,12 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.edu.bkis.dto.admin.AdminStudentDetailDto;
-import vn.edu.bkis.dto.admin.AdminStudentDetailProjection;
-import vn.edu.bkis.dto.admin.AdminStudentListItemDto;
-import vn.edu.bkis.dto.admin.AdminStudentListPageDto;
-import vn.edu.bkis.dto.admin.AdminStudentListProjection;
-import vn.edu.bkis.dto.admin.AdminStudentSummaryDto;
+import vn.edu.bkis.dto.admin.student.AdminStudentDetailDto;
+import vn.edu.bkis.dto.admin.student.AdminStudentDetailProjection;
+import vn.edu.bkis.dto.admin.student.AdminStudentListItemDto;
+import vn.edu.bkis.dto.admin.student.AdminStudentListPageDto;
+import vn.edu.bkis.dto.admin.student.AdminStudentListProjection;
+import vn.edu.bkis.dto.admin.student.AdminStudentSummaryDto;
 import vn.edu.bkis.repository.UserRepository;
 
 /**

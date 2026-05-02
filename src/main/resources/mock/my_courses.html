@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <title>eLEARNING - Khóa học của bạn</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>eLEARNING</h2>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link">Home</a>
+                <a href="courses.html" class="nav-item nav-link">Courses</a>
+                <a href="course_signup.html" class="nav-item nav-link">Đăng ký</a>
+                <a href="my_courses.html" class="nav-item nav-link active">Khóa học của bạn</a>
+                <a href="course_checkout.html" class="nav-item nav-link">Thanh toán</a>
+                <a href="contact.html" class="nav-item nav-link">Contact</a>
+            </div>
+            <div class="nav-item dropdown me-lg-4">
+                <button class="btn d-flex align-items-center gap-2 px-3 py-3 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="img/testimonial-1.jpg" alt="User Avatar" class="rounded-circle" style="width: 42px; height: 42px; object-fit: cover;">
+                    <span class="d-none d-xl-flex flex-column text-start lh-sm">
+                        <strong>Nguyen Van A</strong>
+                        <small class="text-muted">student1@example.com</small>
+                    </span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-2" style="min-width: 260px;">
+                    <div class="px-3 py-3 bg-primary text-white">
+                        <strong class="d-block">Nguyen Van A</strong>
+                        <small>Học viên</small>
+                    </div>
+                    <a class="dropdown-item py-2" href="my_courses.html">
+                        <i class="fa fa-book-open text-primary me-2"></i>Khóa học của bạn
+                    </a>
+                    <a class="dropdown-item py-2" href="course_checkout.html">
+                        <i class="fa fa-receipt text-primary me-2"></i>Lịch sử thanh toán
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item py-2 text-danger" href="login.html">
+                        <i class="fa fa-sign-out-alt me-2"></i>Đăng xuất
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Khóa học của bạn</h1>
+                    <p class="text-white-50 mb-0">Danh sách chỉ gồm các khóa học user này đã đăng ký.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <a class="text-decoration-none text-dark" href="courses_detail.html">
+                        <div class="course-item bg-light h-100">
+                            <div class="position-relative overflow-hidden">
+                                <img class="img-fluid" src="img/course-1.jpg" alt="Web Design">
+                                <span class="badge bg-primary position-absolute top-0 end-0 m-3">ACTIVE</span>
+                            </div>
+                            <div class="p-4">
+                                <h5 class="mb-3">Web Design & Development A-Z</h5>
+                                <p class="text-muted">Khóa học đã đăng ký. Click để quay lại trang detail và vào học.</p>
+                                <span class="btn btn-sm btn-outline-primary">Xem chi tiết</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <a class="text-decoration-none text-dark" href="courses_detail.html">
+                        <div class="course-item bg-light h-100">
+                            <div class="position-relative overflow-hidden">
+                                <img class="img-fluid" src="img/course-2.jpg" alt="Spring Boot">
+                                <span class="badge bg-primary position-absolute top-0 end-0 m-3">ACTIVE</span>
+                            </div>
+                            <div class="p-4">
+                                <h5 class="mb-3">Spring Boot for Beginners</h5>
+                                <p class="text-muted">Khóa học đã đăng ký. Click để quay lại trang detail và vào học.</p>
+                                <span class="btn btn-sm btn-outline-primary">Xem chi tiết</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common/jquery-3.4.1.min.js"></script>
+    <script src="js/common/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layouts/ad-layout-common(pageTitle='Payment Gateways')}">
+<head>
+    <title>Cau hinh cong thanh toan</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <a th:href="@{/admin/dashboard/}" class="btn btn-sm btn-outline-secondary mb-3">
+                <i class="fa fa-arrow-left me-2"></i>Quay lai dashboard
+            </a>
+            <h2 class="mb-1">Cau hinh cong thanh toan</h2>
+            <small class="text-muted">Quan ly gateway, webhook, phi giao dich va rule dinh tuyen thanh toan.</small>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-outline-secondary" type="button" id="testAllGatewayButton">
+                <i class="fa fa-vial me-2"></i>Test tat ca
+            </button>
+            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#addGatewayModal">
+                <i class="fa fa-plus me-2"></i>Them gateway
+            </button>
+        </div>
+    </div>
+
+    <div id="paymentGatewayAlert" class="alert d-none" role="alert"></div>
+
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="stat-card bg-white shadow-sm p-3">
+                <p class="text-muted mb-1">Gateway dang bat</p>
+                <h3 class="mb-0" id="enabledGatewayCount">0</h3>
+                <small class="text-success" id="enabledGatewayLabel">Dang tai...</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card bg-white shadow-sm p-3">
+                <p class="text-muted mb-1">Ty le thanh cong</p>
+                <h3 class="mb-0"><span id="averageSuccessRate">0</span>%</h3>
+                <small class="text-success">Theo gateway dang cau hinh</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card bg-white shadow-sm p-3">
+                <p class="text-muted mb-1">Webhook loi</p>
+                <h3 class="mb-0" id="webhookErrorCount">0</h3>
+                <small class="text-warning">Can retry neu co loi</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card bg-white shadow-sm p-3">
+                <p class="text-muted mb-1">Moi truong</p>
+                <h3 class="mb-0" id="environmentLabel">--</h3>
+                <small class="text-muted">Sandbox co the bat rieng tung gateway</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-xl-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0">Danh sach gateway</h5>
+                        <small class="text-muted">Click de xem cau hinh chi tiet</small>
+                    </div>
+                    <span class="badge bg-success">API</span>
+                </div>
+                <div class="card-body" id="gatewayList">
+                    <div class="text-center text-muted py-4">Dang tai danh sach gateway...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div>
+                        <h5 class="mb-0" id="gatewayTitle">Chua chon gateway</h5>
+                        <small class="text-muted" id="gatewaySubtitle">Du lieu duoc nap tu API</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-secondary" type="button" id="testGatewayButton">Test ket noi</button>
+                        <button class="btn btn-sm btn-primary" type="button" id="saveGatewayButton">Luu cau hinh</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="gatewayForm">
+                        <input type="hidden" id="gatewayCode">
+                        <div class="row g-4">
+                            <div class="col-lg-7">
+                                <div class="gateway-section">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="mb-0">Thong tin ket noi</h6>
+                                        <span class="badge bg-light text-dark" id="gatewayStatusBadge">--</span>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="merchantId">Merchant ID</label>
+                                            <input class="form-control" id="merchantId">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="partnerCode">Terminal / Partner code</label>
+                                            <input class="form-control" id="partnerCode">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label" for="secretKey">Secret key</label>
+                                            <input type="password" class="form-control" id="secretKey"
+                                                   placeholder="De trong neu khong doi secret">
+                                            <div class="form-text" id="maskedSecretLabel">Secret hien tai: --</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="paymentEndpoint">Payment endpoint</label>
+                                            <input class="form-control" id="paymentEndpoint">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="returnUrl">Return URL</label>
+                                            <input class="form-control" id="returnUrl">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="gateway-section h-100">
+                                    <h6 class="mb-3">Che do van hanh</h6>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <strong>Bat gateway</strong>
+                                            <small class="d-block text-muted">Cho phep hoc vien thanh toan qua cong nay</small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="enabled">
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <strong>Sandbox mode</strong>
+                                            <small class="d-block text-muted">Dung credential test</small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="sandboxMode">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="routingPriority">Priority routing</label>
+                                        <input type="number" class="form-control" id="routingPriority" min="1">
+                                    </div>
+                                    <div>
+                                        <label class="form-label" for="transactionFeePercent">Transaction fee</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="transactionFeePercent" step="0.1" min="0">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <label class="form-label" for="status">Trang thai</label>
+                                        <select class="form-select" id="status">
+                                            <option value="LIVE">Live</option>
+                                            <option value="REVIEW">Review</option>
+                                            <option value="MANUAL">Manual</option>
+                                            <option value="DISABLED">Disabled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mt-1">
+                            <div class="col-lg-6">
+                                <div class="gateway-section h-100">
+                                    <h6 class="mb-3">Webhook & callback</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="webhookUrl">Webhook URL</label>
+                                        <input class="form-control" id="webhookUrl">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="ipAllowlist">IP allowlist</label>
+                                        <textarea class="form-control" id="ipAllowlist" rows="3"></textarea>
+                                    </div>
+                                    <div class="alert alert-light border mb-0">
+                                        <i class="fa fa-shield-alt me-2 text-primary"></i>
+                                        <small>Verify signature truoc khi cap nhat payment status va enrollment.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="gateway-section h-100">
+                                    <h6 class="mb-3">Thong tin hien thi</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="displayName">Ten hien thi</label>
+                                        <input class="form-control" id="displayName">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="providerType">Loai gateway</label>
+                                        <input class="form-control" id="providerType">
+                                    </div>
+                                    <div>
+                                        <label class="form-label" for="description">Mo ta ngan</label>
+                                        <textarea class="form-control" id="description" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Routing rule</h5>
+                    <small class="text-muted">Du lieu rule dang lay qua API mock.</small>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush" id="routingRuleList">
+                        <li class="list-group-item text-muted">Dang tai routing rule...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Health check gan day</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline-line" id="healthEventList">
+                        <p class="mb-0 text-muted"><span class="dot"></span>Dang tai health event...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addGatewayModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title">Them gateway moi</h5>
+                        <p class="text-muted small mb-0">Tao cau hinh gateway moi qua API.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addGatewayForm">
+                    <div class="modal-body row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="newGatewayCode">Code</label>
+                            <input class="form-control" id="newGatewayCode" placeholder="paypal" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="newDisplayName">Ten hien thi</label>
+                            <input class="form-control" id="newDisplayName" placeholder="PayPal Global" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="newProviderType">Loai gateway</label>
+                            <select class="form-select" id="newProviderType" required>
+                                <option value="VNPAY">VNPay</option>
+                                <option value="MOMO">MoMo</option>
+                                <option value="STRIPE">Stripe</option>
+                                <option value="PAYPAL">PayPal</option>
+                                <option value="BANK_TRANSFER">Chuyen khoan ngan hang</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="newRoutingPriority">Priority</label>
+                            <input type="number" class="form-control" id="newRoutingPriority" value="10" min="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="newMerchantId">Merchant / Partner ID</label>
+                            <input class="form-control" id="newMerchantId">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="newSecretKey">Secret key</label>
+                            <input type="password" class="form-control" id="newSecretKey">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="newWebhookUrl">Webhook URL</label>
+                            <input class="form-control" id="newWebhookUrl" value="https://elearning.vn/api/webhooks/new-gateway">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Huy</button>
+                        <button type="submit" class="btn btn-primary">Tao gateway</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/ad-05-payment-gateways.js}"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-without-menu-bar(pageTitle=${pageTitle})}">
+<head>
+    <title>[[${pageTitle}]]</title>
+    <link type="text/css" th:href="@{/css/01-app-agreement.css}" rel="stylesheet"/>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <div class="wow fadeInUp" data-wow-delay="0.1s">
+                        <span class="badge bg-light text-primary mb-3">BKIS Account</span>
+                        <h2 class="mb-4">Tạo tài khoản để theo dõi lộ trình học của bạn</h2>
+                        <p class="mb-4 text-muted">
+                            Sau khi đăng ký, tài khoản mặc định là học viên. Bạn có thể đăng ký khóa học,
+                            xem khóa học đã mua và tiếp tục học trên các thiết bị.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><i class="fa fa-check text-primary me-2"></i>Role mặc định: STUDENT</li>
+                            <li class="mb-3"><i class="fa fa-check text-primary me-2"></i>Mật khẩu được mã hóa bằng Spring Security</li>
+                            <li class="mb-3"><i class="fa fa-check text-primary me-2"></i>Không tự cấp quyền admin qua form public</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-lg wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="mb-0">Đăng ký tài khoản</h4>
+                                <a th:href="@{/login}" class="text-muted small">
+                                    <i class="fa fa-arrow-left me-1"></i>Đăng nhập
+                                </a>
+                            </div>
+
+                            <div class="alert alert-danger d-flex align-items-start gap-2" role="alert"
+                                 th:if="${errorMessage != null}">
+                                <i class="fa fa-exclamation-triangle mt-1"></i>
+                                <span th:text="${errorMessage}">Đăng ký không thành công.</span>
+                            </div>
+
+                            <form th:action="@{/register}" th:object="${registerForm}" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control form-control-lg" th:field="*{username}"
+                                           placeholder="student2" required maxlength="100">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Họ và tên</label>
+                                    <input type="text" class="form-control form-control-lg" th:field="*{fullName}"
+                                           placeholder="Nguyễn Văn B" required maxlength="255">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control form-control-lg" th:field="*{email}"
+                                           placeholder="student2@example.com" required maxlength="255">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mật khẩu</label>
+                                    <input type="password" class="form-control form-control-lg" th:field="*{password}"
+                                           placeholder="Ít nhất 8 ký tự" required minlength="8">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Xác nhận mật khẩu</label>
+                                    <input type="password" class="form-control form-control-lg" th:field="*{confirmPassword}"
+                                           placeholder="Nhập lại mật khẩu" required minlength="8">
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary py-3">Tạo tài khoản</button>
+                                </div>
+                            </form>
+
+                            <p class="text-center text-muted mt-4 mb-0">
+                                Đã có tài khoản?
+                                <a th:href="@{/login}" class="text-primary">Đăng nhập ngay</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

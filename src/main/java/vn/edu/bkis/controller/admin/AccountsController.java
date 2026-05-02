@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import vn.edu.bkis.dto.admin.AccountFilterDto;
-import vn.edu.bkis.dto.admin.AccountFormDto;
-import vn.edu.bkis.dto.admin.AccountUpdateFormDto;
+import vn.edu.bkis.dto.admin.account.AccountFilterDto;
+import vn.edu.bkis.dto.admin.account.AccountFormDto;
+import vn.edu.bkis.dto.admin.account.AccountUpdateFormDto;
 import vn.edu.bkis.service.admin.AccountManagementService;
 
 @Controller

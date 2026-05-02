@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
 
-import vn.edu.bkis.dto.admin.AdminCourseDetailProjection;
-import vn.edu.bkis.dto.admin.AdminCourseListProjection;
+import vn.edu.bkis.dto.admin.course.AdminCourseDetailProjection;
+import vn.edu.bkis.dto.admin.course.AdminCourseListProjection;
 import vn.edu.bkis.model.Course;
 
 /**

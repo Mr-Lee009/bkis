@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import vn.edu.bkis.dto.admin.AdminCourseCreateFormDto;
-import vn.edu.bkis.dto.admin.AdminCourseDetailDto;
-import vn.edu.bkis.dto.admin.AdminCourseFilterDto;
-import vn.edu.bkis.dto.admin.AdminCourseModuleFormDto;
-import vn.edu.bkis.dto.admin.AdminCourseUpdateFormDto;
-import vn.edu.bkis.dto.admin.AdminCourseVideoFormDto;
+import vn.edu.bkis.dto.admin.course.AdminCourseCreateFormDto;
+import vn.edu.bkis.dto.admin.course.AdminCourseDetailDto;
+import vn.edu.bkis.dto.admin.course.AdminCourseFilterDto;
+import vn.edu.bkis.dto.admin.course.AdminCourseModuleFormDto;
+import vn.edu.bkis.dto.admin.course.AdminCourseUpdateFormDto;
+import vn.edu.bkis.dto.admin.course.AdminCourseVideoFormDto;
 import vn.edu.bkis.service.admin.AdminCourseManagementService;
 
 /**

@@ -26,6 +26,16 @@
 
     <div class="container-xxl py-5">
         <div class="container">
+            <div class="alert alert-success d-flex align-items-start gap-2" role="alert"
+                 th:if="${successMessage != null}">
+                <i class="fa fa-check-circle mt-1"></i>
+                <span th:text="${successMessage}">Đăng ký khóa học thành công.</span>
+            </div>
+            <div class="alert alert-danger d-flex align-items-start gap-2" role="alert"
+                 th:if="${errorMessage != null}">
+                <i class="fa fa-exclamation-triangle mt-1"></i>
+                <span th:text="${errorMessage}">Không thể đăng ký khóa học.</span>
+            </div>
             <div class="row g-5">
                 <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="position-relative overflow-hidden rounded mb-4">
@@ -80,11 +90,11 @@
                                             <div class="d-flex align-items-center gap-2">
                                                 <small th:text="${video.durationMinutes + ' phút'}">08:35</small>
                                                 <a class="btn btn-sm btn-outline-primary"
-                                                   th:if="${!video.locked}"
+                                                   th:if="${course.enrolled}"
                                                    th:href="${video.videoUrl}"
                                                    target="_blank"
-                                                   rel="noopener noreferrer">View</a>
-                                                <button class="btn btn-sm btn-outline-secondary disabled" th:if="${video.locked}" type="button">Locked</button>
+                                                   rel="noopener noreferrer">Xem video</a>
+                                                <button class="btn btn-sm btn-outline-secondary disabled" th:if="${!course.enrolled}" type="button">Cần đăng ký</button>
                                             </div>
                                         </li>
                                     </ul>
@@ -145,7 +155,19 @@
                             <li class="mb-2"><i class="fa fa-check text-primary me-2"></i>Chứng chỉ hoàn thành</li>
                             <li><i class="fa fa-check text-primary me-2"></i>Cộng đồng hỗ trợ học tập</li>
                         </ul>
-                        <a class="btn btn-primary w-100 py-3" th:href="@{/#contact-section}">Đăng ký ngay</a>
+                        <a class="btn btn-success w-100 py-3 mb-2"
+                           th:if="${course.enrolled}"
+                           th:href="${course.lessons != null && !#lists.isEmpty(course.lessons) && !#lists.isEmpty(course.lessons[0].videos) ? course.lessons[0].videos[0].videoUrl : '#curriculum'}"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            <i class="fa fa-play me-2"></i>Vào học / Xem video
+                        </a>
+                        <a class="btn btn-primary w-100 py-3"
+                           th:if="${!course.enrolled}"
+                           th:href="@{/courses/{id}/signup(id=${course.id})}">Đăng ký ngay</a>
+                        <p class="text-muted small mt-2 mb-0" th:if="${course.enrolled}">
+                            Bạn đã đăng ký khóa học này. Các video và tài liệu đã được mở.
+                        </p>
                     </div>
 
                     <div class="border rounded p-4 mb-4">

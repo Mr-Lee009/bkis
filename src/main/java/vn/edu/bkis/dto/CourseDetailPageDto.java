@@ -25,6 +25,7 @@ public record CourseDetailPageDto(
         Integer durationHours,
         List<String> highlights,
         List<CourseLessonDto> lessons,
-        List<HomeCourseDto> relatedCourses
+        List<HomeCourseDto> relatedCourses,
+        boolean enrolled
 ) {
 }

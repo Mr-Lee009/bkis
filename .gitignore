@@ -40,3 +40,9 @@ out/
 
 /gradle-user
 /.gradle-user/
+
+### Local secrets ###
+dev.env
+dev.evn
+*.env
+!*.env.example

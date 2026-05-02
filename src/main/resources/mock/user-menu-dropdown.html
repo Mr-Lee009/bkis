@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <title>eLEARNING - User Menu Dropdown Mock</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        .user-menu-toggle {
+            min-width: 220px;
+            border: 0;
+            background: #f8fbff;
+            color: #181d38;
+        }
+
+        .user-menu-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(6, 187, 204, 0.35);
+        }
+
+        .user-menu-dropdown {
+            min-width: 280px;
+            border: 0;
+            border-radius: 18px;
+            box-shadow: 0 20px 45px rgba(24, 29, 56, 0.16);
+            overflow: hidden;
+        }
+
+        .user-menu-header {
+            background: linear-gradient(135deg, #06bbcc, #181d38);
+            color: #fff;
+        }
+
+        .user-menu-dropdown .dropdown-item {
+            padding: 0.8rem 1rem;
+            font-weight: 600;
+            color: #181d38;
+        }
+
+        .user-menu-dropdown .dropdown-item i {
+            width: 22px;
+            color: #06bbcc;
+        }
+
+        .user-menu-dropdown .dropdown-item:hover {
+            background: #effcff;
+            color: #06bbcc;
+        }
+
+        .user-menu-dropdown .dropdown-item.text-danger i {
+            color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>eLEARNING</h2>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="courses.html" class="nav-item nav-link">Courses</a>
+                <a href="course_signup.html" class="nav-item nav-link">Đăng ký</a>
+                <a href="course_learn.html" class="nav-item nav-link">Học viên</a>
+                <a href="course_checkout.html" class="nav-item nav-link">Thanh toán</a>
+                <a href="contact.html" class="nav-item nav-link">Contact</a>
+            </div>
+
+            <div class="nav-item dropdown me-lg-4">
+                <button class="btn user-menu-toggle d-flex align-items-center gap-2 px-3 py-3 dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    <img src="img/testimonial-1.jpg" alt="Nguyen Van A" class="user-menu-avatar">
+                    <span class="d-none d-xl-flex flex-column text-start lh-sm">
+                        <strong>Nguyen Van A</strong>
+                        <small class="text-muted">student1@example.com</small>
+                    </span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end user-menu-dropdown">
+                    <div class="user-menu-header p-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="img/testimonial-1.jpg" alt="Nguyen Van A" class="user-menu-avatar">
+                            <div>
+                                <strong class="d-block">Nguyen Van A</strong>
+                                <small>Học viên</small>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="dropdown-item" href="my_courses.html">
+                        <i class="fa fa-book-open me-2"></i>Khóa học của bạn
+                    </a>
+                    <a class="dropdown-item" href="course_checkout.html">
+                        <i class="fa fa-receipt me-2"></i>Lịch sử thanh toán
+                    </a>
+                    <div class="dropdown-divider my-1"></div>
+                    <a class="dropdown-item text-danger" href="login.html">
+                        <i class="fa fa-sign-out-alt me-2"></i>Đăng xuất
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h1 class="mb-3">Mock User Dropdown</h1>
+                    <p class="text-muted mb-4">
+                        Bấm vào cụm avatar/tên người dùng ở góc phải navbar để xem các option tài khoản.
+                    </p>
+                    <div class="alert alert-info text-start">
+                        <strong>Options:</strong> Khóa học của bạn, Lịch sử thanh toán, Đăng xuất.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common/jquery-3.4.1.min.js"></script>
+    <script src="js/common/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

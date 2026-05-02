@@ -1,14 +1,12 @@
 package vn.edu.bkis.security;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -19,6 +17,8 @@ public class SecurityConfig {
     private final AuthFailureHandler authFailureHandler;
     private final AuthSuccessHandler authSuccessHandler;
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final ClientRegistrationRepository clientRegistrationRepository;
     private final String rememberMeKey;
     private final int rememberMeValiditySeconds;
 
@@ -28,12 +28,16 @@ public class SecurityConfig {
             AuthFailureHandler authFailureHandler,
             AuthSuccessHandler authSuccessHandler,
             CustomUserDetailsService customUserDetailsService,
+            CustomOAuth2UserService customOAuth2UserService,
+            ObjectProvider<ClientRegistrationRepository> clientRegistrationRepositoryProvider,
             @Value("${app.security.remember-me.key}") String rememberMeKey,
             @Value("${app.security.remember-me.validity-seconds}") int rememberMeValiditySeconds) {
 //        this.captchaFilter = captchaFilter;
         this.authFailureHandler = authFailureHandler;
         this.authSuccessHandler = authSuccessHandler;
         this.customUserDetailsService = customUserDetailsService;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.clientRegistrationRepository = clientRegistrationRepositoryProvider.getIfAvailable();
         this.rememberMeKey = rememberMeKey;
         this.rememberMeValiditySeconds = rememberMeValiditySeconds;
     }
@@ -44,7 +48,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/captcha", "/css/**", "/js/**", "/favicon.ico").permitAll()
+                        .requestMatchers("/login", "/register", "/forgot-password", "/reset-password", "/captcha", "/css/**", "/js/**", "/img/**",
+                                "/favicon.ico", "/oauth2/**", "/login/oauth2/**").permitAll()
+                        .requestMatchers("/my-courses").hasRole("STUDENT")
+                        .requestMatchers("/courses/*/signup").hasRole("STUDENT")
+                        .requestMatchers("/", "/courses/**").permitAll()
+                        .requestMatchers("/admin/accounts/**", "/admin/dashboard/**", "/admin/payment-gateways/**",
+                                "/api/admin/payment-gateways/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/students/**", "/api/admin/students/**").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers("/admin/courses/**", "/upload/**").hasAnyRole("ADMIN", "TEACHER", "INSTRUCTOR")
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
@@ -60,19 +72,20 @@ public class SecurityConfig {
                         .userDetailsService(customUserDetailsService))
                 .logout(logout -> logout.logoutUrl("/logout").permitAll());
 
+        // Chỉ bật OAuth2 login khi ứng dụng đã có ít nhất một cấu hình client registration hợp lệ.
+        if (clientRegistrationRepository != null) {
+            http.oauth2Login(oauth2 -> oauth2
+                    .loginPage("/login")
+                    .userInfoEndpoint(userInfo -> userInfo
+                            .userService(customOAuth2UserService)
+                            .oidcUserService(customOAuth2UserService::loadOidcUser))
+                    .failureHandler(authFailureHandler)
+                    .successHandler(authSuccessHandler)
+                    .permitAll());
+        }
+
 //        http.addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-    // Tạo bộ mã hóa mật khẩu dùng chung cho toàn bộ luồng xác thực.
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    // Cung cấp AuthenticationManager để các luồng đăng nhập sử dụng xác thực chuẩn của Spring Security.
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
 }

@@ -4,11 +4,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import vn.edu.bkis.model.AuthProvider;
@@ -22,6 +25,7 @@ import vn.edu.bkis.repository.UserRepository;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
+    private final OidcUserService oidcDelegate = new OidcUserService();
     private final UserRepository userRepository;
     private final UserOAuthAccountRepository userOAuthAccountRepository;
     private final PasswordEncoder passwordEncoder;
@@ -43,6 +47,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2UserProfile profile = extractUserProfile(provider, oauth2User.getAttributes());
         User user = resolveLocalUser(provider, profile);
         return new CustomOAuth2User(user, oauth2User.getAttributes());
+    }
+
+    // Tải thông tin người dùng OIDC từ Google, link với user local và trả principal thống nhất cho UI.
+    public OidcUser loadOidcUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+        OidcUser oidcUser = oidcDelegate.loadUser(userRequest);
+        AuthProvider provider = resolveProvider(userRequest);
+        OAuth2UserProfile profile = extractUserProfile(provider, oidcUser.getAttributes());
+        User user = resolveLocalUser(provider, profile);
+        return new CustomOidcUser(user, oidcUser.getAttributes(), oidcUser.getIdToken(), oidcUser.getUserInfo());
     }
 
     // Xác định provider hiện tại từ registrationId đã cấu hình trong Spring Security.

@@ -54,6 +54,16 @@ body {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
+.sidebar-avatar-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #06bbcc, #2f36d8);
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
 .user-role-pill {
     padding: 0.2rem 0.85rem;
     border-radius: 999px;
@@ -382,6 +392,56 @@ body {
     background: #181d38;
     display: inline-block;
     margin-right: 0.5rem;
+}
+
+.gateway-item {
+    border: 1px solid rgba(24, 29, 56, 0.08);
+    border-radius: 0.9rem;
+    padding: 1rem;
+    margin-bottom: 0.85rem;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.gateway-item:hover,
+.gateway-item.active {
+    border-color: rgba(6, 187, 204, 0.55);
+    background: #f7fcfd;
+    transform: translateY(-1px);
+}
+
+.gateway-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex: 0 0 auto;
+}
+
+.gateway-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+}
+
+.gateway-meta span {
+    border-radius: 999px;
+    background: rgba(24, 29, 56, 0.06);
+    color: #4b4b66;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+}
+
+.gateway-section {
+    border: 1px solid rgba(24, 29, 56, 0.08);
+    border-radius: 1rem;
+    padding: 1rem;
+    background: #fff;
 }
 
 /* Settings */
