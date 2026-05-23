@@ -458,6 +458,23 @@
                             <input type="number" min="0" class="form-control" id="addVideoDuration" name="duration" value="0">
                         </div>
                         <div class="col-12">
+                            <div class="upload-widget" data-upload-widget data-upload-folder="/source" data-target-input="#addVideoUrl">
+                                <div class="d-flex flex-wrap align-items-end gap-2">
+                                    <div class="flex-grow-1">
+                                        <label class="form-label" for="addVideoFile">Upload file video</label>
+                                        <input type="file" class="form-control" id="addVideoFile" data-upload-file accept="video/*">
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary" data-upload-button>
+                                        <i class="fa fa-cloud-upload-alt me-2"></i>Upload
+                                    </button>
+                                </div>
+                                <div class="progress upload-progress mt-2" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar" data-upload-progress style="width: 0%">0%</div>
+                                </div>
+                                <small class="text-muted d-block mt-2" data-upload-status>File sẽ lưu vào thư mục /source và tự điền URL sau khi upload.</small>
+                            </div>
+                        </div>
+                        <div class="col-12">
                             <div class="alert alert-light border small mb-0">Module đích: <strong id="addVideoModuleLabel">Module đang chọn</strong></div>
                         </div>
                     </div>
@@ -497,6 +514,23 @@
                         <div class="col-md-4">
                             <label class="form-label" for="editVideoDuration">Thời lượng giây</label>
                             <input type="number" min="0" class="form-control" id="editVideoDuration" name="duration">
+                        </div>
+                        <div class="col-12">
+                            <div class="upload-widget" data-upload-widget data-upload-folder="/source" data-target-input="#editVideoUrl">
+                                <div class="d-flex flex-wrap align-items-end gap-2">
+                                    <div class="flex-grow-1">
+                                        <label class="form-label" for="editVideoFile">Upload file video</label>
+                                        <input type="file" class="form-control" id="editVideoFile" data-upload-file accept="video/*">
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary" data-upload-button>
+                                        <i class="fa fa-cloud-upload-alt me-2"></i>Upload
+                                    </button>
+                                </div>
+                                <div class="progress upload-progress mt-2" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar" data-upload-progress style="width: 0%">0%</div>
+                                </div>
+                                <small class="text-muted d-block mt-2" data-upload-status>File sẽ lưu vào thư mục /source và tự điền URL sau khi upload.</small>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer border-0 pt-0">
@@ -553,6 +587,7 @@
         </div>
     </div>
 
+    <script th:src="@{/js/upload-widget.js}"></script>
     <script>
         let activeModuleId = document.querySelector('[data-module-item]')?.dataset.moduleId || '';
         let activeModuleTitle = document.querySelector('[data-module-item]')?.dataset.moduleTitle || '';
