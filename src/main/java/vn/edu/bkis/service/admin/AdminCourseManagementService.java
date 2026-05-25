@@ -37,6 +37,7 @@ import vn.edu.bkis.repository.LessonRepository;
 import vn.edu.bkis.repository.LessonVideoRepository;
 import vn.edu.bkis.repository.ProgressRepository;
 import vn.edu.bkis.repository.UserRepository;
+import vn.edu.bkis.service.UploadService;
 
 /**
  * Service for the admin course management pages.
@@ -53,17 +54,20 @@ public class AdminCourseManagementService {
     private final LessonVideoRepository lessonVideoRepository;
     private final ProgressRepository progressRepository;
     private final UserRepository userRepository;
+    private final UploadService uploadService;
 
     public AdminCourseManagementService(CourseRepository courseRepository,
                                         LessonRepository lessonRepository,
                                         LessonVideoRepository lessonVideoRepository,
                                         ProgressRepository progressRepository,
-                                        UserRepository userRepository) {
+                                        UserRepository userRepository,
+                                        UploadService uploadService) {
         this.courseRepository = courseRepository;
         this.lessonRepository = lessonRepository;
         this.lessonVideoRepository = lessonVideoRepository;
         this.progressRepository = progressRepository;
         this.userRepository = userRepository;
+        this.uploadService = uploadService;
     }
 
     /**
@@ -346,6 +350,18 @@ public class AdminCourseManagementService {
     public void updateVideo(Long courseId, Long moduleId, Long videoId, AdminCourseVideoFormDto form) {
         getLessonInCourse(courseId, moduleId);
         LessonVideo video = getVideoInLesson(moduleId, videoId);
+        String oldVideoUrl = video.getVideoUrl();
+        String newVideoUrl = required(form.getVideoUrl(), "Video URL is required.");
+
+        // Neu doi sang video moi trong he thong upload noi bo thi xoa file cu truoc khi cap nhat DB.
+        if (shouldDeleteOldVideo(oldVideoUrl, newVideoUrl)) {
+            boolean deleted = uploadService.deleteUploadedFile(oldVideoUrl);
+            if (!deleted) {
+                throw new IllegalArgumentException("Cannot replace video because old file is not managed by upload service.");
+            }
+        }
+
+        form.setVideoUrl(newVideoUrl);
         applyVideoForm(video, form);
         video.setUpdatedBy("admin");
         lessonVideoRepository.save(video);
@@ -577,5 +593,13 @@ public class AdminCourseManagementService {
 
     private boolean isBlank(String value) {
         return value == null || value.isBlank();
+    }
+
+    // Xac dinh co can xoa video cu khi URL moi khac URL hien tai hay khong.
+    private boolean shouldDeleteOldVideo(String oldVideoUrl, String newVideoUrl) {
+        if (isBlank(oldVideoUrl) || isBlank(newVideoUrl)) {
+            return false;
+        }
+        return !oldVideoUrl.trim().equals(newVideoUrl.trim()) && uploadService.isManagedUploadUrl(oldVideoUrl.trim());
     }
 }

@@ -4,6 +4,37 @@
     const MAX_CONCURRENT = 4;
     const activeUploadIds = new Set();
 
+    // Lay gia tri text tu input/selector de build folder upload dong.
+    function getElementValue(selector) {
+        if (!selector) {
+            return "";
+        }
+        const element = document.querySelector(selector);
+        if (!element) {
+            return "";
+        }
+        if (typeof element.value === "string") {
+            return element.value.trim();
+        }
+        return (element.textContent || "").trim();
+    }
+
+    // Xac dinh folder upload tu template dong hoac gia tri co dinh.
+    function resolveUploadFolder(widget) {
+        const staticFolder = widget.dataset.uploadFolder;
+        if (staticFolder) {
+            return staticFolder;
+        }
+
+        const folderPrefix = widget.dataset.uploadFolderPrefix || "/source";
+        const courseTitle = getElementValue(widget.dataset.folderCourseSelector);
+        const videoTitle = getElementValue(widget.dataset.folderVideoSelector);
+
+        const coursePart = courseTitle || "khoa-hoc-chua-dat-ten";
+        const videoPart = videoTitle || "video-chua-dat-ten";
+        return `${folderPrefix}/${coursePart}/${videoPart}`;
+    }
+
     // Hien thi thong bao trang thai trong widget upload.
     function setWidgetStatus(widget, message, type = "muted") {
         const status = widget.querySelector("[data-upload-status]");
@@ -149,7 +180,7 @@
         const fileInput = widget.querySelector("[data-upload-file]");
         const uploadButton = widget.querySelector("[data-upload-button]");
         const targetInput = document.querySelector(widget.dataset.targetInput || "");
-        const folder = widget.dataset.uploadFolder || "/source";
+        const folder = resolveUploadFolder(widget);
         const file = fileInput?.files?.[0];
 
         if (!file) {

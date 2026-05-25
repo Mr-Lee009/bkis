@@ -8,6 +8,7 @@
 
 <body>
 <div layout:fragment="content">
+    <input type="hidden" id="uploadCourseTitle" th:value="${course.title}">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
             <a th:href="@{/admin/courses/}" class="btn btn-sm btn-outline-secondary mb-3">
@@ -463,7 +464,12 @@
                             <input type="number" min="0" class="form-control" id="addVideoDuration" name="duration" value="0">
                         </div>
                         <div class="col-12">
-                            <div class="upload-widget" data-upload-widget data-upload-folder="/source" data-target-input="#addVideoUrl">
+                            <div class="upload-widget"
+                                 data-upload-widget
+                                 data-upload-folder-prefix="/source"
+                                 data-folder-course-selector="#uploadCourseTitle"
+                                 data-folder-video-selector="#addVideoTitle"
+                                 data-target-input="#addVideoUrl">
                                 <div class="d-flex flex-wrap align-items-end gap-2">
                                     <div class="flex-grow-1">
                                         <label class="form-label" for="addVideoFile">Upload file video</label>
@@ -476,7 +482,7 @@
                                 <div class="progress upload-progress mt-2" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                                     <div class="progress-bar" data-upload-progress style="width: 0%">0%</div>
                                 </div>
-                                <small class="text-muted d-block mt-2" data-upload-status>File sẽ lưu vào thư mục /source và tự điền URL sau khi upload.</small>
+                                <small class="text-muted d-block mt-2" data-upload-status>File se luu vao /source/ten-khoa-hoc/ten-video va tu dien URL sau khi upload.</small>
                             </div>
                         </div>
                         <div class="col-12">
@@ -521,7 +527,12 @@
                             <input type="number" min="0" class="form-control" id="editVideoDuration" name="duration">
                         </div>
                         <div class="col-12">
-                            <div class="upload-widget" data-upload-widget data-upload-folder="/source" data-target-input="#editVideoUrl">
+                            <div class="upload-widget"
+                                 data-upload-widget
+                                 data-upload-folder-prefix="/source"
+                                 data-folder-course-selector="#uploadCourseTitle"
+                                 data-folder-video-selector="#editVideoTitle"
+                                 data-target-input="#editVideoUrl">
                                 <div class="d-flex flex-wrap align-items-end gap-2">
                                     <div class="flex-grow-1">
                                         <label class="form-label" for="editVideoFile">Upload file video</label>
@@ -534,7 +545,7 @@
                                 <div class="progress upload-progress mt-2" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                                     <div class="progress-bar" data-upload-progress style="width: 0%">0%</div>
                                 </div>
-                                <small class="text-muted d-block mt-2" data-upload-status>File sẽ lưu vào thư mục /source và tự điền URL sau khi upload.</small>
+                                <small class="text-muted d-block mt-2" data-upload-status>File se luu vao /source/ten-khoa-hoc/ten-video va tu dien URL sau khi upload.</small>
                             </div>
                         </div>
                     </div>
