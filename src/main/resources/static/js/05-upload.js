@@ -18,6 +18,8 @@ async function startUpload() {
     const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
     const startTime = Date.now();
     let uploadedCount = 0;
+    let uploadId = "";
+    let completed = false;
 
     setStatus("Initializing upload...");
     toggleButton(true);
@@ -36,7 +38,7 @@ async function startUpload() {
 
         if (!initRes.ok) throw new Error("Init failed");
 
-        const uploadId = await initRes.text();
+        uploadId = await initRes.text();
 
         setStatus("Uploading in parallel...");
 
@@ -72,15 +74,35 @@ async function startUpload() {
         });
 
         if (!completeRes.ok) throw new Error("Merge failed");
+        completed = true;
 
         const totalTime = uploadCommon.formatElapsedTime(Date.now() - startTime);
 
         setStatus(`✅ Upload completed in ${totalTime}`);
     } catch (err) {
         console.error(err);
+        if (uploadId && !completed) {
+            try {
+                await abortUpload(uploadId);
+            } catch (abortErr) {
+                console.warn("Abort upload failed", abortErr);
+            }
+        }
         setStatus("❌ " + err.message);
     } finally {
         toggleButton(false);
+    }
+}
+
+async function abortUpload(uploadId) {
+    const res = await fetch("/upload/abort", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ uploadId })
+    });
+
+    if (!res.ok) {
+        throw new Error("Abort upload failed");
     }
 }
 

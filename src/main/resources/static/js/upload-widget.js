@@ -2,6 +2,7 @@
     const CHUNK_SIZE = 10 * 1024 * 1024;
     const MAX_RETRY = 3;
     const MAX_CONCURRENT = 4;
+    const activeUploadIds = new Set();
 
     // Hien thi thong bao trang thai trong widget upload.
     function setWidgetStatus(widget, message, type = "muted") {
@@ -115,6 +116,34 @@
         return body.url;
     }
 
+    // Goi API abort de xoa chunk tam khi upload that bai hoac bi huy.
+    async function abortUpload(uploadId) {
+        if (!uploadId) {
+            return;
+        }
+
+        const response = await fetch("/upload/api/abort", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ uploadId })
+        });
+
+        if (!response.ok) {
+            throw new Error(await readErrorMessage(response, "Khong the huy upload."));
+        }
+    }
+
+    // Gui abort bang sendBeacon khi nguoi dung dong tab giua chung.
+    function abortUploadWithBeacon(uploadId) {
+        if (!uploadId || !navigator.sendBeacon) {
+            return false;
+        }
+        const body = new Blob([new URLSearchParams({ uploadId }).toString()], {
+            type: "application/x-www-form-urlencoded"
+        });
+        return navigator.sendBeacon("/upload/api/abort", body);
+    }
+
     // Upload file cua mot widget va dien URL vao input dich.
     async function uploadWidgetFile(widget) {
         const fileInput = widget.querySelector("[data-upload-file]");
@@ -134,6 +163,8 @@
 
         const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
         let uploadedCount = 0;
+        let uploadId = "";
+        let completed = false;
 
         uploadButton.disabled = true;
         fileInput.disabled = true;
@@ -141,7 +172,9 @@
         setWidgetStatus(widget, "Dang khoi tao upload...", "muted");
 
         try {
-            const uploadId = await initUpload(file, totalChunks, folder);
+            uploadId = await initUpload(file, totalChunks, folder);
+            widget.dataset.currentUploadId = uploadId;
+            activeUploadIds.add(uploadId);
             const tasks = [];
             for (let index = 0; index < totalChunks; index++) {
                 tasks.push(async () => {
@@ -158,13 +191,26 @@
 
             setWidgetStatus(widget, "Dang ghep file tren server...", "muted");
             const fileUrl = await completeUpload(uploadId);
+            completed = true;
             targetInput.value = fileUrl;
             targetInput.dispatchEvent(new Event("input", { bubbles: true }));
             setWidgetStatus(widget, "Upload thanh cong. URL da duoc dien vao o Video URL.", "success");
         } catch (error) {
             console.error(error);
+            if (uploadId && !completed) {
+                try {
+                    setWidgetStatus(widget, `${error.message || "Upload that bai."} Dang don file tam...`, "danger");
+                    await abortUpload(uploadId);
+                } catch (abortError) {
+                    console.warn("Abort upload failed", abortError);
+                }
+            }
             setWidgetStatus(widget, error.message || "Upload that bai.", "danger");
         } finally {
+            if (uploadId) {
+                activeUploadIds.delete(uploadId);
+                delete widget.dataset.currentUploadId;
+            }
             uploadButton.disabled = false;
             fileInput.disabled = false;
         }
@@ -179,4 +225,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", initUploadWidgets);
+    window.addEventListener("beforeunload", () => {
+        activeUploadIds.forEach((uploadId) => abortUploadWithBeacon(uploadId));
+    });
 })();

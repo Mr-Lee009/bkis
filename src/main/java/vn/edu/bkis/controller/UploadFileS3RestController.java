@@ -91,6 +91,19 @@ public class UploadFileS3RestController {
     }
   }
 
+  // Huy upload dang do dang va xoa chunk tam tren server.
+  @PostMapping("/abort")
+  public ResponseEntity<?> abort(@RequestParam String uploadId) {
+    try {
+      boolean deleted = uploadService.abortUpload(uploadId);
+      return ResponseEntity.ok(deleted ? "Upload aborted" : "Upload session not found");
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().body("Abort upload failed");
+    }
+  }
+
   // Ghep file va tra ve URL public sau khi upload hoan tat.
   @PostMapping("/api/complete")
   public ResponseEntity<?> completeApi(@RequestParam String uploadId, HttpServletRequest request) {
@@ -103,6 +116,19 @@ public class UploadFileS3RestController {
       return ResponseEntity.internalServerError().body(Map.of("message", "Error merging chunks"));
     } catch (Exception e) {
       return ResponseEntity.internalServerError().body(Map.of("message", "Complete upload failed"));
+    }
+  }
+
+  // Huy upload dang do dang va tra ve JSON cho cac widget upload.
+  @PostMapping("/api/abort")
+  public ResponseEntity<?> abortApi(@RequestParam String uploadId) {
+    try {
+      boolean deleted = uploadService.abortUpload(uploadId);
+      return ResponseEntity.ok(Map.of("aborted", deleted));
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().body(Map.of("message", "Abort upload failed"));
     }
   }
 
