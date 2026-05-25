@@ -248,6 +248,11 @@
                                 </div>
                                 <div class="d-flex flex-wrap align-items-center gap-3 mt-2 small text-muted">
                                     <span><i class="fa fa-clock me-1"></i><span th:text="${video.durationLabel}">08:30</span></span>
+                                    <button class="btn btn-sm btn-link p-0 text-decoration-none" type="button"
+                                            th:if="${video.videoUrl != null && !#strings.isEmpty(video.videoUrl)}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#videoPreviewModal"
+                                            th:attr="data-video-url=${video.videoUrl}, data-video-title=${video.title}">Xem video</button>
                                     <button class="btn btn-sm btn-link p-0 text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#editVideoModal"
                                             th:attr="data-module-id=${module.id}, data-video-id=${video.id}, data-video-title=${video.title}, data-video-url=${video.videoUrl}, data-video-duration=${video.duration}, data-video-position=${video.position}">Sửa video</button>
                                     <button class="btn btn-sm btn-link p-0 text-danger text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#deleteVideoModal"
@@ -563,6 +568,31 @@
         </div>
     </div>
 
+    <div class="modal fade" id="videoPreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen-lg-down modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg video-preview-modal">
+                <div class="modal-header border-0">
+                    <div>
+                        <h5 class="modal-title" id="videoPreviewTitle">Xem video</h5>
+                        <small class="text-muted" id="videoPreviewUrl"></small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-0">
+                    <div class="video-preview-frame">
+                        <video id="videoPreviewPlayer" class="w-100 h-100" controls playsinline preload="metadata">
+                            Trình duyệt của bạn không hỗ trợ xem video.
+                        </video>
+                        <iframe id="videoPreviewEmbed" class="w-100 h-100 d-none" title="Video preview"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                    </div>
+                    <div class="alert alert-warning mt-3 mb-0 d-none" id="videoPreviewError" role="alert"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="deleteCourseModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
@@ -671,6 +701,78 @@
                 'VIDEO_ID': button.dataset.videoId
             });
             document.getElementById('deleteVideoTitle').textContent = button.dataset.videoTitle || 'này';
+        });
+
+        // Chuyển URL phổ biến sang link embed để xem ngay trong modal.
+        function resolveEmbeddableVideoUrl(videoUrl) {
+            try {
+                const url = new URL(videoUrl, window.location.origin);
+                if (url.hostname.includes('youtube.com') && url.searchParams.get('v')) {
+                    return `https://www.youtube.com/embed/${url.searchParams.get('v')}`;
+                }
+                if (url.hostname.includes('youtu.be')) {
+                    return `https://www.youtube.com/embed/${url.pathname.replace('/', '')}`;
+                }
+                if (url.hostname.includes('vimeo.com')) {
+                    const videoId = url.pathname.split('/').filter(Boolean).pop();
+                    return videoId ? `https://player.vimeo.com/video/${videoId}` : '';
+                }
+                return '';
+            } catch (error) {
+                return '';
+            }
+        }
+
+        // Hiển thị video trong modal thay vì mở tab mới.
+        function openVideoPreviewModal(button) {
+            const videoUrl = button?.dataset.videoUrl || '';
+            const videoTitle = button?.dataset.videoTitle || 'Xem video';
+            const player = document.getElementById('videoPreviewPlayer');
+            const embed = document.getElementById('videoPreviewEmbed');
+            const errorBox = document.getElementById('videoPreviewError');
+
+            document.getElementById('videoPreviewTitle').textContent = videoTitle;
+            document.getElementById('videoPreviewUrl').textContent = videoUrl;
+            errorBox.classList.add('d-none');
+            errorBox.textContent = '';
+            player.pause();
+            player.removeAttribute('src');
+            player.load();
+            embed.removeAttribute('src');
+
+            const embedUrl = resolveEmbeddableVideoUrl(videoUrl);
+            if (embedUrl) {
+                player.classList.add('d-none');
+                embed.classList.remove('d-none');
+                embed.src = embedUrl;
+                return;
+            }
+
+            if (!videoUrl) {
+                player.classList.add('d-none');
+                embed.classList.add('d-none');
+                errorBox.textContent = 'Video này chưa có URL để xem.';
+                errorBox.classList.remove('d-none');
+                return;
+            }
+
+            embed.classList.add('d-none');
+            player.classList.remove('d-none');
+            player.src = videoUrl;
+            player.load();
+        }
+
+        document.getElementById('videoPreviewModal')?.addEventListener('show.bs.modal', (event) => {
+            openVideoPreviewModal(event.relatedTarget);
+        });
+
+        document.getElementById('videoPreviewModal')?.addEventListener('hidden.bs.modal', () => {
+            const player = document.getElementById('videoPreviewPlayer');
+            const embed = document.getElementById('videoPreviewEmbed');
+            player.pause();
+            player.removeAttribute('src');
+            player.load();
+            embed.removeAttribute('src');
         });
     </script>
 </div>

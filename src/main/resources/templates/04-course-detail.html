@@ -89,11 +89,10 @@
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
                                                 <small th:text="${video.durationMinutes + ' phút'}">08:35</small>
-                                                <a class="btn btn-sm btn-outline-primary"
-                                                   th:if="${course.enrolled}"
-                                                   th:href="${video.videoUrl}"
-                                                   target="_blank"
-                                                   rel="noopener noreferrer">Xem video</a>
+
+                                                <i class="btn btn-sm btn-outline-primary open-video-btn"
+                                                   th:attr="data-video-url=${video.videoUrl}">Xem video
+                                                </i>
                                                 <button class="btn btn-sm btn-outline-secondary disabled" th:if="${!course.enrolled}" type="button">Cần đăng ký</button>
                                             </div>
                                         </li>
@@ -101,21 +100,21 @@
                                     <div class="alert alert-light border mb-3" th:if="${#lists.isEmpty(lesson.videos)}">
                                         This lesson does not have any videos yet.
                                     </div>
-<!--                                    <div class="mt-3 p-3 bg-white border rounded" th:if="${lesson.description != null && !lesson.description.isBlank()}">-->
-<!--                                        <div class="d-flex align-items-center mb-2">-->
-<!--                                            <i class="fa fa-paperclip text-primary me-2"></i>-->
-<!--                                            <strong>Lesson Resources</strong>-->
-<!--                                        </div>-->
-<!--                                        <p class="mb-3" th:text="${lesson.description}">Lesson description</p>-->
-<!--                                        <div class="d-flex flex-wrap gap-2">-->
-<!--                                            <a class="btn btn-sm btn-outline-primary" th:if="${lesson.resourceUrl != null && !lesson.resourceUrl.isBlank()}" th:href="${lesson.resourceUrl}">-->
-<!--                                                <i class="fa fa-file-pdf me-2"></i>Summary PDF-->
-<!--                                            </a>-->
-<!--                                            <a class="btn btn-sm btn-outline-primary" th:if="${lesson.videoUrl != null && !lesson.videoUrl.isBlank()}" th:href="${lesson.videoUrl}" target="_blank" rel="noopener noreferrer">-->
-<!--                                                <i class="fa fa-play-circle me-2"></i>Watch Preview-->
-<!--                                            </a>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                    <!--                                    <div class="mt-3 p-3 bg-white border rounded" th:if="${lesson.description != null && !lesson.description.isBlank()}">-->
+                                    <!--                                        <div class="d-flex align-items-center mb-2">-->
+                                    <!--                                            <i class="fa fa-paperclip text-primary me-2"></i>-->
+                                    <!--                                            <strong>Lesson Resources</strong>-->
+                                    <!--                                        </div>-->
+                                    <!--                                        <p class="mb-3" th:text="${lesson.description}">Lesson description</p>-->
+                                    <!--                                        <div class="d-flex flex-wrap gap-2">-->
+                                    <!--                                            <a class="btn btn-sm btn-outline-primary" th:if="${lesson.resourceUrl != null && !lesson.resourceUrl.isBlank()}" th:href="${lesson.resourceUrl}">-->
+                                    <!--                                                <i class="fa fa-file-pdf me-2"></i>Summary PDF-->
+                                    <!--                                            </a>-->
+                                    <!--                                            <a class="btn btn-sm btn-outline-primary" th:if="${lesson.videoUrl != null && !lesson.videoUrl.isBlank()}" th:href="${lesson.videoUrl}" target="_blank" rel="noopener noreferrer">-->
+                                    <!--                                                <i class="fa fa-play-circle me-2"></i>Watch Preview-->
+                                    <!--                                            </a>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -223,6 +222,64 @@
             </div>
         </div>
     </div>
+
+    <!-- Video Modal -->
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-dark">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white">Video khóa học</h5>
+
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
+
+                <div class="modal-body p-0">
+                    <video id="courseVideo"
+                           class="w-100"
+                           controls
+                           autoplay>
+                        <source id="videoSource" src="" type="video/mp4">
+                        Trình duyệt không hỗ trợ video.
+                    </video>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function (){
+            // click mở video
+            $('.open-video-btn').on('click', function (e) {
+                e.preventDefault();
+
+                let videoUrl = $(this).data('video-url');
+
+                $('#videoSource').attr('src', videoUrl);
+
+                let video = $('#courseVideo')[0];
+                video.load();
+                video.play();
+
+                $('#videoModal').modal('show');
+            });
+
+            // đóng modal thì stop video
+            $('#videoModal').on('hidden.bs.modal', function () {
+
+                let video = $('#courseVideo')[0];
+
+                video.pause();
+                video.currentTime = 0;
+
+                $('#videoSource').attr('src', '');
+            });
+        });
+    </script>
 </section>
 </body>
 </html>
