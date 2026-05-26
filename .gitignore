@@ -42,6 +42,7 @@ out/
 /.gradle-user/
 
 ### Local secrets ###
+# Local dev da dung application-dev.properties, khong can commit file env runtime.
 dev.env
 dev.evn
 *.env

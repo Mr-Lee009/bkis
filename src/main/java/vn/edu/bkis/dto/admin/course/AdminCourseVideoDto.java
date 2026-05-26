@@ -15,5 +15,6 @@ public class AdminCourseVideoDto {
     private final Integer duration;
     private final String durationLabel;
     private final Integer position;
+    private final boolean preview;
     private final String statusLabel;
 }

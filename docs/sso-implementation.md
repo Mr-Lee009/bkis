@@ -94,3 +94,25 @@ spring.security.oauth2.client.registration.facebook.scope=email,public_profile
 - Thêm màn hình link/unlink tài khoản SSO trong profile.
 - Ghi log audit cho lần đăng nhập SSO.
 - Nếu cần kiểm soát token lâu dài, cân nhắc persistent login hoặc session store riêng.
+## Cap Nhat 2026-05-25
+
+Luá»“ng SSO hiá»‡n táº¡i Ä‘ang tÃ­ch há»£p song song vá»›i form login truyá»n thá»‘ng:
+
+- form login: `POST /login`
+- captcha image: `GET /captcha/image`
+- Google start: `GET /oauth2/authorization/google`
+- Facebook start: `GET /oauth2/authorization/facebook`
+
+`CaptchaFilter` chá»‰ kiá»ƒm tra captcha cho `POST /login`, nÃªn khÃ´ng cháº·n luá»“ng Google/Facebook.
+
+UI login chá»‰ hiá»‡n nÃºt SSO khi:
+
+- `app.security.sso.google-enabled=true` hoáº·c
+- `app.security.sso.facebook-enabled=true`
+
+NgoÃ i cÃ¡c cÅ© hiá»ƒn thá»‹ nÃºt, Spring Security cÃ²n cáº§n táº¡o Ä‘Æ°á»£c `ClientRegistrationRepository` tá»« `spring.security.oauth2.client.registration.*` thÃ¬ `SecurityConfig` má»›i báº­t `oauth2Login(...)`.
+
+Vá»›i repo hiá»‡n táº¡i:
+
+- local nÃªn cáº¥u hÃ¬nh trong `src/main/resources/application-dev.properties`
+- production nÃªn cáº¥u hÃ¬nh trong `src/main/resources/application-prod.properties` + env runtime

@@ -40,13 +40,13 @@ INSERT INTO lessons (course_id, title, description, position, created_at, update
 (@course_id, 'Database Integration', 'Connect your Spring Boot app to MySQL databases using JPA/Hibernate', 3, NOW(), NOW());
 
 -- 5. Insert Lesson Videos
-INSERT INTO lesson_videos (lesson_id, title, video_url, duration, position, created_at, updated_at) VALUES
-(1, 'What is Spring Boot?', 'https://example.com/videos/spring-intro-1.mp4', 450, 1, NOW(), NOW()),
-(1, 'Setting up Development Environment', 'https://example.com/videos/spring-intro-2.mp4', 520, 2, NOW(), NOW()),
-(2, 'Creating Your First REST Endpoint', 'https://example.com/videos/spring-rest-1.mp4', 380, 1, NOW(), NOW()),
-(2, 'Request Mapping and HTTP Methods', 'https://example.com/videos/spring-rest-2.mp4', 420, 2, NOW(), NOW()),
-(3, 'JPA and Entity Mapping', 'https://example.com/videos/spring-db-1.mp4', 550, 1, NOW(), NOW()),
-(3, 'CRUD Operations with Repository', 'https://example.com/videos/spring-db-2.mp4', 480, 2, NOW(), NOW());
+INSERT INTO lesson_videos (lesson_id, title, video_url, duration, position, is_preview, created_at, updated_at) VALUES
+(1, 'What is Spring Boot?', 'https://example.com/videos/spring-intro-1.mp4', 450, 1, 1, NOW(), NOW()),
+(1, 'Setting up Development Environment', 'https://example.com/videos/spring-intro-2.mp4', 520, 2, 0, NOW(), NOW()),
+(2, 'Creating Your First REST Endpoint', 'https://example.com/videos/spring-rest-1.mp4', 380, 1, 1, NOW(), NOW()),
+(2, 'Request Mapping and HTTP Methods', 'https://example.com/videos/spring-rest-2.mp4', 420, 2, 0, NOW(), NOW()),
+(3, 'JPA and Entity Mapping', 'https://example.com/videos/spring-db-1.mp4', 550, 1, 0, NOW(), NOW()),
+(3, 'CRUD Operations with Repository', 'https://example.com/videos/spring-db-2.mp4', 480, 2, 0, NOW(), NOW());
 
 -- 6. Insert Payments for Students
 INSERT INTO payments (student_id, course_id, amount, status, created_at, updated_at) VALUES

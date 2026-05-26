@@ -65,6 +65,7 @@ create table lesson_videos
     video_url  varchar(500)                        not null,
     duration   int                                 null,
     position   int                                 not null,
+    is_preview tinyint(1) default 0               not null,
     created_by char(36)                            null,
     updated_by char(36)                            null,
     created_at timestamp default CURRENT_TIMESTAMP null,

@@ -31,13 +31,13 @@ INSERT INTO lessons (course_id, title, description, position, created_at, update
 (1, 'REST APIs with Spring Boot', 'Build RESTful APIs using Spring Boot annotations', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (1, 'Database Integration', 'Connect your Spring Boot app to MySQL databases using JPA/Hibernate', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO lesson_videos (lesson_id, title, video_url, duration, position, created_at, updated_at) VALUES
-(1, 'What is Spring Boot?', 'https://example.com/videos/spring-intro-1.mp4', 450, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1, 'Setting up Development Environment', 'https://example.com/videos/spring-intro-2.mp4', 520, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'Creating Your First REST Endpoint', 'https://example.com/videos/spring-rest-1.mp4', 380, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'Request Mapping and HTTP Methods', 'https://example.com/videos/spring-rest-2.mp4', 420, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'JPA and Entity Mapping', 'https://example.com/videos/spring-db-1.mp4', 550, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'CRUD Operations with Repository', 'https://example.com/videos/spring-db-2.mp4', 480, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO lesson_videos (lesson_id, title, video_url, duration, position, is_preview, created_at, updated_at) VALUES
+(1, 'What is Spring Boot?', 'https://example.com/videos/spring-intro-1.mp4', 450, 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 'Setting up Development Environment', 'https://example.com/videos/spring-intro-2.mp4', 520, 2, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'Creating Your First REST Endpoint', 'https://example.com/videos/spring-rest-1.mp4', 380, 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'Request Mapping and HTTP Methods', 'https://example.com/videos/spring-rest-2.mp4', 420, 2, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'JPA and Entity Mapping', 'https://example.com/videos/spring-db-1.mp4', 550, 1, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'CRUD Operations with Repository', 'https://example.com/videos/spring-db-2.mp4', 480, 2, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO payments (student_id, course_id, amount, status, created_at, updated_at) VALUES
 ('studentDto-001', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

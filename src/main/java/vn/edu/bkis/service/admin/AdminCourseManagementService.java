@@ -384,14 +384,23 @@ public class AdminCourseManagementService {
         lessonVideoRepository.delete(video);
     }
 
+    /**
+     * Tải danh sách module và video của khóa học để render màn hình chi tiết quản trị.
+     *
+     * @param courseId id khóa học cần lấy giáo trình
+     * @return {@link List} danh sách {@link AdminCourseModuleDto} đã kèm các video của từng module
+     */
     private List<AdminCourseModuleDto> getModules(Long courseId) {
+        // Step 1: lấy toàn bộ lesson của khóa học theo đúng thứ tự module.
         List<Lesson> lessons = lessonRepository.findByCourseIdOrderByPositionAsc(courseId);
         List<Long> lessonIds = lessons.stream().map(Lesson::getId).toList();
+        // Step 2: tải video theo nhóm lesson để tránh query lặp lại cho từng module.
         Map<Long, List<LessonVideo>> videosByLesson = lessonIds.isEmpty()
             ? Map.of()
             : lessonVideoRepository.findByLessonIdInOrderByPositionAsc(lessonIds).stream()
                 .collect(Collectors.groupingBy(LessonVideo::getLessonId));
 
+        // Step 3: map lesson và video sang DTO cuối cùng để controller render ra màn hình admin.
         return lessons.stream()
             .map(lesson -> {
                 List<AdminCourseVideoDto> videos = videosByLesson.getOrDefault(lesson.getId(), List.of()).stream()
@@ -409,7 +418,15 @@ public class AdminCourseManagementService {
             .toList();
     }
 
+    /**
+     * Chuyển entity video sang DTO hiển thị ở màn hình quản trị khóa học.
+     *
+     * @param video video nguồn lấy từ bảng lesson_videos
+     * @return {@link AdminCourseVideoDto} chứa dữ liệu hiển thị và nhãn trạng thái preview
+     */
     private AdminCourseVideoDto toVideoDto(LessonVideo video) {
+        // Step 1: đọc cờ preview từ entity để xác định trạng thái hiển thị.
+        // Step 2: dựng DTO với nhãn dễ đọc để admin biết video nào đang mở xem thử.
         return new AdminCourseVideoDto(
             video.getId(),
             video.getTitle(),
@@ -417,7 +434,8 @@ public class AdminCourseManagementService {
             video.getDuration(),
             formatDuration(video.getDuration()),
             video.getPosition(),
-            "Published"
+            Boolean.TRUE.equals(video.getPreview()),
+            Boolean.TRUE.equals(video.getPreview()) ? "Xem thử" : "Nội dung khóa học"
         );
     }
 
@@ -487,11 +505,21 @@ public class AdminCourseManagementService {
         lesson.setPosition(resolvePosition(form.getPosition()));
     }
 
+    /**
+     * Đồng bộ dữ liệu form thêm hoặc sửa video vào entity trước khi lưu xuống database.
+     *
+     * @param video entity video sẽ được cập nhật dữ liệu
+     * @param form dữ liệu gửi lên từ màn hình quản trị video
+     * @return không trả dữ liệu; method cập nhật trực tiếp trên entity đầu vào
+     */
     private void applyVideoForm(LessonVideo video, AdminCourseVideoFormDto form) {
+        // Step 1: kiểm tra các field bắt buộc như tiêu đề và URL video trước khi gán vào entity.
+        // Step 2: chuẩn hóa các field số như thời lượng, position và cờ preview từ form quản trị.
         video.setTitle(required(form.getTitle(), "Video title is required."));
         video.setVideoUrl(required(form.getVideoUrl(), "Video URL is required."));
         video.setDuration(form.getDuration() == null || form.getDuration() < 0 ? 0 : form.getDuration());
         video.setPosition(resolvePosition(form.getPosition()));
+        video.setPreview(Boolean.TRUE.equals(form.getPreview()));
     }
 
     private int resolvePosition(Integer position) {

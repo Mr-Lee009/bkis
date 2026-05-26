@@ -1,19 +1,20 @@
 package vn.edu.bkis.security;
 
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-//    private final CaptchaFilter captchaFilter;
+    // Filter captcha duoc chen truoc filter login thuong de chan request sai som.
+    private final CaptchaFilter captchaFilter;
     private final AuthFailureHandler authFailureHandler;
     private final AuthSuccessHandler authSuccessHandler;
     private final CustomUserDetailsService customUserDetailsService;
@@ -22,9 +23,9 @@ public class SecurityConfig {
     private final String rememberMeKey;
     private final int rememberMeValiditySeconds;
 
-    // Khởi tạo cấu hình bảo mật và nạp các tham số cần cho tính năng ghi nhớ đăng nhập.
+    // Khoi tao cau hinh bao mat va nap cac thanh phan xac thuc can thiet.
     public SecurityConfig(
-//            CaptchaFilter captchaFilter,
+            CaptchaFilter captchaFilter,
             AuthFailureHandler authFailureHandler,
             AuthSuccessHandler authSuccessHandler,
             CustomUserDetailsService customUserDetailsService,
@@ -32,7 +33,7 @@ public class SecurityConfig {
             ObjectProvider<ClientRegistrationRepository> clientRegistrationRepositoryProvider,
             @Value("${app.security.remember-me.key}") String rememberMeKey,
             @Value("${app.security.remember-me.validity-seconds}") int rememberMeValiditySeconds) {
-//        this.captchaFilter = captchaFilter;
+        this.captchaFilter = captchaFilter;
         this.authFailureHandler = authFailureHandler;
         this.authSuccessHandler = authSuccessHandler;
         this.customUserDetailsService = customUserDetailsService;
@@ -42,25 +43,35 @@ public class SecurityConfig {
         this.rememberMeValiditySeconds = rememberMeValiditySeconds;
     }
 
-    // Cấu hình chuỗi filter bảo mật và bật cơ chế remember-me bằng cookie token.
+    // Cau hinh chuoi filter bao mat cho login thuong, SSO va cac vung du lieu theo role.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/forgot-password", "/reset-password", "/captcha", "/css/**", "/js/**", "/img/**",
-                                "/favicon.ico", "/oauth2/**", "/login/oauth2/**").permitAll()
+                        // Mo public cho login, captcha server-side, static asset, file preview va callback OAuth2.
+                        .requestMatchers("/login", "/register", "/forgot-password", "/reset-password", "/captcha/**",
+                                "/css/**", "/js/**", "/img/**", "/uploads/**", "/favicon.ico", "/oauth2/**",
+                                "/login/oauth2/**").permitAll()
+                        // Chi hoc vien da dang nhap moi duoc vao cac luong hoc tap ca nhan.
                         .requestMatchers("/my-courses").hasRole("STUDENT")
                         .requestMatchers("/courses/*/signup").hasRole("STUDENT")
+                        // Trang cong khai cho phep xem thong tin khoa hoc truoc khi mua hoc.
                         .requestMatchers("/", "/courses/**").permitAll()
+                        // Cac khu vuc admin nhay cam chi cho ADMIN truy cap.
                         .requestMatchers("/admin/accounts/**", "/admin/dashboard/**", "/admin/payment-gateways/**",
                                 "/api/admin/payment-gateways/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/students/**", "/api/admin/students/**").hasAnyRole("ADMIN", "TEACHER")
-                        .requestMatchers("/admin/courses/**", "/upload/**").hasAnyRole("ADMIN", "TEACHER", "INSTRUCTOR")
+                        // Quan ly hoc vien cho phep ADMIN va TEACHER.
+                        .requestMatchers("/admin/students/**", "/api/admin/students/**")
+                        .hasAnyRole("ADMIN", "TEACHER")
+                        // Quan ly noi dung khoa hoc va upload mo cho nhom giang day.
+                        .requestMatchers("/admin/courses/**", "/upload/**")
+                        .hasAnyRole("ADMIN", "TEACHER", "INSTRUCTOR")
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .loginProcessingUrl("/login") // Đổi sang /do-login
+                        // Giu login processing tai /login de CaptchaFilter chi can chan mot diem vao.
+                        .loginProcessingUrl("/login")
                         .failureHandler(authFailureHandler)
                         .successHandler(authSuccessHandler)
                         .permitAll())
@@ -72,10 +83,14 @@ public class SecurityConfig {
                         .userDetailsService(customUserDetailsService))
                 .logout(logout -> logout.logoutUrl("/logout").permitAll());
 
-        // Chỉ bật OAuth2 login khi ứng dụng đã có ít nhất một cấu hình client registration hợp lệ.
+        // Captcha chi ap cho form login thuong vi filter nay chan truoc UsernamePasswordAuthenticationFilter.
+        http.addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // Chi bat OAuth2 login khi ung dung da co it nhat mot client registration hop le.
         if (clientRegistrationRepository != null) {
             http.oauth2Login(oauth2 -> oauth2
                     .loginPage("/login")
+                    // Tai thong tin tu provider va map ve user local theo role cua he thong.
                     .userInfoEndpoint(userInfo -> userInfo
                             .userService(customOAuth2UserService)
                             .oidcUserService(customOAuth2UserService::loadOidcUser))
@@ -84,8 +99,6 @@ public class SecurityConfig {
                     .permitAll());
         }
 
-//        http.addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
 }

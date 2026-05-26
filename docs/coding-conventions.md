@@ -107,10 +107,24 @@ Tài liệu này chuẩn hóa cách viết mã trong repo `bkis` để:
 - Tất cả function hoặc method được thêm mới hay chỉnh sửa đều phải có comment ngắn gọn bằng tiếng Việt.
 - Comment đặt ngay phía trên function.
 - Comment phải đủ để người đọc hiểu nhanh mục đích chính của hàm.
+- Comment bắt buộc phải nêu rõ:
+  - hàm dùng để làm gì
+  - các tham số đầu vào chính là gì
+  - kiểu dữ liệu hoặc đối tượng trả về là gì
+  - exception quan trọng nếu hàm có thể dừng luồng bằng lỗi nghiệp vụ
 - Nếu cần, comment nên nêu ngắn gọn:
   - hàm dùng để làm gì
   - đầu vào hoặc ngữ cảnh xử lý chính
   - kết quả trả về hoặc tác động chính
+
+### Comment theo từng bước trong thân hàm
+- Với mọi hàm mới hoặc hàm được sửa, phần thân hàm phải có comment theo các bước xử lý chính nếu logic không chỉ là 1 phép gán đơn giản.
+- Ưu tiên dùng format nhất quán như:
+  - `Step 1: lấy dữ liệu ...`
+  - `Step 2: kiểm tra điều kiện ...`
+  - `Step 3: map dữ liệu và trả kết quả ...`
+- Các step comment phải bám theo luồng xử lý thực tế của code, không viết chung chung.
+- Không cần comment mọi dòng lệnh nhỏ, nhưng phải comment đủ để người đọc lần đầu hiểu luồng dữ liệu và quyết định nghiệp vụ.
 
 ### Comment cho hàm có nhiều logic
 - Với các hàm có nhiều bước xử lý, cần comment ngắn cho từng block logic chính.
@@ -194,6 +208,7 @@ for (StudentDto student : students) {
 - Nếu phải cải thiện readability, chỉ chỉnh trong phạm vi phần đang sửa.
 - Khi sửa function cũ mà chưa có comment, bổ sung comment ngắn bằng tiếng Việt cho function đó.
 - Khi sửa `service` có nhiều bước xử lý, bổ sung comment cho các block logic chính nếu phần code chưa đủ rõ.
+- Khi sửa hoặc thêm JavaDoc cho method, phải ghi rõ `@param`, `@return` và `@throws` nếu có luồng lỗi quan trọng.
 
 ## Quy ước khi tạo hoặc sửa page
 - Khi tạo page mới hoặc chỉnh sửa page hiện có, luôn tham khảo HTML tương ứng trong `src/main/resources/mock`.
@@ -210,6 +225,7 @@ for (StudentDto student : students) {
 - Business logic có bị trôi vào controller hoặc DTO không.
 - Comment có thực sự cần thiết và có nói đúng lý do không.
 - Tất cả function được thêm mới hoặc chỉnh sửa đã có comment ngắn bằng tiếng Việt chưa.
+- Tất cả function được thêm mới hoặc chỉnh sửa đã mô tả rõ `@param`, `@return` và các step xử lý chính chưa.
 - Với `service` nhiều logic, các block xử lý chính đã được comment rõ chưa.
 - Có import thừa, code chết, hoặc block debug còn sót lại không.
 - Nếu đổi field hoặc API, đã kiểm tra các consumer liên quan chưa.

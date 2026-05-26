@@ -86,13 +86,13 @@ VALUES ('2026-02-27 14:15:06.000000', 'ducla', '2026-02-27 14:15:12.000000', 'du
 
 select * from lessons;
 #insert 10 records into the lesson_videos table
-INSERT INTO bkis_edu.lesson_videos (created_at, created_by, updated_at, updated_by, duration, lesson_id, position, title, video_url) 
+INSERT INTO bkis_edu.lesson_videos (created_at, created_by, updated_at, updated_by, duration, lesson_id, position, is_preview, title, video_url) 
 VALUES 
-('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 1, 'video gioi thieu kho hoc', 'link')
-,('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 2, 'video cac nguyen to hoa hoc', 'link')
-,('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 3, 'video phan ung hoa hoc co ban', 'link')
-,('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 4, 'video ung dung cua hoa hoc trong cuoc song', 'link')
-,('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 5, 'video thuc hanh hoa hoc co ban', 'link')
+('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 1, true, 'video gioi thieu kho hoc', 'link')
+,('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 2, false, 'video cac nguyen to hoa hoc', 'link')
+,('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 3, false, 'video phan ung hoa hoc co ban', 'link')
+,('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 4, false, 'video ung dung cua hoa hoc trong cuoc song', 'link')
+,('2026-02-27 14:58:13.000000', 'sys', '2026-02-27 14:58:17.000000', 'sys', 1, 1, 5, false, 'video thuc hanh hoa hoc co ban', 'link')
 ;
 
 select * from lesson_videos;

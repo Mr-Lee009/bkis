@@ -8,14 +8,14 @@
 </head>
 
 <body>
-<div layout:fragment="content" >
+<div layout:fragment="content">
     <div class="container-xxl py-5">
         <div class="container">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6">
                     <div class="wow fadeInUp" data-wow-delay="0.1s">
-                        <h2 class="mb-4" th:text="#{login.manage}">Quản lý toàn bộ khoá học trong một tài khoản</h2>
-                        <p class="mb-4" th:text="#{login.track}">Theo dõi tiến độ học tập, truy cập tài nguyên đã mở khoá và nhận thông báo từ mentor ngay trong dashboard của bạn.</p>
+                        <h2 class="mb-4" th:text="#{login.manage}">Quan ly toan bo khoa hoc trong mot tai khoan</h2>
+                        <p class="mb-4" th:text="#{login.track}">Theo doi tien do hoc tap, truy cap tai nguyen da mo khoa va nhan thong bao tu mentor ngay trong dashboard cua ban.</p>
                         <ul class="list-unstyled">
                             <li class="mb-3"><i class="fa fa-check text-primary me-2"></i><b th:text="#{login.sync}"></b></li>
                             <li class="mb-3"><i class="fa fa-check text-primary me-2"></i><b th:text="#{login.security}"></b></li>
@@ -27,17 +27,12 @@
                     <div class="card border-0 shadow-lg wow fadeInUp" data-wow-delay="0.3s">
                         <div class="card-body p-4 p-lg-5">
                             <h4 class="mb-4" th:text="#{login.account}"></h4>
-                            <div class="alert alert-success d-flex align-items-start gap-2" role="alert"
-                                 th:if="${successMessage != null}">
-                                <i class="fa fa-check-circle mt-1"></i>
-                                <span th:text="${successMessage}">Thao tác thành công.</span>
-                            </div>
                             <div class="alert alert-danger d-flex align-items-start gap-2" role="alert"
                                  th:if="${errorMessage != null}">
                                 <i class="fa fa-exclamation-triangle mt-1"></i>
-                                <span th:text="${errorMessage}">Đăng nhập không thành công.</span>
+                                <span th:text="${errorMessage}">Dang nhap khong thanh cong.</span>
                             </div>
-                            <form id="loginForm" th:action="@{/login}" method="post">
+                            <form id="loginForm" th:action="@{/login}" method="post" autocomplete="off">
                                 <div class="mb-3">
                                     <label class="form-label" th:text="#{login.username}">UserName</label>
                                     <input type="text" class="form-control form-control-lg" placeholder="username" name="username" required>
@@ -57,12 +52,18 @@
                                     <a th:href="@{/forgot-password}" class="text-primary" th:text="#{login.forgot}">Quên mật khẩu?</a>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label" th:text="#{login.captcha}">Captcha xác minh</label>
-                                    <div class="d-flex align-items-center gap-2 mb-2">
-                                        <div class="bg-light border rounded flex-grow-1 text-center py-2" id="captchaText">ABCDE</div>
-                                        <button type="button" class="btn btn-outline-primary" id="refreshCaptcha"><i class="fa fa-sync"></i></button>
+                                    <label class="form-label" th:text="#{login.captcha}">Captcha xac minh</label>
+                                    <div class="d-flex align-items-center gap-2 mb-2 captcha-box">
+                                        <img class="flex-grow-1 border rounded bg-light captcha-image" id="captchaImage"
+                                             th:src="@{/captcha/image}" src="/captcha/image" alt="Captcha image"
+                                             draggable="false">
+                                        <button type="button" class="btn btn-outline-primary" id="refreshCaptcha" aria-label="Refresh captcha">
+                                            <i class="fa fa-sync"></i>
+                                        </button>
                                     </div>
-                                    <input type="text" class="form-control" id="captchaInput" th:placeholder="#{login.placeholder.capcha}" required>
+                                    <input type="text" class="form-control" id="captchaInput" name="captchaAnswer"
+                                           th:placeholder="#{login.placeholder.capcha}" required
+                                           inputmode="text" autocapitalize="characters" spellcheck="false">
                                 </div>
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary py-3" th:text="#{login.button}">Đăng nhập</button>
@@ -101,6 +102,24 @@
     </div>
     <!-- import 01-login.js -->
     <script th:src="@{/js/01-login.js}"></script>
+    <style>
+        .captcha-box {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .captcha-image {
+            width: 150px;
+            max-width: 100%;
+            height: 46px;
+            object-fit: contain;
+            padding: 0.2rem 0.35rem;
+        }
+
+        #refreshCaptcha {
+            padding: 0.45rem 0.7rem;
+        }
+    </style>
 </div>
 </body>
 

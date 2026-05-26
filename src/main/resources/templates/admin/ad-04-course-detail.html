@@ -245,7 +245,8 @@
                                         <h6 class="mb-1" th:text="${video.title}">Intro to the course</h6>
                                         <small class="text-muted" th:text="${video.videoUrl ?: 'Chưa có URL video'}">https://cdn.example/video.mp4</small>
                                     </div>
-                                    <span class="badge bg-success" th:text="${video.statusLabel}">Published</span>
+                                    <span th:class="${video.preview} ? 'badge bg-info text-dark' : 'badge bg-success'"
+                                          th:text="${video.statusLabel}">Published</span>
                                 </div>
                                 <div class="d-flex flex-wrap align-items-center gap-3 mt-2 small text-muted">
                                     <span><i class="fa fa-clock me-1"></i><span th:text="${video.durationLabel}">08:30</span></span>
@@ -255,7 +256,7 @@
                                             data-bs-target="#videoPreviewModal"
                                             th:attr="data-video-url=${video.videoUrl}, data-video-title=${video.title}">Xem video</button>
                                     <button class="btn btn-sm btn-link p-0 text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#editVideoModal"
-                                            th:attr="data-module-id=${module.id}, data-video-id=${video.id}, data-video-title=${video.title}, data-video-url=${video.videoUrl}, data-video-duration=${video.duration}, data-video-position=${video.position}">Sửa video</button>
+                                            th:attr="data-module-id=${module.id}, data-video-id=${video.id}, data-video-title=${video.title}, data-video-url=${video.videoUrl}, data-video-duration=${video.duration}, data-video-position=${video.position}, data-video-preview=${video.preview}">Sửa video</button>
                                     <button class="btn btn-sm btn-link p-0 text-danger text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#deleteVideoModal"
                                             th:attr="data-module-id=${module.id}, data-video-id=${video.id}, data-video-title=${video.title}">Xóa</button>
                                 </div>
@@ -464,6 +465,12 @@
                             <input type="number" min="0" class="form-control" id="addVideoDuration" name="duration" value="0">
                         </div>
                         <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="addVideoPreview" name="preview" value="true">
+                                <label class="form-check-label" for="addVideoPreview">Cho phép xem thử video này khi chưa mua khóa học</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
                             <div class="upload-widget"
                                  data-upload-widget
                                  data-upload-folder-prefix="/source"
@@ -525,6 +532,12 @@
                         <div class="col-md-4">
                             <label class="form-label" for="editVideoDuration">Thời lượng giây</label>
                             <input type="number" min="0" class="form-control" id="editVideoDuration" name="duration">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="editVideoPreview" name="preview" value="true">
+                                <label class="form-check-label" for="editVideoPreview">Cho phép xem thử video này khi chưa mua khóa học</label>
+                            </div>
                         </div>
                         <div class="col-12">
                             <div class="upload-widget"
@@ -673,6 +686,7 @@
             form.action = buildAction(form, { 'MODULE_ID': activeModuleId });
             document.getElementById('addVideoModuleLabel').textContent = activeModuleTitle || 'Module đang chọn';
             document.getElementById('addVideoPosition').value = Number(activeModuleVideos || 0) + 1;
+            document.getElementById('addVideoPreview').checked = false;
         });
 
         document.getElementById('editModuleModal')?.addEventListener('show.bs.modal', (event) => {
@@ -702,6 +716,7 @@
             document.getElementById('editVideoUrl').value = button.dataset.videoUrl || '';
             document.getElementById('editVideoDuration').value = button.dataset.videoDuration || '0';
             document.getElementById('editVideoPosition').value = button.dataset.videoPosition || '1';
+            document.getElementById('editVideoPreview').checked = button.dataset.videoPreview === 'true';
         });
 
         document.getElementById('deleteVideoModal')?.addEventListener('show.bs.modal', (event) => {

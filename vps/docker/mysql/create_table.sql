@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS lesson_videos (
     video_url VARCHAR(500) NOT NULL,
     duration INT,
     position INT NOT NULL,
+    is_preview BIT DEFAULT b'0',
     created_by VARCHAR(255),
     updated_by VARCHAR(255),
     created_at DATETIME,

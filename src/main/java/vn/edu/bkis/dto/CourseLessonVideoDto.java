@@ -11,6 +11,7 @@ public record CourseLessonVideoDto(
         String videoUrl,
         Integer durationMinutes,
         Integer position,
-        boolean locked
+        boolean accessible,
+        boolean preview
 ) {
 }

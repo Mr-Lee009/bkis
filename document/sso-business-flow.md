@@ -381,3 +381,32 @@ Nếu vẫn thiếu email, cần thiết kế thêm màn hình yêu cầu ngư�
 - Thêm trang lỗi SSO thân thiện khi thiếu email hoặc user bị khóa.
 - Thêm audit log cho các lần đăng nhập SSO.
 - Thêm màn hình admin xem/link/unlink tài khoản SSO của user.
+## Cap Nhat 2026-05-25: Login, Captcha Va SSO
+
+Trang login hiá»‡n táº¡i khÃ´ng cÃ²n sinh captcha á»Ÿ client. Captcha Ä‘Æ°á»£c server sinh táº¡i `GET /captcha/image`, lÆ°u Ä‘Ã¡p Ã¡n vÃ o `HttpSession`, sau Ä‘Ã³ form login thÆ°á»ng gá»­i láº¡i giÃ¡ trá»‹ qua field `captchaAnswer`.
+
+Luá»“ng captcha hiá»‡n táº¡i chá»‰ Ã¡p dá»¥ng cho `POST /login`. CÃ¡c endpoint SSO nhÆ° `/oauth2/authorization/google`, `/oauth2/authorization/facebook`, `/login/oauth2/code/google`, `/login/oauth2/code/facebook` khÃ´ng Ä‘i qua `CaptchaFilter`.
+
+Trang login chá»‰ hiá»‡n nÃºt Google/Facebook khi cÃ¡c cÅ© sau Ä‘Æ°á»£c báº­t:
+
+```properties
+app.security.sso.google-enabled=true
+app.security.sso.facebook-enabled=true
+```
+
+Chá»‰ cÃ³ `spring.security.oauth2.client.registration.google.client-id` hoáº·c `client-secret` chÆ°a Ä‘á»§ Ä‘á»ƒ hiá»‡n nÃºt SSO trÃªn UI.
+
+Repo hiá»‡n táº¡i tá»• chá»©c cáº¥u hÃ¬nh nhÆ° sau:
+
+- `application.properties`: cáº¥u hÃ¬nh chung
+- `application-dev.properties`: local config, bao gá»“m SSO local
+- `application-prod.properties`: mapping sang env var cho production
+
+Vá»›i form login thÆ°á»ng, cÃ¡c tÃªn field khÃ´ng Ä‘Æ°á»£c Ä‘á»•i tá»± do:
+
+- `username`
+- `password`
+- `captchaAnswer`
+- `remember-me`
+
+Náº¿u Ä‘á»•i tÃªn cÃ¡c field nÃ y mÃ  khÃ´ng sá»­a Ä‘á»“ng thá»i template, JS, filter vÃ  `SecurityConfig`, login thÆ°á»ng hoáº·c remember-me sáº½ hỏng.

@@ -43,8 +43,9 @@ This file exists to help Codex work consistently every time the repository is op
 - When changing admin student/account behavior, inspect controller, service, DTO, template, JS, and repository layers together.
 - When changing authentication behavior, inspect the classes under `security` first.
 - If a rule is unclear, infer from the nearest existing feature and note the assumption in the final response.
-- All new or modified functions must have short Vietnamese comments.
-- Service methods with multi-step logic should include short Vietnamese block comments for the main processing steps.
+- All new or modified functions must have Vietnamese comments that describe purpose, parameters, return type, and important exceptions when applicable.
+- All new or modified functions with non-trivial logic must include Vietnamese step comments inside the body in the style `Step 1`, `Step 2`, `Step 3`.
+- Service methods with multi-step logic must include Vietnamese block comments for the main processing steps.
 
 ## Editing Constraints
 - Avoid changing generated, vendored, or third-party library assets unless the task is explicitly about them.

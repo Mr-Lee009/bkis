@@ -12,16 +12,18 @@ services:
       - ./docker/mysql:/docker-entrypoint-initdb.d
     restart: always
 
-  app:
-    build: .
-    container_name: bkis_app
-    env_file:
-      - ./docker/.env.docker
-    ports:
-      - "8888:8888"
-    depends_on:
-      - db
-    restart: always
-
+    app:
+      build: .
+      container_name: bkis_app
+      env_file:
+        - ./docker/.env.docker
+      ports:
+        - "8888:8888"
+      depends_on:
+        - db
+      volumes:
+        - ./storage/uploads:/app/uploads
+        - ./storage/upload-tmp:/app/upload-tmp
+      restart: always
 volumes:
   db_data:

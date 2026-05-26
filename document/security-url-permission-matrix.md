@@ -159,3 +159,21 @@ flowchart TD
 4. Thêm trang 403 thân thiện.
 5. Ẩn/hiện menu admin theo role trong header/sidebar.
 6. Nếu cần, bổ sung phân quyền sâu tại service cho course ownership.
+## Cap Nhat 2026-05-25
+
+Pháº§n login/SSO/captcha hiá»‡n táº¡i nÃªn Ä‘á»c theo ma tráº­n sau:
+
+| NhÃ³m | URL | Method | Ghi chÃº |
+|---|---|---|---|
+| Login page | `/login` | `GET` | Public |
+| Form login | `/login` | `POST` | Public, nhÆ°ng bá»‹ `CaptchaFilter` kiá»ƒm tra captcha |
+| Captcha image | `/captcha/image` | `GET` | Public, sinh captcha áº£nh tá»« server |
+| OAuth2 start | `/oauth2/**` | `GET` | Public, khÃ´ng Ä‘i qua captcha |
+| OAuth2 callback | `/login/oauth2/**` | `GET` | Public, khÃ´ng Ä‘i qua captcha |
+
+Rule public nÃªn bao gá»“m Ã­t nháº¥t:
+
+```java
+.requestMatchers("/login", "/captcha/**", "/css/**", "/js/**", "/img/**",
+        "/favicon.ico", "/oauth2/**", "/login/oauth2/**").permitAll()
+```

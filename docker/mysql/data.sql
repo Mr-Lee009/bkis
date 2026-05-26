@@ -33,17 +33,18 @@ ON DUPLICATE KEY UPDATE
     position = VALUES(position),
     updated_at = NOW();
 
-INSERT INTO lesson_videos (id, lesson_id, title, video_url, duration, position, created_by, updated_by, created_at, updated_at)
+INSERT INTO lesson_videos (id, lesson_id, title, video_url, duration, position, is_preview, created_by, updated_by, created_at, updated_at)
 VALUES
-    (1, 1, 'Course Introduction', 'https://www.youtube.com/embed/1Rs2ND1ryYc', 12, 1, 'system', 'system', NOW(), NOW()),
-    (2, 1, 'Responsive Layout Basics', 'https://www.youtube.com/embed/fYq5PXgSsbE', 18, 2, 'system', 'system', NOW(), NOW()),
-    (3, 2, 'Bootstrap Grid Deep Dive', 'https://www.youtube.com/embed/0ik6X4DJKCc', 15, 1, 'system', 'system', NOW(), NOW()),
-    (4, 3, 'DOM Essentials', 'https://www.youtube.com/embed/AeUCNkvzYqQ', 9, 1, 'system', 'system', NOW(), NOW())
+    (1, 1, 'Course Introduction', 'https://www.youtube.com/embed/1Rs2ND1ryYc', 12, 1, b'1', 'system', 'system', NOW(), NOW()),
+    (2, 1, 'Responsive Layout Basics', 'https://www.youtube.com/embed/fYq5PXgSsbE', 18, 2, b'0', 'system', 'system', NOW(), NOW()),
+    (3, 2, 'Bootstrap Grid Deep Dive', 'https://www.youtube.com/embed/0ik6X4DJKCc', 15, 1, b'1', 'system', 'system', NOW(), NOW()),
+    (4, 3, 'DOM Essentials', 'https://www.youtube.com/embed/AeUCNkvzYqQ', 9, 1, b'0', 'system', 'system', NOW(), NOW())
 ON DUPLICATE KEY UPDATE
     title = VALUES(title),
     video_url = VALUES(video_url),
     duration = VALUES(duration),
     position = VALUES(position),
+    is_preview = VALUES(is_preview),
     updated_at = NOW();
 
 INSERT INTO payments (id, student_id, course_id, amount, status, created_by, updated_by, created_at, updated_at)

@@ -15,4 +15,5 @@ public class AdminCourseVideoFormDto {
     private String videoUrl;
     private Integer duration;
     private Integer position;
+    private Boolean preview;
 }

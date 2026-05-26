@@ -36,4 +36,7 @@ public class LessonVideo extends BasicEntity {
 
     @Column(name = "position", nullable = false)
     private Integer position;
+
+    @Column(name = "is_preview", nullable = false)
+    private Boolean preview = Boolean.FALSE;
 }
