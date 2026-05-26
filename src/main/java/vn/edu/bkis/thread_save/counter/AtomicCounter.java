@@ -1,9 +1,11 @@
 package vn.edu.bkis.thread_save.counter;
 
+import vn.edu.bkis.constan.ConstantCommon;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AtomicCounter {
-  private AtomicInteger count = new AtomicInteger(0);
+  private AtomicInteger count = new AtomicInteger(ConstantCommon.ZERO_NUMBER);
 
   public void increment() {
     // Phương thức incrementAndGet() là một thao tác nguyên tử (atomic)

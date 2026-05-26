@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.edu.bkis.constan.ConstantCommon;
 import vn.edu.bkis.dto.admin.account.AccountFilterDto;
 import vn.edu.bkis.dto.admin.account.AccountFormDto;
 import vn.edu.bkis.dto.admin.account.AccountManagementPageDto;
@@ -126,7 +127,7 @@ public class AccountManagementService {
         user.setRole(role);
         user.setBio(blankToDefault(form.getBio(), "Created from admin account management screen."));
         user.setProfilePictureUrl(blankToDefault(form.getProfilePictureUrl(), DEFAULT_PROFILE_PICTURE));
-        user.setFailedLoginAttempts(0);
+        user.setFailedLoginAttempts(ConstantCommon.ZERO_NUMBER);
         user.setLocked(false);
 
         userRepository.save(user);

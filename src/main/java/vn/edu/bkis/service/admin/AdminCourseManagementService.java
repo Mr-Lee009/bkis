@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.edu.bkis.constan.ConstantCommon;
 import vn.edu.bkis.dto.admin.course.AdminCourseDetailDto;
 import vn.edu.bkis.dto.admin.course.AdminCourseDetailProjection;
 import vn.edu.bkis.dto.admin.course.AdminCourseCreateFormDto;
@@ -38,6 +39,7 @@ import vn.edu.bkis.repository.LessonVideoRepository;
 import vn.edu.bkis.repository.ProgressRepository;
 import vn.edu.bkis.repository.UserRepository;
 import vn.edu.bkis.service.UploadService;
+import vn.edu.bkis.security.UserSession;
 
 /**
  * Service for the admin course management pages.
@@ -55,19 +57,22 @@ public class AdminCourseManagementService {
     private final ProgressRepository progressRepository;
     private final UserRepository userRepository;
     private final UploadService uploadService;
+    private final UserSession userSession;
 
     public AdminCourseManagementService(CourseRepository courseRepository,
                                         LessonRepository lessonRepository,
                                         LessonVideoRepository lessonVideoRepository,
                                         ProgressRepository progressRepository,
                                         UserRepository userRepository,
-                                        UploadService uploadService) {
+                                        UploadService uploadService,
+                                        UserSession userSession) {
         this.courseRepository = courseRepository;
         this.lessonRepository = lessonRepository;
         this.lessonVideoRepository = lessonVideoRepository;
         this.progressRepository = progressRepository;
         this.userRepository = userRepository;
         this.uploadService = uploadService;
+        this.userSession = userSession;
     }
 
     /**
@@ -193,6 +198,8 @@ public class AdminCourseManagementService {
      */
     @Transactional
     public Long createDraftCourse(AdminCourseCreateFormDto form) {
+        // Step 1: lấy actor hiện tại từ phiên đăng nhập để dùng thống nhất cho audit field.
+        String auditActor = userSession.auditActor();
         Course course = new Course();
 
         // Gán dữ liệu bắt buộc và dữ liệu mô tả cơ bản cho hồ sơ khóa học.
@@ -205,12 +212,12 @@ public class AdminCourseManagementService {
 
         // Khóa nháp không được public cho đến khi admin chuyển sang PUBLISHED.
         course.setPrice(form.getPrice() == null ? BigDecimal.ZERO : form.getPrice());
-        course.setTotalStudents(0);
-        course.setRating(5);
+        course.setTotalStudents(ConstantCommon.ZERO_NUMBER);
+        course.setRating(ConstantCommon.MAX_RATING);
         course.setCourseStatus(CourseStatus.DRAFT);
         course.setActiveFlag(false);
-        course.setCreatedBy("admin");
-        course.setUpdatedBy("admin");
+        course.setCreatedBy(auditActor);
+        course.setUpdatedBy(auditActor);
 
         return courseRepository.save(course).getId();
     }
@@ -222,6 +229,8 @@ public class AdminCourseManagementService {
      */
     @Transactional
     public void updateCourse(AdminCourseUpdateFormDto form) {
+        // Step 1: lấy actor hiện tại từ phiên đăng nhập để cập nhật audit field nhất quán.
+        String auditActor = userSession.auditActor();
         if (form.getId() == null) {
             throw new IllegalArgumentException("Course id is required.");
         }
@@ -239,7 +248,7 @@ public class AdminCourseManagementService {
         CourseStatus status = resolveStatus(form.getStatus(), form.getVisible());
         course.setCourseStatus(status);
         course.setActiveFlag(resolveActiveFlag(status));
-        course.setUpdatedBy("admin");
+        course.setUpdatedBy(auditActor);
 
         courseRepository.save(course);
     }
@@ -252,6 +261,8 @@ public class AdminCourseManagementService {
      */
     @Transactional
     public boolean deleteOrArchiveCourse(Long courseId) {
+        // Step 1: lấy actor hiện tại từ phiên đăng nhập để ghi nhận người ẩn khóa học khi có dữ liệu nghiệp vụ.
+        String auditActor = userSession.auditActor();
         Course course = courseRepository.findById(courseId)
             .orElseThrow(() -> new IllegalArgumentException("Course not found."));
 
@@ -260,7 +271,7 @@ public class AdminCourseManagementService {
         if (hasBusinessData) {
             course.setActiveFlag(false);
             course.setCourseStatus(CourseStatus.HIDDEN);
-            course.setUpdatedBy("admin");
+            course.setUpdatedBy(auditActor);
             courseRepository.save(course);
             return false;
         }
@@ -277,12 +288,14 @@ public class AdminCourseManagementService {
      */
     @Transactional
     public void createModule(Long courseId, AdminCourseModuleFormDto form) {
+        // Step 1: lấy actor hiện tại từ phiên đăng nhập để dùng cho audit của lesson mới.
+        String auditActor = userSession.auditActor();
         ensureCourseExists(courseId);
         Lesson lesson = new Lesson();
         lesson.setCourseId(courseId);
         applyModuleForm(lesson, form);
-        lesson.setCreatedBy("admin");
-        lesson.setUpdatedBy("admin");
+        lesson.setCreatedBy(auditActor);
+        lesson.setUpdatedBy(auditActor);
         lessonRepository.save(lesson);
     }
 
@@ -295,9 +308,11 @@ public class AdminCourseManagementService {
      */
     @Transactional
     public void updateModule(Long courseId, Long moduleId, AdminCourseModuleFormDto form) {
+        // Step 1: lấy actor hiện tại từ phiên đăng nhập để ghi nhận người sửa module.
+        String auditActor = userSession.auditActor();
         Lesson lesson = getLessonInCourse(courseId, moduleId);
         applyModuleForm(lesson, form);
-        lesson.setUpdatedBy("admin");
+        lesson.setUpdatedBy(auditActor);
         lessonRepository.save(lesson);
     }
 
@@ -329,12 +344,14 @@ public class AdminCourseManagementService {
      */
     @Transactional
     public void createVideo(Long courseId, Long moduleId, AdminCourseVideoFormDto form) {
+        // Step 1: lấy actor hiện tại từ phiên đăng nhập để dùng cho audit của video mới.
+        String auditActor = userSession.auditActor();
         getLessonInCourse(courseId, moduleId);
         LessonVideo video = new LessonVideo();
         video.setLessonId(moduleId);
         applyVideoForm(video, form);
-        video.setCreatedBy("admin");
-        video.setUpdatedBy("admin");
+        video.setCreatedBy(auditActor);
+        video.setUpdatedBy(auditActor);
         lessonVideoRepository.save(video);
     }
 
@@ -348,6 +365,8 @@ public class AdminCourseManagementService {
      */
     @Transactional
     public void updateVideo(Long courseId, Long moduleId, Long videoId, AdminCourseVideoFormDto form) {
+        // Step 1: lấy actor hiện tại từ phiên đăng nhập để ghi nhận người sửa video.
+        String auditActor = userSession.auditActor();
         getLessonInCourse(courseId, moduleId);
         LessonVideo video = getVideoInLesson(moduleId, videoId);
         String oldVideoUrl = video.getVideoUrl();
@@ -363,7 +382,7 @@ public class AdminCourseManagementService {
 
         form.setVideoUrl(newVideoUrl);
         applyVideoForm(video, form);
-        video.setUpdatedBy("admin");
+        video.setUpdatedBy(auditActor);
         lessonVideoRepository.save(video);
     }
 

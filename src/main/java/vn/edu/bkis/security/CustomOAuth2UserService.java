@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import vn.edu.bkis.constan.ConstantCommon;
 import vn.edu.bkis.model.AuthProvider;
 import vn.edu.bkis.model.User;
 import vn.edu.bkis.model.UserOAuthAccount;
@@ -135,7 +136,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         user.setEmail(profile.email());
         user.setPasswordHash(passwordEncoder.encode(UUID.randomUUID().toString()));
         user.setRole(UserRole.STUDENT);
-        user.setFailedLoginAttempts(0);
+        user.setFailedLoginAttempts(ConstantCommon.ZERO_NUMBER);
         user.setLocked(false);
         return userRepository.save(user);
     }

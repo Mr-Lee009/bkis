@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.bkis.common.BusinessException;
 import vn.edu.bkis.common.MessageCode;
+import vn.edu.bkis.constan.ConstantCommon;
 import vn.edu.bkis.model.PasswordResetToken;
 import vn.edu.bkis.model.User;
 import vn.edu.bkis.repository.PasswordResetTokenRepository;
@@ -67,7 +68,7 @@ public class PasswordResetService {
         User user = userRepository.findById(resetToken.getUserId())
                 .orElseThrow(() -> new BusinessException(MessageCode.E0021));
         user.setPasswordHash(passwordEncoder.encode(password));
-        user.setFailedLoginAttempts(0);
+        user.setFailedLoginAttempts(ConstantCommon.ZERO_NUMBER);
         user.setLocked(false);
         user.setUpdatedBy("password-reset");
         userRepository.save(user);

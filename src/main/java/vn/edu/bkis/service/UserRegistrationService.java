@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.bkis.common.BusinessException;
 import vn.edu.bkis.common.MessageCode;
+import vn.edu.bkis.constan.ConstantCommon;
 import vn.edu.bkis.dto.RegisterAccountFormDto;
 import vn.edu.bkis.model.User;
 import vn.edu.bkis.model.UserRole;
@@ -50,7 +51,7 @@ public class UserRegistrationService {
         user.setRole(UserRole.STUDENT);
         user.setBio("Self-registered student account.");
         user.setProfilePictureUrl(DEFAULT_PROFILE_PICTURE);
-        user.setFailedLoginAttempts(0);
+        user.setFailedLoginAttempts(ConstantCommon.ZERO_NUMBER);
         user.setLocked(false);
         user.setCreatedBy("self-register");
         user.setUpdatedBy("self-register");

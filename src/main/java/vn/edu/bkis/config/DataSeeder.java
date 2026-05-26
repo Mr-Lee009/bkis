@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import vn.edu.bkis.constan.ConstantCommon;
 import vn.edu.bkis.model.User;
 import vn.edu.bkis.model.UserRole;
 import vn.edu.bkis.repository.UserRepository;
@@ -42,7 +43,7 @@ public class DataSeeder {
         systemAdmin.setEmail("sa@bkis.local");
         systemAdmin.setPasswordHash(encoder.encode("admin112233"));
         systemAdmin.setRole(UserRole.ADMIN);
-        systemAdmin.setFailedLoginAttempts(0);
+        systemAdmin.setFailedLoginAttempts(ConstantCommon.ZERO_NUMBER);
         systemAdmin.setLocked(false);
         repo.save(systemAdmin);
     }
@@ -60,7 +61,7 @@ public class DataSeeder {
             u.setEmail(email);
             u.setPasswordHash(encoder.encode(plainPassword));
             u.setRole(role);
-            u.setFailedLoginAttempts(0);
+            u.setFailedLoginAttempts(ConstantCommon.ZERO_NUMBER);
             u.setLocked(false);
             repo.save(u);
         }

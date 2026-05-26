@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.edu.bkis.constan.ConstantCommon;
 import vn.edu.bkis.dto.admin.AdminOptionDto;
 import vn.edu.bkis.dto.admin.student.AdminStudentCreateRequest;
 import vn.edu.bkis.dto.admin.student.AdminStudentCreateResponseDto;
@@ -19,6 +20,7 @@ import vn.edu.bkis.model.UserRole;
 import vn.edu.bkis.repository.CourseRepository;
 import vn.edu.bkis.repository.EnrollmentRepository;
 import vn.edu.bkis.repository.UserRepository;
+import vn.edu.bkis.security.UserSession;
 
 /**
  * Command service for admin student mutations.
@@ -32,6 +34,7 @@ public class AdminStudentCommandService {
     private final CourseRepository courseRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserSession userSession;
 
     /**
      * Create the service with required repositories.
@@ -45,12 +48,14 @@ public class AdminStudentCommandService {
         UserRepository userRepository,
         CourseRepository courseRepository,
         EnrollmentRepository enrollmentRepository,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        UserSession userSession
     ) {
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
         this.enrollmentRepository = enrollmentRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userSession = userSession;
     }
 
     /**
@@ -112,10 +117,10 @@ public class AdminStudentCommandService {
         user.setRole(UserRole.STUDENT);
         user.setBio(buildBio(request));
         user.setProfilePictureUrl(DEFAULT_PROFILE_PICTURE);
-        user.setFailedLoginAttempts(0);
+        user.setFailedLoginAttempts(ConstantCommon.ZERO_NUMBER);
         user.setLocked(false);
-        user.setCreatedBy("admin");
-        user.setUpdatedBy("admin");
+        user.setCreatedBy(userSession.userId());
+        user.setUpdatedBy(userSession.userId());
 
         userRepository.save(user);
 
@@ -124,8 +129,8 @@ public class AdminStudentCommandService {
         enrollment.setCourseId(course.getId());
         enrollment.setStatus(EnrollmentStatus.ACTIVE);
         enrollment.setEnrolledAt(request.getStartDate().atStartOfDay());
-        enrollment.setCreatedBy("admin");
-        enrollment.setUpdatedBy("admin");
+        enrollment.setCreatedBy(userSession.userId());
+        enrollment.setUpdatedBy(userSession.userId());
 
         enrollmentRepository.save(enrollment);
 
