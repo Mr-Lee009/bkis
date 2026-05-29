@@ -27,8 +27,6 @@ import vn.edu.bkis.security.UserSession;
  */
 @Service
 public class AdminStudentCommandService {
-    private static final String DEFAULT_PROFILE_PICTURE = "/img/testimonial-1.jpg";
-    private static final String DEFAULT_PASSWORD = "123456";
 
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
@@ -113,10 +111,10 @@ public class AdminStudentCommandService {
         user.setUsername(username);
         user.setFullName(fullName);
         user.setEmail(email);
-        user.setPasswordHash(passwordEncoder.encode(DEFAULT_PASSWORD));
+        user.setPasswordHash(passwordEncoder.encode(ConstantCommon.DEFAULT_PASSWORD));
         user.setRole(UserRole.STUDENT);
         user.setBio(buildBio(request));
-        user.setProfilePictureUrl(DEFAULT_PROFILE_PICTURE);
+        user.setProfilePictureUrl(ConstantCommon.DEFAULT_PROFILE_PICTURE);
         user.setFailedLoginAttempts(ConstantCommon.ZERO_NUMBER);
         user.setLocked(false);
         user.setCreatedBy(userSession.userId());

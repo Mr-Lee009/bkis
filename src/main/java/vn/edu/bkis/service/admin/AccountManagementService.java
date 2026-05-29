@@ -25,7 +25,6 @@ import vn.edu.bkis.repository.UserRepository;
  */
 @Service
 public class AccountManagementService {
-    private static final String DEFAULT_PROFILE_PICTURE = "/img/team-1.jpg";
     private static final int DEFAULT_PAGE_SIZE = 5;
     private static final DateTimeFormatter ACCOUNT_DATE_FORMAT =
         DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm", Locale.forLanguageTag("vi-VN"));
@@ -126,7 +125,7 @@ public class AccountManagementService {
         user.setPasswordHash(passwordEncoder.encode(password));
         user.setRole(role);
         user.setBio(blankToDefault(form.getBio(), "Created from admin account management screen."));
-        user.setProfilePictureUrl(blankToDefault(form.getProfilePictureUrl(), DEFAULT_PROFILE_PICTURE));
+        user.setProfilePictureUrl(blankToDefault(form.getProfilePictureUrl(), ConstantCommon.DEFAULT_PROFILE_PICTURE));
         user.setFailedLoginAttempts(ConstantCommon.ZERO_NUMBER);
         user.setLocked(false);
 
@@ -166,7 +165,7 @@ public class AccountManagementService {
         user.setEmail(email.toLowerCase(Locale.ROOT));
         user.setRole(role);
         user.setBio(blankToDefault(form.getBio(), "Updated from admin account management screen."));
-        user.setProfilePictureUrl(blankToDefault(form.getProfilePictureUrl(), DEFAULT_PROFILE_PICTURE));
+        user.setProfilePictureUrl(blankToDefault(form.getProfilePictureUrl(), ConstantCommon.DEFAULT_PROFILE_PICTURE));
         user.setLocked(Boolean.TRUE.equals(form.getLocked()));
 
         userRepository.save(user);
@@ -188,7 +187,7 @@ public class AccountManagementService {
             user.getEmail(),
             user.getRole() == null ? "UNKNOWN" : user.getRole().name(),
             blankToDefault(user.getBio(), ""),
-            blankToDefault(user.getProfilePictureUrl(), DEFAULT_PROFILE_PICTURE),
+            blankToDefault(user.getProfilePictureUrl(), ConstantCommon.DEFAULT_PROFILE_PICTURE),
             Boolean.TRUE.equals(user.getLocked()),
             user.getFailedLoginAttempts() == null ? 0 : user.getFailedLoginAttempts(),
             createdAt
