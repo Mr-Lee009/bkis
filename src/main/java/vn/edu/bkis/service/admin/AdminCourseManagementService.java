@@ -39,7 +39,7 @@ import vn.edu.bkis.repository.LessonVideoRepository;
 import vn.edu.bkis.repository.ProgressRepository;
 import vn.edu.bkis.repository.UserRepository;
 import vn.edu.bkis.service.UploadService;
-import vn.edu.bkis.security.UserSession;
+import vn.edu.bkis.security.UserSessionProvider;
 
 /**
  * Service for the admin course management pages.
@@ -57,22 +57,34 @@ public class AdminCourseManagementService {
     private final ProgressRepository progressRepository;
     private final UserRepository userRepository;
     private final UploadService uploadService;
-    private final UserSession userSession;
+    private final UserSessionProvider userSessionProvider;
 
+    /**
+     * Khởi tạo service quản trị khóa học với các dependency đọc/ghi dữ liệu cần thiết.
+     *
+     * @param courseRepository repository thao tác dữ liệu khóa học
+     * @param lessonRepository repository thao tác dữ liệu module bài học
+     * @param lessonVideoRepository repository thao tác dữ liệu video bài học
+     * @param progressRepository repository kiểm tra tiến độ học tập liên quan
+     * @param userRepository repository tải dữ liệu giảng viên cho form quản trị
+     * @param uploadService service xử lý tài nguyên upload nội bộ
+     * @param userSessionProvider provider đọc người dùng hiện tại từ SecurityContext
+     * @return không trả về dữ liệu; constructor dùng để khởi tạo bean service
+     */
     public AdminCourseManagementService(CourseRepository courseRepository,
                                         LessonRepository lessonRepository,
                                         LessonVideoRepository lessonVideoRepository,
                                         ProgressRepository progressRepository,
                                         UserRepository userRepository,
                                         UploadService uploadService,
-                                        UserSession userSession) {
+                                        UserSessionProvider userSessionProvider) {
         this.courseRepository = courseRepository;
         this.lessonRepository = lessonRepository;
         this.lessonVideoRepository = lessonVideoRepository;
         this.progressRepository = progressRepository;
         this.userRepository = userRepository;
         this.uploadService = uploadService;
-        this.userSession = userSession;
+        this.userSessionProvider = userSessionProvider;
     }
 
     /**
@@ -199,7 +211,7 @@ public class AdminCourseManagementService {
     @Transactional
     public Long createDraftCourse(AdminCourseCreateFormDto form) {
         // Step 1: lấy actor hiện tại từ phiên đăng nhập để dùng thống nhất cho audit field.
-        String auditActor = userSession.auditActor();
+        String auditActor = userSessionProvider.getCurrentAuditActor();
         Course course = new Course();
 
         // Gán dữ liệu bắt buộc và dữ liệu mô tả cơ bản cho hồ sơ khóa học.
@@ -230,7 +242,7 @@ public class AdminCourseManagementService {
     @Transactional
     public void updateCourse(AdminCourseUpdateFormDto form) {
         // Step 1: lấy actor hiện tại từ phiên đăng nhập để cập nhật audit field nhất quán.
-        String auditActor = userSession.auditActor();
+        String auditActor = userSessionProvider.getCurrentAuditActor();
         if (form.getId() == null) {
             throw new IllegalArgumentException("Course id is required.");
         }
@@ -262,7 +274,7 @@ public class AdminCourseManagementService {
     @Transactional
     public boolean deleteOrArchiveCourse(Long courseId) {
         // Step 1: lấy actor hiện tại từ phiên đăng nhập để ghi nhận người ẩn khóa học khi có dữ liệu nghiệp vụ.
-        String auditActor = userSession.auditActor();
+        String auditActor = userSessionProvider.getCurrentAuditActor();
         Course course = courseRepository.findById(courseId)
             .orElseThrow(() -> new IllegalArgumentException("Course not found."));
 
@@ -289,7 +301,7 @@ public class AdminCourseManagementService {
     @Transactional
     public void createModule(Long courseId, AdminCourseModuleFormDto form) {
         // Step 1: lấy actor hiện tại từ phiên đăng nhập để dùng cho audit của lesson mới.
-        String auditActor = userSession.auditActor();
+        String auditActor = userSessionProvider.getCurrentAuditActor();
         ensureCourseExists(courseId);
         Lesson lesson = new Lesson();
         lesson.setCourseId(courseId);
@@ -309,7 +321,7 @@ public class AdminCourseManagementService {
     @Transactional
     public void updateModule(Long courseId, Long moduleId, AdminCourseModuleFormDto form) {
         // Step 1: lấy actor hiện tại từ phiên đăng nhập để ghi nhận người sửa module.
-        String auditActor = userSession.auditActor();
+        String auditActor = userSessionProvider.getCurrentAuditActor();
         Lesson lesson = getLessonInCourse(courseId, moduleId);
         applyModuleForm(lesson, form);
         lesson.setUpdatedBy(auditActor);
@@ -345,7 +357,7 @@ public class AdminCourseManagementService {
     @Transactional
     public void createVideo(Long courseId, Long moduleId, AdminCourseVideoFormDto form) {
         // Step 1: lấy actor hiện tại từ phiên đăng nhập để dùng cho audit của video mới.
-        String auditActor = userSession.auditActor();
+        String auditActor = userSessionProvider.getCurrentAuditActor();
         getLessonInCourse(courseId, moduleId);
         LessonVideo video = new LessonVideo();
         video.setLessonId(moduleId);
@@ -366,7 +378,7 @@ public class AdminCourseManagementService {
     @Transactional
     public void updateVideo(Long courseId, Long moduleId, Long videoId, AdminCourseVideoFormDto form) {
         // Step 1: lấy actor hiện tại từ phiên đăng nhập để ghi nhận người sửa video.
-        String auditActor = userSession.auditActor();
+        String auditActor = userSessionProvider.getCurrentAuditActor();
         getLessonInCourse(courseId, moduleId);
         LessonVideo video = getVideoInLesson(moduleId, videoId);
         String oldVideoUrl = video.getVideoUrl();

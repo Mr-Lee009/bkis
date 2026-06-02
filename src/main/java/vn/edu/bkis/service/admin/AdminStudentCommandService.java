@@ -21,6 +21,7 @@ import vn.edu.bkis.repository.CourseRepository;
 import vn.edu.bkis.repository.EnrollmentRepository;
 import vn.edu.bkis.repository.UserRepository;
 import vn.edu.bkis.security.UserSession;
+import vn.edu.bkis.security.UserSessionProvider;
 
 /**
  * Command service for admin student mutations.
@@ -32,28 +33,30 @@ public class AdminStudentCommandService {
     private final CourseRepository courseRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserSession userSession;
+    private final UserSessionProvider userSessionProvider;
 
     /**
-     * Create the service with required repositories.
+     * Khởi tạo service xử lý tạo học viên với các dependency cần thiết.
      *
-     * @param userRepository user repository
-     * @param courseRepository course repository
-     * @param enrollmentRepository enrollment repository
-     * @param passwordEncoder password encoder
+     * @param userRepository repository thao tác dữ liệu người dùng
+     * @param courseRepository repository thao tác dữ liệu khóa học
+     * @param enrollmentRepository repository thao tác dữ liệu ghi danh
+     * @param passwordEncoder bộ mã hóa mật khẩu cho tài khoản mới
+     * @param userSessionProvider provider đọc người dùng hiện tại từ SecurityContext
+     * @return không trả về dữ liệu; constructor dùng để khởi tạo bean service
      */
     public AdminStudentCommandService(
         UserRepository userRepository,
         CourseRepository courseRepository,
         EnrollmentRepository enrollmentRepository,
         PasswordEncoder passwordEncoder,
-        UserSession userSession
+        UserSessionProvider userSessionProvider
     ) {
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
         this.enrollmentRepository = enrollmentRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userSession = userSession;
+        this.userSessionProvider = userSessionProvider;
     }
 
     /**
@@ -84,6 +87,10 @@ public class AdminStudentCommandService {
      */
     @Transactional
     public AdminStudentCreateResponseDto createStudent(AdminStudentCreateRequest request) {
+        // Step 1: lấy người dùng hiện tại từ SecurityContext để điền thông tin audit cho dữ liệu tạo mới.
+        UserSession userSession = userSessionProvider.getCurrentUserSession();
+
+        // Step 2: kiểm tra các dữ liệu bắt buộc và chặn sớm các trường hợp không hợp lệ.
         String fullName = required(request.getFullName(), "Họ và tên là bắt buộc.");
         String email = required(request.getEmail(), "Email là bắt buộc.").toLowerCase(Locale.ROOT);
 
@@ -103,6 +110,7 @@ public class AdminStudentCommandService {
             throw new IllegalArgumentException("Ngày bắt đầu là bắt buộc.");
         }
 
+        // Step 3: tạo user, enrollment và lưu toàn bộ dữ liệu xuống database.
         String username = generateUniqueUsername(fullName, email);
         String studentId = UUID.randomUUID().toString();
 
