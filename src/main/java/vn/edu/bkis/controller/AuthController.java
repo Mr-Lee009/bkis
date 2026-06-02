@@ -47,6 +47,25 @@ public class AuthController {
         return "01-login";
     }
 
+    /**
+     * Hiển thị trang báo lỗi khi người dùng đã đăng nhập nhưng không có quyền truy cập tài nguyên.
+     *
+     * @param model model dùng để truyền tiêu đề và nội dung hiển thị ra giao diện
+     * @return {@link String} tên template trang lỗi phân quyền 403
+     */
+    @GetMapping("/access-denied")
+    public String accessDeniedPage(Model model) {
+        // Step 1: chuẩn bị tiêu đề và thông điệp ngắn để giao diện hiển thị đúng ngữ cảnh lỗi phân quyền.
+        model.addAttribute("pageTitle", "403");
+        model.addAttribute("errorCode", "403");
+        model.addAttribute("errorTitle", "Bạn không có quyền truy cập");
+        model.addAttribute("errorDescription",
+            "Tài khoản hiện tại không được phép mở trang này. Vui lòng quay lại trang phù hợp hoặc liên hệ quản trị viên.");
+
+        // Step 2: trả về template lỗi dùng chung cho trường hợp đã xác thực nhưng thiếu quyền.
+        return "12-access-denied";
+    }
+
     // Chuan hoa thong bao loi dang nhap va captcha truoc khi dua ra giao dien.
     private String resolveLoginErrorMessage(String error, String errorCode, String errorArg) {
         if (errorCode != null && !errorCode.isBlank()) {

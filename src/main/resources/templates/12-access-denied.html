@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-common(pageTitle=${pageTitle})}">
+<head>
+    <title>[[${pageTitle}]]</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown" th:text="${errorTitle}">Bạn không có quyền truy cập</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page" th:text="${errorCode}">403</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    <i class="bi bi-shield-lock display-1 text-primary"></i>
+                    <h2 class="display-4 mt-3" th:text="${errorCode}">403</h2>
+                    <h3 class="mb-4" th:text="${errorTitle}">Bạn không có quyền truy cập</h3>
+                    <p class="mb-4" th:text="${errorDescription}">
+                        Tài khoản hiện tại không được phép mở trang này. Vui lòng quay lại trang phù hợp hoặc liên hệ quản trị viên.
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/}">
+                            Về trang chủ
+                        </a>
+                        <a class="btn btn-outline-primary rounded-pill py-3 px-5" href="javascript:history.back()">
+                            Quay lại trang trước
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

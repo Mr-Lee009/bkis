@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Mo public cho login, captcha server-side, static asset, file preview va callback OAuth2.
                         .requestMatchers("/login", "/register", "/forgot-password", "/reset-password", "/captcha/**",
-                                "/css/**", "/js/**", "/img/**", "/uploads/**", "/favicon.ico", "/oauth2/**",
+                                "/access-denied", "/css/**", "/js/**", "/img/**", "/uploads/**", "/favicon.ico", "/oauth2/**",
                                 "/login/oauth2/**").permitAll()
                         // Chi hoc vien da dang nhap moi duoc vao cac luong hoc tap ca nhan.
                         .requestMatchers("/my-courses").hasRole("STUDENT")
@@ -81,6 +81,9 @@ public class SecurityConfig {
                         .rememberMeCookieName("BKIS_REMEMBER_ME")
                         .tokenValiditySeconds(rememberMeValiditySeconds)
                         .userDetailsService(customUserDetailsService))
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        // Nguoi dung da dang nhap nhung khong du quyen se duoc redirect sang man hinh 403 chung.
+                        .accessDeniedPage("/access-denied"))
                 .logout(logout -> logout.logoutUrl("/logout").permitAll());
 
         // Captcha chi ap cho form login thuong vi filter nay chan truoc UsernamePasswordAuthenticationFilter.
