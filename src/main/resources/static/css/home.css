@@ -1,0 +1,233 @@
+.hot-news-intro {
+    max-width: 540px;
+    color: #6c757d;
+}
+
+.hot-news-card {
+    background: #fff;
+    border: 1px solid rgba(24, 29, 56, .08);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 18px 42px rgba(24, 29, 56, .08);
+}
+
+.hot-news-card.sale {
+    border-color: rgba(255, 193, 7, .28);
+    box-shadow: 0 18px 42px rgba(255, 193, 7, .12);
+}
+
+.hot-news-media {
+    position: relative;
+    height: 260px;
+    overflow: hidden;
+}
+
+.hot-news-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .6s ease;
+}
+
+.hot-news-card:hover .hot-news-media img {
+    transform: scale(1.08);
+}
+
+.hot-news-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(6, 187, 204, .92);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.hot-news-badge.sale-badge {
+    background: rgba(255, 193, 7, .95);
+    color: #181d38;
+}
+
+.hot-news-body {
+    padding: 28px;
+}
+
+.hot-news-body h4 {
+    font-size: 1.45rem;
+    margin-bottom: 14px;
+}
+
+.hot-news-body p {
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.hot-news-meta,
+.hot-news-date {
+    color: #6c757d;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.hot-news-tags,
+.hot-news-price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.hot-news-tags span {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--light);
+    color: var(--dark);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.hot-news-price strong {
+    color: #dc3545;
+    font-size: 1.4rem;
+}
+
+.hot-news-price del {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.hot-news-carousel .owl-stage-outer {
+    padding: 12px 0 20px;
+}
+
+.hot-news-carousel .owl-nav {
+    position: absolute;
+    top: -88px;
+    right: 0;
+    display: flex;
+    gap: 12px;
+}
+
+.hot-news-carousel .owl-nav button {
+    width: 46px;
+    height: 46px;
+    border-radius: 50% !important;
+    border: 1px solid rgba(24, 29, 56, .12) !important;
+    background: #fff !important;
+    color: var(--dark) !important;
+    transition: .3s;
+}
+
+.hot-news-carousel .owl-nav button:hover {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #fff !important;
+}
+
+.hot-news-carousel .owl-dots,
+.testimonial-carousel .owl-dots {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.hot-news-carousel .owl-dot span {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(24, 29, 56, .16);
+}
+
+.hot-news-carousel .owl-dot.active span {
+    background: var(--primary);
+}
+
+.testimonial-carousel::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    z-index: 1;
+}
+
+.testimonial-carousel::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    z-index: 1;
+}
+
+.testimonial-carousel .owl-item .testimonial-text,
+.testimonial-carousel .owl-item.center .testimonial-text * {
+    transition: .5s;
+}
+
+.testimonial-carousel .owl-item.center .testimonial-text {
+    background: var(--primary) !important;
+}
+
+.testimonial-carousel .owl-item.center .testimonial-text * {
+    color: #FFFFFF !important;
+}
+
+.testimonial-carousel .owl-dot {
+    position: relative;
+    display: inline-block;
+    margin: 0 5px;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #CCCCCC;
+    transition: .5s;
+}
+
+.testimonial-carousel .owl-dot.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+@media (min-width: 768px) {
+    .testimonial-carousel::before,
+    .testimonial-carousel::after {
+        width: 200px;
+    }
+}
+
+@media (min-width: 992px) {
+    .testimonial-carousel::before,
+    .testimonial-carousel::after {
+        width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hot-news-carousel .owl-nav {
+        position: static;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .hot-news-media {
+        height: 220px;
+    }
+
+    .hot-news-body {
+        padding: 22px;
+    }
+}

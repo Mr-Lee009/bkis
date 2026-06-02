@@ -4,6 +4,7 @@
       layout:decorate="~{layouts/layout-common(pageTitle='home')}">
 <head>
     <title>[[${pageTitle}]]</title>
+    <link th:href="@{/css/home.css}" rel="stylesheet">
 </head>
 <body>
 <section layout:fragment="content">
@@ -23,6 +24,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="container-xxl py-5 category" id="categories-section">
         <div class="container">
@@ -91,6 +93,91 @@
             </div>
         </div>
     </div>
+
+    <!-- Hot News Slider Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="d-flex flex-column flex-lg-row align-items-lg-end justify-content-between gap-3 mb-4 wow fadeInUp" data-wow-delay="0.1s">
+                <div>
+                    <h6 class="section-title bg-white text-start text-primary pe-3">Tin khóa học</h6>
+                </div>
+            </div>
+            <div class="owl-carousel hot-news-carousel position-relative wow fadeInUp" data-wow-delay="0.2s">
+                <div class="hot-news-card">
+                    <div class="hot-news-media">
+                        <img src="img/course-1.jpg" alt="Java Backend Bootcamp">
+                        <span class="hot-news-badge">Khóa mới</span>
+                    </div>
+                    <div class="hot-news-body">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                            <span class="hot-news-meta"><i class="fa fa-calendar-alt text-primary me-2"></i>Khai giảng 15/06</span>
+                            <span class="hot-news-date">Cập nhật hôm nay</span>
+                        </div>
+                        <h4>Java Backend Bootcamp mở lớp tối cho người đi làm</h4>
+                        <p>
+                            Lộ trình 16 tuần tập trung Java Core, Spring Boot, REST API và MySQL. Phù hợp cho học viên muốn chuyển hướng sang backend thực chiến.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                            <div class="hot-news-tags">
+                                <span>Spring Boot</span>
+                                <span>Dự án thật</span>
+                                <span>Mentor hỗ trợ</span>
+                            </div>
+                            <a href="courses.html" class="btn btn-primary px-4">Xem thêm</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hot-news-card sale">
+                    <div class="hot-news-media">
+                        <img src="img/course-2.jpg" alt="Frontend React Pro">
+                        <span class="hot-news-badge sale-badge">Sale 35%</span>
+                    </div>
+                    <div class="hot-news-body">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                            <span class="hot-news-meta"><i class="fa fa-bolt text-warning me-2"></i>Ưu đãi còn 2 ngày</span>
+                            <span class="hot-news-date">Kết thúc Chủ nhật</span>
+                        </div>
+                        <h4>Frontend React Pro giảm từ 4.900.000đ còn 3.185.000đ</h4>
+                        <p>
+                            Khóa học React cập nhật thực hành UI component, gọi API và tối ưu portfolio. Đăng ký trong đợt sale được tặng thêm 2 buổi review CV.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                            <div class="hot-news-price">
+                                <strong>3.185.000đ</strong>
+                                <del>4.900.000đ</del>
+                            </div>
+                            <a href="course_signup.html" class="btn btn-primary px-4">Đăng ký ngay</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hot-news-card">
+                    <div class="hot-news-media">
+                        <img src="img/course-3.jpg" alt="Digital Marketing Performance">
+                        <span class="hot-news-badge">Lớp hot</span>
+                    </div>
+                    <div class="hot-news-body">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                            <span class="hot-news-meta"><i class="fa fa-users text-danger me-2"></i>Đã lấp 80% số chỗ</span>
+                            <span class="hot-news-date">Mở lớp cuối tuần</span>
+                        </div>
+                        <h4>Performance Marketing chuyên sâu mở thêm lớp mới</h4>
+                        <p>
+                            Nội dung tập trung Meta Ads, Google Ads, tracking và tối ưu chuyển đổi. Học viên được thực hành trên tình huống bán hàng thực tế.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                            <div class="hot-news-tags">
+                                <span>Meta Ads</span>
+                                <span>Google Ads</span>
+                                <span>Case study</span>
+                            </div>
+                            <a href="courses.html" class="btn btn-primary px-4">Khám phá</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hot News Slider End -->
 
     <!--fragment for #courses-section-->
     <div class="container-xxl py-5" id="courses-section">
@@ -215,7 +302,8 @@
             </div>
         </div>
     </div>
-</section>
 
+    <script th:src="@{/js/03-home.js}"></script>
+</section>
 </body>
 </html>
