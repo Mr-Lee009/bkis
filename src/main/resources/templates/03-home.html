@@ -1,309 +1,360 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout-common(pageTitle='home')}">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout-common(pageTitle='home')}">
+
 <head>
     <title>[[${pageTitle}]]</title>
     <link th:href="@{/css/home.css}" rel="stylesheet">
 </head>
+
 <body>
-<section layout:fragment="content">
-    <div class="container-fluid bg-primary py-5 mb-5 page-header">
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-10 text-center">
-                    <h1 class="display-3 text-white animated slideInDown">Courses</h1>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center">
-                            <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Home</a></li>
-                            <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Pages</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Courses</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="container-xxl py-5 category" id="categories-section">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Categories</h6>
-                <h1 class="mb-5">Courses Categories</h1>
-            </div>
-            <div class="row g-3" id="categories">
-                <!-- Loop through top 4 courses by enrollment -->
-                <div th:if="${!#lists.isEmpty(topCoursesByEnrollment)}">
-                    <!-- Large featured course (first course) -->
-                    <div class="col-lg-7 col-md-6">
-                        <div class="row g-3">
-                            <!-- First course - full width -->
-                            <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s"
-                                 th:with="course=${topCoursesByEnrollment[0]}" th:if="${course != null}">
-                                <a class="position-relative d-block overflow-hidden" th:href="@{/courses/{id}(id=${course.id})}">
-                                    <img class="img-fluid" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
-                                    <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
-                                        <h5 class="m-0" th:text="${course.title}">Course Title</h5>
-                                        <small class="text-primary" th:text="${course.totalStudents + ' Students'}">0 Students</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <!-- Second and third courses - half width -->
-                            <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s"
-                                 th:with="course=${topCoursesByEnrollment[1]}" th:if="${course != null}">
-                                <a class="position-relative d-block overflow-hidden" th:href="@{/courses/{id}(id=${course.id})}">
-                                    <img class="img-fluid" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
-                                    <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
-                                        <h5 class="m-0" th:text="${course.title}">Course Title</h5>
-                                        <small class="text-primary" th:text="${course.totalStudents + ' Students'}">0 Students</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s"
-                                 th:with="course=${topCoursesByEnrollment[2]}" th:if="${course != null}">
-                                <a class="position-relative d-block overflow-hidden" th:href="@{/courses/{id}(id=${course.id})}">
-                                    <img class="img-fluid" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
-                                    <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
-                                        <h5 class="m-0" th:text="${course.title}">Course Title</h5>
-                                        <small class="text-primary" th:text="${course.totalStudents + ' Students'}">0 Students</small>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Fourth course - large right side -->
-                    <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;"
-                         th:with="course=${topCoursesByEnrollment[3]}" th:if="${course != null}">
-                        <a class="position-relative d-block h-100 overflow-hidden" th:href="@{/courses/{id}(id=${course.id})}">
-                            <img class="img-fluid position-absolute w-100 h-100" th:src="@{${course.imageUrl}}" th:alt="${course.title}" style="object-fit: cover;">
-                            <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
-                                <h5 class="m-0" th:text="${course.title}">Course Title</h5>
-                                <small class="text-primary" th:text="${course.totalStudents + ' Students'}">0 Students</small>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- Fallback message when no courses available -->
-                <div class="col-12" th:if="${#lists.isEmpty(topCoursesByEnrollment)}">
-                    <div class="alert alert-light border text-center mb-0">
-                        Hiện chưa có khóa học nào để hiển thị trong danh mục.
+    <section layout:fragment="content">
+        <div class="container-fluid bg-primary py-5 mb-5 page-header">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10 text-center">
+                        <h1 class="display-3 text-white animated slideInDown">Courses</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb justify-content-center">
+                                <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Home</a></li>
+                                <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Pages</a></li>
+                                <li class="breadcrumb-item text-white active" aria-current="page">Courses</li>
+                            </ol>
+                        </nav>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Hot News Slider Start -->
-    <div class="container-xxl py-5">
-        <div class="container">
-            <div class="d-flex flex-column flex-lg-row align-items-lg-end justify-content-between gap-3 mb-4 wow fadeInUp" data-wow-delay="0.1s">
-                <div>
-                    <h6 class="section-title bg-white text-start text-primary pe-3">Tin khóa học</h6>
+
+        <div class="container-xxl py-5 category" id="categories-section">
+            <div class="container">
+                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                    <h6 class="section-title bg-white text-center text-primary px-3">Categories</h6>
+                    <h1 class="mb-5">Courses Categories</h1>
                 </div>
-            </div>
-            <div class="owl-carousel hot-news-carousel position-relative wow fadeInUp" data-wow-delay="0.2s">
-                <div class="hot-news-card">
-                    <div class="hot-news-media">
-                        <img src="img/course-1.jpg" alt="Java Backend Bootcamp">
-                        <span class="hot-news-badge">Khóa mới</span>
-                    </div>
-                    <div class="hot-news-body">
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                            <span class="hot-news-meta"><i class="fa fa-calendar-alt text-primary me-2"></i>Khai giảng 15/06</span>
-                            <span class="hot-news-date">Cập nhật hôm nay</span>
-                        </div>
-                        <h4>Java Backend Bootcamp mở lớp tối cho người đi làm</h4>
-                        <p>
-                            Lộ trình 16 tuần tập trung Java Core, Spring Boot, REST API và MySQL. Phù hợp cho học viên muốn chuyển hướng sang backend thực chiến.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                            <div class="hot-news-tags">
-                                <span>Spring Boot</span>
-                                <span>Dự án thật</span>
-                                <span>Mentor hỗ trợ</span>
+                <div class="row g-3" id="categories">
+                    <!-- Loop through top 4 courses by enrollment -->
+                    <div th:if="${!#lists.isEmpty(topCoursesByEnrollment)}">
+                        <!-- Large featured course (first course) -->
+                        <div class="col-lg-7 col-md-6">
+                            <div class="row g-3">
+                                <!-- First course - full width -->
+                                <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s"
+                                    th:with="course=${topCoursesByEnrollment[0]}" th:if="${course != null}">
+                                    <a class="position-relative d-block overflow-hidden"
+                                        th:href="@{/courses/{id}(id=${course.id})}">
+                                        <img class="img-fluid" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
+                                        <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
+                                            style="margin: 1px;">
+                                            <h5 class="m-0" th:text="${course.title}">Course Title</h5>
+                                            <small class="text-primary"
+                                                th:text="${course.totalStudents + ' Students'}">0 Students</small>
+                                        </div>
+                                    </a>
+                                </div>
+                                <!-- Second and third courses - half width -->
+                                <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s"
+                                    th:with="course=${topCoursesByEnrollment[1]}" th:if="${course != null}">
+                                    <a class="position-relative d-block overflow-hidden"
+                                        th:href="@{/courses/{id}(id=${course.id})}">
+                                        <img class="img-fluid" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
+                                        <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
+                                            style="margin: 1px;">
+                                            <h5 class="m-0" th:text="${course.title}">Course Title</h5>
+                                            <small class="text-primary"
+                                                th:text="${course.totalStudents + ' Students'}">0 Students</small>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s"
+                                    th:with="course=${topCoursesByEnrollment[2]}" th:if="${course != null}">
+                                    <a class="position-relative d-block overflow-hidden"
+                                        th:href="@{/courses/{id}(id=${course.id})}">
+                                        <img class="img-fluid" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
+                                        <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
+                                            style="margin: 1px;">
+                                            <h5 class="m-0" th:text="${course.title}">Course Title</h5>
+                                            <small class="text-primary"
+                                                th:text="${course.totalStudents + ' Students'}">0 Students</small>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                            <a href="courses.html" class="btn btn-primary px-4">Xem thêm</a>
+                        </div>
+                        <!-- Fourth course - large right side -->
+                        <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;"
+                            th:with="course=${topCoursesByEnrollment[3]}" th:if="${course != null}">
+                            <a class="position-relative d-block h-100 overflow-hidden"
+                                th:href="@{/courses/{id}(id=${course.id})}">
+                                <img class="img-fluid position-absolute w-100 h-100" th:src="@{${course.imageUrl}}"
+                                    th:alt="${course.title}" style="object-fit: cover;">
+                                <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
+                                    style="margin: 1px;">
+                                    <h5 class="m-0" th:text="${course.title}">Course Title</h5>
+                                    <small class="text-primary" th:text="${course.totalStudents + ' Students'}">0
+                                        Students</small>
+                                </div>
+                            </a>
                         </div>
                     </div>
-                </div>
-                <div class="hot-news-card sale">
-                    <div class="hot-news-media">
-                        <img src="img/course-2.jpg" alt="Frontend React Pro">
-                        <span class="hot-news-badge sale-badge">Sale 35%</span>
-                    </div>
-                    <div class="hot-news-body">
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                            <span class="hot-news-meta"><i class="fa fa-bolt text-warning me-2"></i>Ưu đãi còn 2 ngày</span>
-                            <span class="hot-news-date">Kết thúc Chủ nhật</span>
-                        </div>
-                        <h4>Frontend React Pro giảm từ 4.900.000đ còn 3.185.000đ</h4>
-                        <p>
-                            Khóa học React cập nhật thực hành UI component, gọi API và tối ưu portfolio. Đăng ký trong đợt sale được tặng thêm 2 buổi review CV.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                            <div class="hot-news-price">
-                                <strong>3.185.000đ</strong>
-                                <del>4.900.000đ</del>
-                            </div>
-                            <a href="course_signup.html" class="btn btn-primary px-4">Đăng ký ngay</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="hot-news-card">
-                    <div class="hot-news-media">
-                        <img src="img/course-3.jpg" alt="Digital Marketing Performance">
-                        <span class="hot-news-badge">Lớp hot</span>
-                    </div>
-                    <div class="hot-news-body">
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                            <span class="hot-news-meta"><i class="fa fa-users text-danger me-2"></i>Đã lấp 80% số chỗ</span>
-                            <span class="hot-news-date">Mở lớp cuối tuần</span>
-                        </div>
-                        <h4>Performance Marketing chuyên sâu mở thêm lớp mới</h4>
-                        <p>
-                            Nội dung tập trung Meta Ads, Google Ads, tracking và tối ưu chuyển đổi. Học viên được thực hành trên tình huống bán hàng thực tế.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                            <div class="hot-news-tags">
-                                <span>Meta Ads</span>
-                                <span>Google Ads</span>
-                                <span>Case study</span>
-                            </div>
-                            <a href="courses.html" class="btn btn-primary px-4">Khám phá</a>
+                    <!-- Fallback message when no courses available -->
+                    <div class="col-12" th:if="${#lists.isEmpty(topCoursesByEnrollment)}">
+                        <div class="alert alert-light border text-center mb-0">
+                            Hiện chưa có khóa học nào để hiển thị trong danh mục.
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Hot News Slider End -->
 
-    <!--fragment for #courses-section-->
-    <div class="container-xxl py-5" id="courses-section">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Courses</h6>
-                <h1 class="mb-3">Popular Courses</h1>
-                <p class="mb-5" th:text="${message}">Chào mừng đến BKIS MVC!</p>
-            </div>
-            <div class="row g-4 justify-content-center" th:if="${!#lists.isEmpty(featuredCourses)}">
-                <div class="col-lg-4 col-md-6 wow fadeInUp"
-                     th:each="course, stat : ${featuredCourses}"
-                     th:attr="data-wow-delay=${(stat.index * 0.2 + 0.1) + 's'}">
-                    <div class="course-item bg-light h-100">
-                        <div class="position-relative overflow-hidden">
-                            <img class="img-fluid" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
-                            <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                <a th:href="@{/courses/{id}(id=${course.id})}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">Read More</a>
-                                <a th:href="@{/courses/{id}(id=${course.id})}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4 pb-0">
-                            <span class="badge bg-primary mb-3" th:if="${course.tag != null && !course.tag.isBlank()}" th:text="${course.tag}">Featured</span>
-                            <h3 class="mb-0" th:text="${'$' + #numbers.formatDecimal(course.price, 1, 'COMMA', 2, 'POINT')}">$149.00</h3>
-                            <div class="mb-3">
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small th:text="${'(' + course.reviewCount + ')'}">(123)</small>
-                            </div>
-                            <h5 class="mb-3" th:text="${course.title}">Course title</h5>
-                            <p class="px-2" th:text="${#strings.abbreviate(course.description, 120)}">Course description</p>
-                        </div>
-                        <div class="d-flex border-top">
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-user-tie text-primary me-2"></i><span th:text="${course.instructorName}">Instructor</span></small>
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-clock text-primary me-2"></i><span th:text="${course.durationHours + ' Hrs'}">1.49 Hrs</span></small>
-                            <small class="flex-fill text-center py-2"><i class="fa fa-user text-primary me-2"></i><span th:text="${course.totalStudents + ' Students'}">30 Students</span></small>
-                        </div>
+        <!-- Hot News Slider Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="d-flex flex-column flex-lg-row align-items-lg-end justify-content-between gap-3 mb-4 wow fadeInUp"
+                    data-wow-delay="0.1s">
+                    <div>
+                        <h6 class="section-title bg-white text-start text-primary pe-3">Tin khóa học</h6>
                     </div>
                 </div>
-            </div>
-            <div class="row" th:if="${#lists.isEmpty(featuredCourses)}">
-                <div class="col-12">
-                    <div class="alert alert-light border text-center mb-0">
-                        Hiện chưa có khóa học nào được kích hoạt để hiển thị trên trang chủ.
+                <div class="owl-carousel hot-news-carousel position-relative wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="hot-news-card">
+                        <div class="hot-news-media">
+                            <img src="img/course-1.jpg" alt="Java Backend Bootcamp">
+                            <span class="hot-news-badge">Khóa mới</span>
+                        </div>
+                        <div class="hot-news-body">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                <span class="hot-news-meta"><i class="fa fa-calendar-alt text-primary me-2"></i>Khai
+                                    giảng 15/06</span>
+                                <span class="hot-news-date">Cập nhật hôm nay</span>
+                            </div>
+                            <h4>Java Backend Bootcamp mở lớp tối cho người đi làm</h4>
+                            <p>
+                                Lộ trình 16 tuần tập trung Java Core, Spring Boot, REST API và MySQL. Phù hợp cho học
+                                viên muốn chuyển hướng sang backend thực chiến.
+                            </p>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                <div class="hot-news-tags">
+                                    <span>Spring Boot</span>
+                                    <span>Dự án thật</span>
+                                    <span>Mentor hỗ trợ</span>
+                                </div>
+                                <a href="courses.html" class="btn btn-primary px-4">Xem thêm</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hot-news-card sale">
+                        <div class="hot-news-media">
+                            <img src="img/course-2.jpg" alt="Frontend React Pro">
+                            <span class="hot-news-badge sale-badge">Sale 35%</span>
+                        </div>
+                        <div class="hot-news-body">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                <span class="hot-news-meta"><i class="fa fa-bolt text-warning me-2"></i>Ưu đãi còn 2
+                                    ngày</span>
+                                <span class="hot-news-date">Kết thúc Chủ nhật</span>
+                            </div>
+                            <h4>Frontend React Pro giảm từ 4.900.000đ còn 3.185.000đ</h4>
+                            <p>
+                                Khóa học React cập nhật thực hành UI component, gọi API và tối ưu portfolio. Đăng ký
+                                trong đợt sale được tặng thêm 2 buổi review CV.
+                            </p>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                <div class="hot-news-price">
+                                    <strong>3.185.000đ</strong>
+                                    <del>4.900.000đ</del>
+                                </div>
+                                <a href="course_signup.html" class="btn btn-primary px-4">Đăng ký ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hot-news-card">
+                        <div class="hot-news-media">
+                            <img src="img/course-3.jpg" alt="Digital Marketing Performance">
+                            <span class="hot-news-badge">Lớp hot</span>
+                        </div>
+                        <div class="hot-news-body">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                <span class="hot-news-meta"><i class="fa fa-users text-danger me-2"></i>Đã lấp 80% số
+                                    chỗ</span>
+                                <span class="hot-news-date">Mở lớp cuối tuần</span>
+                            </div>
+                            <h4>Performance Marketing chuyên sâu mở thêm lớp mới</h4>
+                            <p>
+                                Nội dung tập trung Meta Ads, Google Ads, tracking và tối ưu chuyển đổi. Học viên được
+                                thực hành trên tình huống bán hàng thực tế.
+                            </p>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                <div class="hot-news-tags">
+                                    <span>Meta Ads</span>
+                                    <span>Google Ads</span>
+                                    <span>Case study</span>
+                                </div>
+                                <a href="courses.html" class="btn btn-primary px-4">Khám phá</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- Hot News Slider End -->
 
-    <!--fragment for #tag name-->
-    <div class="container-xxl py-5 wow fadeInUp" id="java-courses-section" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="text-center">
-                <h6 class="section-title bg-white text-center text-primary px-3">Java Courses</h6>
-                <h1 class="mb-5">Explore Our Java Courses</h1>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6" th:each="course : ${javaCourses}">
-                    <div class="course-item bg-light">
-                        <div class="position-relative overflow-hidden">
-                            <img class="img-fluid" th:src="@{${course.imageUrl}}" alt="Course Image">
-                        </div>
-                        <div class="text-center p-4">
-                            <h5 class="mb-3" th:text="${course.title}">Course Title</h5>
-                            <p class="mb-4" th:text="${course.description}">Course Description</p>
+        <!--fragment for #courses-section-->
+        <div class="container-xxl py-5" id="courses-section">
+            <div class="container">
+                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                    <h6 class="section-title bg-white text-center text-primary px-3">Courses</h6>
+                    <h1 class="mb-3">Popular Courses</h1>
+                    <p class="mb-5" th:text="${message}">Chào mừng đến BKIS MVC!</p>
+                </div>
+                <div class="row g-4 justify-content-center" th:if="${!#lists.isEmpty(featuredCourses)}">
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" th:each="course, stat : ${featuredCourses}"
+                        th:attr="data-wow-delay=${(stat.index * 0.2 + 0.1) + 's'}">
+                        <div class="course-item bg-light h-100">
+                            <div class="position-relative overflow-hidden">
+                                <img class="img-fluid" th:src="@{${course.imageUrl}}" th:alt="${course.title}">
+                                <div
+                                    class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                    <a th:href="@{/courses/{id}(id=${course.id})}"
+                                        class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
+                                        style="border-radius: 30px 0 0 30px;">Read More</a>
+                                    <a th:href="@{/courses/{id}(id=${course.id})}"
+                                        class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                        style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                </div>
+                            </div>
+                            <div class="text-center p-4 pb-0">
+                                <span class="badge bg-primary mb-3"
+                                    th:if="${course.tag != null && !course.tag.isBlank()}"
+                                    th:text="${course.tag}">Featured</span>
+                                <h3 class="mb-0"
+                                    th:text="${'$' + #numbers.formatDecimal(course.price, 1, 'COMMA', 2, 'POINT')}">
+                                    $149.00</h3>
+                                <div class="mb-3">
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small th:text="${'(' + course.reviewCount + ')'}">(123)</small>
+                                </div>
+                                <h5 class="mb-3" th:text="${course.title}">Course title</h5>
+                                <p class="px-2" th:text="${#strings.abbreviate(course.description, 120)}">Course
+                                    description</p>
+                            </div>
                             <div class="d-flex border-top">
-                                <small class="flex-fill text-center border-end py-2"><i class="fa fa-user-tie text-primary me-2"></i><span th:text="${course.instructorName}">Instructor</span></small>
-                                <small class="flex-fill text-center border-end py-2"><i class="fa fa-clock text-primary me-2"></i><span th:text="${course.durationHours + ' Hrs'}">1.49 Hrs</span></small>
-                                <small class="flex-fill text-center py-2"><i class="fa fa-user text-primary me-2"></i><span th:text="${course.totalStudents + ' Students'}">30 Students</span></small>
+                                <small class="flex-fill text-center border-end py-2"><i
+                                        class="fa fa-user-tie text-primary me-2"></i><span
+                                        th:text="${course.instructorName}">Instructor</span></small>
+                                <small class="flex-fill text-center border-end py-2"><i
+                                        class="fa fa-clock text-primary me-2"></i><span
+                                        th:text="${course.durationHours + ' Hrs'}">1.49 Hrs</span></small>
+                                <small class="flex-fill text-center py-2"><i
+                                        class="fa fa-user text-primary me-2"></i><span
+                                        th:text="${course.totalStudents + ' Students'}">30 Students</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" th:if="${#lists.isEmpty(featuredCourses)}">
+                    <div class="col-12">
+                        <div class="alert alert-light border text-center mb-0">
+                            Hiện chưa có khóa học nào được kích hoạt để hiển thị trên trang chủ.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--fragment for #tag name-->
+        <div class="container-xxl py-5 wow fadeInUp" id="java-courses-section" data-wow-delay="0.1s">
+            <div class="container">
+                <div class="text-center">
+                    <h6 class="section-title bg-white text-center text-primary px-3">Java Courses</h6>
+                    <h1 class="mb-5">Explore Our Java Courses</h1>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6" th:each="course : ${javaCourses}">
+                        <div class="course-item bg-light">
+                            <div class="position-relative overflow-hidden">
+                                <img class="img-fluid" th:src="@{${course.imageUrl}}" alt="Course Image">
+                            </div>
+                            <div class="text-center p-4">
+                                <h5 class="mb-3" th:text="${course.title}">Course Title</h5>
+                                <p class="mb-4" th:text="${course.description}">Course Description</p>
+                                <div class="d-flex border-top">
+                                    <small class="flex-fill text-center border-end py-2"><i
+                                            class="fa fa-user-tie text-primary me-2"></i><span
+                                            th:text="${course.instructorName}">Instructor</span></small>
+                                    <small class="flex-fill text-center border-end py-2"><i
+                                            class="fa fa-clock text-primary me-2"></i><span
+                                            th:text="${course.durationHours + ' Hrs'}">1.49 Hrs</span></small>
+                                    <small class="flex-fill text-center py-2"><i
+                                            class="fa fa-user text-primary me-2"></i><span
+                                            th:text="${course.totalStudents + ' Students'}">30 Students</span></small>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!--fragment for #testimonial-section-->
-    <div class="container-xxl py-5 wow fadeInUp" id="testimonial-section" data-wow-delay="0.2s">
-        <div class="container">
-            <div class="text-center">
-                <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
-                <h1 class="mb-5">Our Students Say!</h1>
-            </div>
-            <div class="owl-carousel testimonial-carousel position-relative">
-                <div class="testimonial-item text-center">
-                    <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-1.jpg}" alt="Student 1" style="width: 80px; height: 80px;">
-                    <h5 class="mb-0">Mai Linh</h5>
-                    <p>Frontend Student</p>
-                    <div class="testimonial-text bg-light text-center p-4">
-                        <p class="mb-0">Lộ trình học rõ ràng, mentor phản hồi nhanh và dự án thực chiến giúp mình đi làm sớm hơn kế hoạch.</p>
-                    </div>
+        <!--fragment for #testimonial-section-->
+        <div class="container-xxl py-5 wow fadeInUp" id="testimonial-section" data-wow-delay="0.2s">
+            <div class="container">
+                <div class="text-center">
+                    <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
+                    <h1 class="mb-5">Our Students Say!</h1>
                 </div>
-                <div class="testimonial-item text-center">
-                    <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-2.jpg}" alt="Student 2" style="width: 80px; height: 80px;">
-                    <h5 class="mb-0">Quang Huy</h5>
-                    <p>Java Student</p>
-                    <div class="testimonial-text bg-light text-center p-4">
-                        <p class="mb-0">Khóa Java backend bám sát doanh nghiệp, phần code review và định hướng kiến trúc rất hữu ích.</p>
+                <div class="owl-carousel testimonial-carousel position-relative">
+                    <div class="testimonial-item text-center">
+                        <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-1.jpg}"
+                            alt="Student 1" style="width: 80px; height: 80px;">
+                        <h5 class="mb-0">Mai Linh</h5>
+                        <p>Frontend Student</p>
+                        <div class="testimonial-text bg-light text-center p-4">
+                            <p class="mb-0">Lộ trình học rõ ràng, mentor phản hồi nhanh và dự án thực chiến giúp mình đi
+                                làm sớm hơn kế hoạch.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="testimonial-item text-center">
-                    <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-3.jpg}" alt="Student 3" style="width: 80px; height: 80px;">
-                    <h5 class="mb-0">Thanh Trúc</h5>
-                    <p>Marketing Student</p>
-                    <div class="testimonial-text bg-light text-center p-4">
-                        <p class="mb-0">Case study cập nhật liên tục, nội dung không quá lý thuyết nên có thể áp dụng ngay cho công việc thực tế.</p>
+                    <div class="testimonial-item text-center">
+                        <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-2.jpg}"
+                            alt="Student 2" style="width: 80px; height: 80px;">
+                        <h5 class="mb-0">Quang Huy</h5>
+                        <p>Java Student</p>
+                        <div class="testimonial-text bg-light text-center p-4">
+                            <p class="mb-0">Khóa Java backend bám sát doanh nghiệp, phần code review và định hướng kiến
+                                trúc rất hữu ích.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="testimonial-item text-center">
-                    <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-4.jpg}" alt="Student 4" style="width: 80px; height: 80px;">
-                    <h5 class="mb-0">Đức Anh</h5>
-                    <p>UI/UX Student</p>
-                    <div class="testimonial-text bg-light text-center p-4">
-                        <p class="mb-0">Phần portfolio cuối khóa được hướng dẫn kỹ, giúp mình tự tin hơn khi phỏng vấn với doanh nghiệp.</p>
+                    <div class="testimonial-item text-center">
+                        <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-3.jpg}"
+                            alt="Student 3" style="width: 80px; height: 80px;">
+                        <h5 class="mb-0">Thanh Trúc</h5>
+                        <p>Marketing Student</p>
+                        <div class="testimonial-text bg-light text-center p-4">
+                            <p class="mb-0">Case study cập nhật liên tục, nội dung không quá lý thuyết nên có thể áp
+                                dụng ngay cho công việc thực tế.</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-item text-center">
+                        <img class="border rounded-circle p-2 mx-auto mb-3" th:src="@{/img/testimonial-4.jpg}"
+                            alt="Student 4" style="width: 80px; height: 80px;">
+                        <h5 class="mb-0">Đức Anh</h5>
+                        <p>UI/UX Student</p>
+                        <div class="testimonial-text bg-light text-center p-4">
+                            <p class="mb-0">Phần portfolio cuối khóa được hướng dẫn kỹ, giúp mình tự tin hơn khi phỏng
+                                vấn với doanh nghiệp.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script th:src="@{/js/03-home.js}"></script>
-</section>
+        <script th:src="@{/js/03-home.js}"></script>
+    </section>
 </body>
+
 </html>

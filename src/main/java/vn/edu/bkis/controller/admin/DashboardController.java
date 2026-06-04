@@ -8,22 +8,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import vn.edu.bkis.service.admin.DashboardService;
 
 @Controller
-@RequestMapping("/admin/dashboard")
+@RequestMapping("/admin")
 public class DashboardController {
 
-  private final DashboardService dashboardService;
+    private final DashboardService dashboardService;
 
-  /**
-   * Constructor
-   * @param dashboardService dashboard service.
-   */
-  public DashboardController(DashboardService dashboardService) {
-    this.dashboardService = dashboardService;
-  }
+    /**
+     * Constructor
+     * @param dashboardService dashboard service.
+     */
+    public DashboardController(DashboardService dashboardService) {
+        this.dashboardService = dashboardService;
+    }
 
-  @GetMapping("/")
-  public String dashboard(Model model) {
-    model.addAttribute("infoDto", dashboardService.getDashboardInfo());
-    return "admin/ad-01-dashboard";
-  }
+    @GetMapping(value = {"", "/dashboard"})
+    public String dashboard(Model model) {
+        model.addAttribute("infoDto", dashboardService.getDashboardInfo());
+        return "admin/ad-01-dashboard";
+    }
 }

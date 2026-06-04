@@ -13,18 +13,18 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a th:href="@{/}" class="nav-item nav-link" th:classappend="${title == 'Home'} ? ' active'">Home</a>
                 <a th:href="@{/#categories-section}" class="nav-item nav-link">Categories</a>
-                <a th:href="@{/#courses-section}" class="nav-item nav-link" th:classappend="${title == 'Courses'} ? ' active'">Courses</a>
-                <a th:href="@{/#courses-section}" class="nav-item nav-link">Đăng ký</a>
+                <a th:href="@{/#courses-section}" class="nav-item nav-link" th:classappend="${title == 'Courses'} ? ' active'">Khóa học</a>
+<!--                <a th:href="@{/#courses-section}" class="nav-item nav-link">Đăng ký</a>-->
                 <a th:href="@{/my-courses}" class="nav-item nav-link" th:classappend="${title == 'Khóa học của bạn'} ? ' active'">Khóa học của bạn</a>
-                <a th:href="@{/#courses-section}" class="nav-item nav-link">Thanh toán</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu fade-down m-0">
-                        <a th:href="@{/#java-courses-section}" class="dropdown-item">Java Courses</a>
-                        <a th:href="@{/#testimonial-section}" class="dropdown-item">Testimonial</a>
-                        <a th:href="@{/login}" class="dropdown-item">Login</a>
-                    </div>
-                </div>
+<!--                <a th:href="@{/#courses-section}" class="nav-item nav-link">Thanh toán</a>-->
+<!--                <div class="nav-item dropdown">-->
+<!--                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>-->
+<!--                    <div class="dropdown-menu fade-down m-0">-->
+<!--                        <a th:href="@{/#java-courses-section}" class="dropdown-item">Java Courses</a>-->
+<!--                        <a th:href="@{/#testimonial-section}" class="dropdown-item">Testimonial</a>-->
+<!--                        <a th:href="@{/login}" class="dropdown-item">Login</a>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <a th:href="@{/#contact-section}" class="nav-item nav-link">Contact</a>
             </div>
             <a sec:authorize="isAnonymous()" th:href="@{/#courses-section}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a>

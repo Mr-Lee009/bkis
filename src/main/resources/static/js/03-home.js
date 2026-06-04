@@ -1,7 +1,7 @@
 (function ($) {
     "use strict";
 
-    // Khởi tạo slider tin khóa học riêng cho trang chủ với 1 item ở mobile và 2 item ở desktop.
+    // Khoi tao slider tin khoa hoc rieng cho trang chu voi 1 item o mobile va 2 item o desktop.
     $(".hot-news-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 900,
@@ -23,7 +23,7 @@
         }
     });
 
-    // Khởi tạo slider cảm nhận học viên chỉ dùng ở trang chủ.
+    // Khoi tao slider cam nhan hoc vien chi dung o trang chu.
     $(".testimonial-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 1000,
