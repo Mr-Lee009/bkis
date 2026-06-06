@@ -47,3 +47,6 @@ dev.env
 dev.evn
 *.env
 !*.env.example
+
+### source ###
+./uploads/rource

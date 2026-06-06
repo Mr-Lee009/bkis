@@ -1,0 +1,78 @@
+body[data-theme="dark"] {
+    background: #10151f;
+    color: #e9eefb;
+}
+
+body[data-theme="dark"] .text-muted {
+    color: #a6b0c6 !important;
+}
+
+body[data-theme="dark"] .bg-light {
+    background-color: #1a2335 !important;
+}
+
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .modal-content,
+body[data-theme="dark"] .dropdown-menu,
+body[data-theme="dark"] .table,
+body[data-theme="dark"] .table > :not(caption) > * > *,
+body[data-theme="dark"] .list-group-item,
+body[data-theme="dark"] .accordion-item {
+    background: #182033 !important;
+    color: #e9eefb !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body[data-theme="dark"] .card-header,
+body[data-theme="dark"] .card-footer,
+body[data-theme="dark"] .modal-header,
+body[data-theme="dark"] .modal-footer,
+body[data-theme="dark"] .accordion-button {
+    background: #1a2335 !important;
+    color: #e9eefb !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body[data-theme="dark"] .form-control,
+body[data-theme="dark"] .form-select,
+body[data-theme="dark"] .input-group-text {
+    background: #121a2a;
+    color: #e9eefb;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+body[data-theme="dark"] .form-control::placeholder {
+    color: #93a0bc;
+}
+
+body[data-theme="dark"] .btn-outline-secondary,
+body[data-theme="dark"] .btn-outline-primary,
+body[data-theme="dark"] .btn-outline-danger,
+body[data-theme="dark"] .btn-outline-light {
+    color: #d6def2;
+    border-color: rgba(255, 255, 255, 0.24);
+}
+
+body[data-theme="dark"] .badge.bg-light {
+    background: #243048 !important;
+    color: #e9eefb !important;
+}
+
+body[data-theme="dark"] .page-link {
+    background: #182033;
+    color: #e9eefb;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+body[data-theme="dark"] .page-item.active .page-link {
+    background: #06bbcc;
+    border-color: #06bbcc;
+    color: #0f1522;
+}
+
+.theme-toggle-floating {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1080;
+}

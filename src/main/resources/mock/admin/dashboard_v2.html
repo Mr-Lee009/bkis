@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <title>Dashboard V2 - eLEARNING</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="../img/favicon.ico" rel="icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="admin.css" rel="stylesheet">
+    <link href="../theme-toggle.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid dashboard-v2">
+        <div class="row">
+            <aside class="col-md-3 col-lg-2 sidebar py-4">
+                <div class="px-3 mb-4">
+                    <h4 class="text-white mb-0"><i class="fa fa-graduation-cap me-2"></i>eLEARNING</h4>
+                    <small class="text-muted">Admin Panel</small>
+                </div>
+                <div class="sidebar-user text-center">
+                    <img src="../img/testimonial-1.jpg" alt="Admin Avatar" class="sidebar-avatar">
+                    <strong class="d-block">Nguyen Admin</strong>
+                    <span class="user-role-pill">Super Admin</span>
+                    <small>admin@elearning.vn</small>
+                </div>
+                <a href="dashboard_v2.html" class="active"><i class="fa fa-chart-line me-2"></i>Dashboard</a>
+                <a href="accounts.html"><i class="fa fa-users-cog me-2"></i>Tài khoản</a>
+                <a href="student.html"><i class="fa fa-user-graduate me-2"></i>Học viên</a>
+                <a href="courses.html"><i class="fa fa-book-open me-2"></i>Khóa học</a>
+                <a href="payments.html"><i class="fa fa-credit-card me-2"></i>Thanh toán</a>
+                <a href="settings.html"><i class="fa fa-cog me-2"></i>Cài đặt</a>
+            </aside>
+
+            <main class="col-md-9 col-lg-10 p-4">
+                <div class="dashboard-v2-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                    <div>
+                        <span class="section-eyebrow">Dashboard V2</span>
+                        <h2 class="mb-1">Tổng quan vận hành học viện</h2>
+                        <small class="text-muted">Ưu tiên số 1: doanh thu, đơn hàng và các việc cần xử lý trong ngày.</small>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-secondary"><i class="fa fa-calendar-alt me-2"></i>Tháng 05/2026</button>
+                        <button class="btn btn-primary"><i class="fa fa-file-export me-2"></i>Xuất báo cáo</button>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="metric-card">
+                            <div class="metric-icon bg-success-subtle text-success"><i class="fa fa-wallet"></i></div>
+                            <p class="text-muted mb-1">Doanh thu thực thu</p>
+                            <h3>1,248,000,000đ</h3>
+                            <span class="trend-badge positive"><i class="fa fa-arrow-up"></i> 18.4% với tháng trước</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="metric-card">
+                            <div class="metric-icon bg-primary-subtle text-primary"><i class="fa fa-receipt"></i></div>
+                            <p class="text-muted mb-1">Đơn hàng thành công</p>
+                            <h3>3,482</h3>
+                            <span class="trend-badge positive"><i class="fa fa-arrow-up"></i> 9.8% MoM</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="metric-card">
+                            <div class="metric-icon bg-info-subtle text-info"><i class="fa fa-user-plus"></i></div>
+                            <p class="text-muted mb-1">Học viên mới</p>
+                            <h3>1,126</h3>
+                            <span class="trend-badge positive"><i class="fa fa-arrow-up"></i> 6.2% MoM</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="metric-card">
+                            <div class="metric-icon bg-warning-subtle text-warning"><i class="fa fa-bullseye"></i></div>
+                            <p class="text-muted mb-1">Tỷ lệ chuyển đổi</p>
+                            <h3>7.6%</h3>
+                            <span class="trend-badge negative"><i class="fa fa-arrow-down"></i> 1.1% cần theo dõi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-xl-7">
+                        <section class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <div>
+                                    <h5 class="mb-0">Doanh thu theo ngày</h5>
+                                    <small class="text-muted">Biến động thực thu sau chiết khấu</small>
+                                </div>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-primary">Ngày</button>
+                                    <button class="btn btn-outline-secondary">Tuần</button>
+                                    <button class="btn btn-outline-secondary">Tháng</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="revenue-chart" aria-label="Biểu đồ đường doanh thu">
+                                    <svg viewBox="0 0 720 260" role="img">
+                                        <polyline class="chart-grid" points="0,210 720,210"></polyline>
+                                        <polyline class="chart-grid" points="0,150 720,150"></polyline>
+                                        <polyline class="chart-grid" points="0,90 720,90"></polyline>
+                                        <polyline class="chart-area" points="0,220 0,178 90,164 180,188 270,128 360,140 450,92 540,112 630,64 720,78 720,220"></polyline>
+                                        <polyline class="chart-line" points="0,178 90,164 180,188 270,128 360,140 450,92 540,112 630,64 720,78"></polyline>
+                                        <circle cx="630" cy="64" r="6"></circle>
+                                        <circle cx="720" cy="78" r="6"></circle>
+                                    </svg>
+                                </div>
+                                <div class="d-flex justify-content-between text-muted small mt-2">
+                                    <span>01/05</span>
+                                    <span>08/05</span>
+                                    <span>15/05</span>
+                                    <span>22/05</span>
+                                    <span>31/05</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-xl-5">
+                        <section class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Phễu bán hàng</h5>
+                                <small class="text-muted">Từ lượt xem khóa học đến thanh toán thành công</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="funnel-step" style="--width: 100%;">
+                                    <span>Lượt xem khóa học</span><strong>84,200</strong>
+                                </div>
+                                <div class="funnel-step" style="--width: 68%;">
+                                    <span>Thêm vào giỏ</span><strong>18,430</strong>
+                                </div>
+                                <div class="funnel-step warning" style="--width: 43%;">
+                                    <span>Bắt đầu thanh toán</span><strong>9,870</strong>
+                                </div>
+                                <div class="funnel-step success" style="--width: 31%;">
+                                    <span>Thành công</span><strong>6,412</strong>
+                                </div>
+                                <div class="alert alert-warning py-2 px-3 mb-0">
+                                    <i class="fa fa-exclamation-circle me-2"></i>Rơi nhiều nhất ở bước thanh toán: cần kiểm tra mã giảm giá và cổng VNPay.
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-xl-4">
+                        <section class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Nguồn học viên</h5>
+                                <small class="text-muted">Tỷ trọng đăng ký mới theo kênh</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="source-donut mx-auto mb-3">
+                                    <span>1,126<br><small>học viên</small></span>
+                                </div>
+                                <div class="source-list">
+                                    <div><span class="dot organic"></span>Organic <strong>42%</strong></div>
+                                    <div><span class="dot social"></span>Social <strong>24%</strong></div>
+                                    <div><span class="dot paid"></span>Paid Ads <strong>21%</strong></div>
+                                    <div><span class="dot referral"></span>Referral <strong>13%</strong></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-xl-8">
+                        <section class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <div>
+                                    <h5 class="mb-0">Top khóa học</h5>
+                                    <small class="text-muted">Xếp hạng theo số đơn và doanh thu</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary">Xem tất cả</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Khóa học</th>
+                                                <th>Đơn hàng</th>
+                                                <th>Doanh thu</th>
+                                                <th>Rating</th>
+                                                <th>Hoàn thành</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Java Spring Boot Pro</strong><br><small class="text-muted">Backend</small></td>
+                                                <td>842</td>
+                                                <td>368,000,000đ</td>
+                                                <td><span class="text-warning">★</span> 4.8</td>
+                                                <td>
+                                                    <div class="progress progress-mini"><div class="progress-bar bg-success" style="width: 82%"></div></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Data Analyst Foundation</strong><br><small class="text-muted">Data</small></td>
+                                                <td>614</td>
+                                                <td>214,000,000đ</td>
+                                                <td><span class="text-warning">★</span> 4.7</td>
+                                                <td>
+                                                    <div class="progress progress-mini"><div class="progress-bar bg-primary" style="width: 76%"></div></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Frontend Sprint</strong><br><small class="text-muted">Web</small></td>
+                                                <td>488</td>
+                                                <td>176,000,000đ</td>
+                                                <td><span class="text-warning">★</span> 4.6</td>
+                                                <td>
+                                                    <div class="progress progress-mini"><div class="progress-bar bg-info" style="width: 69%"></div></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-4">
+                        <section class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Chất lượng nội dung</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="quality-grid">
+                                    <div>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <strong>4.72/5</strong>
+                                        <span>Rating trung bình</span>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-check-circle text-success"></i>
+                                        <strong>73%</strong>
+                                        <span>Tỷ lệ hoàn thành</span>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-stopwatch text-primary"></i>
+                                        <strong>42 phút</strong>
+                                        <span>Xem hết 1 chương</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <section class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Học viên hoạt động</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="engagement-row">
+                                    <span><i class="fa fa-circle text-success me-2"></i>Đang online</span>
+                                    <strong>286</strong>
+                                </div>
+                                <div class="engagement-row">
+                                    <span><i class="fa fa-calendar-week text-primary me-2"></i>WAU</span>
+                                    <strong>8,940</strong>
+                                </div>
+                                <div class="study-time mt-3">
+                                    <span>Khung giờ học phổ biến</span>
+                                    <strong>20:00 - 22:00</strong>
+                                </div>
+                                <div class="device-split mt-3">
+                                    <div style="width: 58%">Mobile 58%</div>
+                                    <div style="width: 42%">Desktop 42%</div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <section class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Tương tác cần xử lý</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="action-item urgent">
+                                    <div><strong>32 câu hỏi</strong><span>Chưa có giảng viên trả lời</span></div>
+                                    <button class="btn btn-sm btn-outline-danger">Xử lý</button>
+                                </div>
+                                <div class="action-item">
+                                    <div><strong>118 bài tập</strong><span>Đang chờ chấm điểm</span></div>
+                                    <button class="btn btn-sm btn-outline-primary">Mở hàng đợi</button>
+                                </div>
+                                <div class="action-item">
+                                    <div><strong>14 bình luận</strong><span>Cần kiểm duyệt nội dung</span></div>
+                                    <button class="btn btn-sm btn-outline-secondary">Duyệt</button>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1 mb-4">
+                    <div class="col-xl-8">
+                        <section class="card border-0 shadow-sm">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Đơn hàng gần đây</h5>
+                                <button class="btn btn-sm btn-outline-secondary">Lọc giao dịch</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Học viên</th>
+                                                <th>Khóa học</th>
+                                                <th>Số tiền</th>
+                                                <th>Trạng thái</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Minh Anh<br><small class="text-muted">08/05/2026 09:24</small></td>
+                                                <td>Java Spring Boot Pro</td>
+                                                <td><strong>2,490,000đ</strong></td>
+                                                <td><span class="badge bg-success">Đã thanh toán</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Quang Huy<br><small class="text-muted">08/05/2026 09:08</small></td>
+                                                <td>Data Analyst Foundation</td>
+                                                <td><strong>1,890,000đ</strong></td>
+                                                <td><span class="badge bg-warning text-dark">Chờ đối soát</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Thảo Vy<br><small class="text-muted">08/05/2026 08:41</small></td>
+                                                <td>Frontend Sprint</td>
+                                                <td><strong>1,590,000đ</strong></td>
+                                                <td><span class="badge bg-danger">Refund</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Hoàng Nam<br><small class="text-muted">08/05/2026 08:15</small></td>
+                                                <td>UX Writing Master</td>
+                                                <td><strong>990,000đ</strong></td>
+                                                <td><span class="badge bg-success">Đã thanh toán</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <section class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Thông báo hệ thống</h5>
+                                <small class="text-muted">Các việc vận hành cần ưu tiên</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="operation-feed">
+                                    <div class="feed-item danger">
+                                        <strong>2 yêu cầu rút tiền</strong>
+                                        <span>Giảng viên đang chờ duyệt payout.</span>
+                                    </div>
+                                    <div class="feed-item warning">
+                                        <strong>5 đánh giá tiêu cực</strong>
+                                        <span>Cần phản hồi trong hôm nay.</span>
+                                    </div>
+                                    <div class="feed-item">
+                                        <strong>VNPay timeout tăng</strong>
+                                        <span>Tỷ lệ lỗi 2.8% trong 60 phút gần nhất.</span>
+                                    </div>
+                                    <div class="feed-item success">
+                                        <strong>Chiến dịch Social tốt</strong>
+                                        <span>CR cao hơn Organic 1.4 điểm.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../theme-toggle.js"></script>
+</body>
+
+</html>
