@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-common(pageTitle=${pageTitle})}">
+<head>
+    <title>[[${pageTitle}]]</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Đăng ký khóa học</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" th:href="@{/}">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" th:href="@{/courses/{id}(id=${signupPage.courseId})}">Course Detail</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Signup</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-7">
+                    <div class="bg-light rounded p-4">
+                        <div class="alert alert-danger d-flex align-items-start gap-2" role="alert"
+                             th:if="${errorMessage != null}">
+                            <i class="fa fa-exclamation-triangle mt-1"></i>
+                            <span th:text="${errorMessage}">Không thể đăng ký khóa học.</span>
+                        </div>
+                        <div class="alert alert-info d-flex align-items-start gap-2" role="alert"
+                             th:if="${signupPage.alreadyEnrolled}">
+                            <i class="fa fa-check-circle mt-1"></i>
+                            <span>Bạn đã đăng ký khóa học này. Bạn có thể tiếp tục học khi trang học được kích hoạt.</span>
+                        </div>
+                        <form th:action="@{/courses/{id}/signup(id=${signupPage.courseId})}"
+                              th:object="${signupForm}"
+                              method="post">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Họ tên</label>
+                                    <input type="text" class="form-control" th:value="${signupPage.studentFullName}" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" th:value="${signupPage.studentEmail}" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="text" class="form-control" th:field="*{phone}" placeholder="09xx xxx xxx">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Khóa học</label>
+                                    <input type="text" class="form-control" th:value="${signupPage.courseTitle}" readonly>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Mục tiêu học tập</label>
+                                    <textarea class="form-control" rows="4"
+                                              th:field="*{learningGoal}"
+                                              placeholder="Chia sẻ ngắn về kỳ vọng của bạn..."></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Hình thức học</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" th:field="*{learningMode}" value="ONLINE_SELF_PACED">
+                                        <label class="form-check-label">Online self-paced</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" th:field="*{learningMode}" value="HYBRID_MENTOR">
+                                        <label class="form-check-label">Hybrid + mentor</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Mã ưu đãi</label>
+                                    <input type="text" class="form-control" th:field="*{couponCode}" placeholder="Nhập coupon nếu có">
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" th:field="*{acceptedTerms}">
+                                        <label class="form-check-label">
+                                            Tôi đồng ý với điều khoản dịch vụ và chính sách bảo mật.
+                                        </label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100 py-3">
+                                        Hoàn tất đăng ký khóa học
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="border rounded p-4 mb-4">
+                        <img class="img-fluid rounded mb-3" th:src="${signupPage.courseImageUrl}" th:alt="${signupPage.courseTitle}">
+                        <h4 class="mb-2" th:text="${signupPage.courseTitle}">Course title</h4>
+                        <p class="text-muted" th:text="${#strings.abbreviate(signupPage.courseDescription, 160)}">Course description</p>
+                        <h3 class="text-primary mb-0" th:text="${'$' + #numbers.formatDecimal(signupPage.price, 1, 'COMMA', 2, 'POINT')}">$0.00</h3>
+                    </div>
+                    <div class="border rounded p-4 mb-4">
+                        <h5 class="mb-3">Quyền lợi khi đăng ký</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fa fa-check text-primary me-2"></i>Truy cập toàn bộ video sau khi được kích hoạt.</li>
+                            <li class="mb-2"><i class="fa fa-check text-primary me-2"></i>Tài liệu học tập đi kèm khóa học.</li>
+                            <li class="mb-2"><i class="fa fa-check text-primary me-2"></i>Theo dõi tiến độ học tập cá nhân.</li>
+                            <li class="mb-0"><i class="fa fa-check text-primary me-2"></i>Hỗ trợ từ đội ngũ mentor.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-light rounded p-4">
+                        <h5 class="mb-3">Cần hỗ trợ?</h5>
+                        <p class="mb-2"><i class="fa fa-phone text-primary me-2"></i>Hotline: 1900 6868</p>
+                        <p class="mb-2"><i class="fa fa-envelope text-primary me-2"></i>admissions@elearning.dev</p>
+                        <p class="mb-0"><i class="fa fa-comments text-primary me-2"></i>Live chat từ 9h - 22h</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

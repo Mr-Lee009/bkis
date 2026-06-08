@@ -1,6 +1,7 @@
 package vn.edu.bkis.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.Value;
 
 @Value
@@ -13,4 +14,5 @@ public class CourseSignupPageDto {
     String studentFullName;
     String studentEmail;
     boolean alreadyEnrolled;
+    List<CoursePaymentGatewayDto> paymentGateways;
 }

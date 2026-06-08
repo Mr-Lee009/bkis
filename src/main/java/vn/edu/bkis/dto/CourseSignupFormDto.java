@@ -8,5 +8,6 @@ public class CourseSignupFormDto {
     private String learningGoal;
     private String learningMode;
     private String couponCode;
+    private String paymentMethod;
     private boolean acceptedTerms;
 }
