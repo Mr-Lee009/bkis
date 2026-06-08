@@ -48,24 +48,19 @@ INSERT INTO lesson_videos (lesson_id, title, video_url, duration, position, is_p
 (3, 'JPA and Entity Mapping', 'https://example.com/videos/spring-db-1.mp4', 550, 1, 0, NOW(), NOW()),
 (3, 'CRUD Operations with Repository', 'https://example.com/videos/spring-db-2.mp4', 480, 2, 0, NOW(), NOW());
 
--- 6. Insert Payments for Students
-INSERT INTO payments (student_id, course_id, amount, status, created_at, updated_at) VALUES
-('studentDto-001', @course_id, 149.99, 'COMPLETED', NOW(), NOW()),
-('studentDto-002', @course_id, 149.99, 'COMPLETED', NOW(), NOW()),
-('studentDto-003', @course_id, 149.99, 'COMPLETED', NOW(), NOW());
+-- 6. Insert Payment Transactions for Students
+INSERT INTO payment_transaction (payment_code, order_id, student_id, course_id, provider, amount, currency, status, created_at, updated_at) VALUES
+('PAY-SQL-0001', 'ORDER-SQL-0001', 'studentDto-001', @course_id, 'VNPAY', 149.99, 'VND', 'COMPLETED', NOW(), NOW()),
+('PAY-SQL-0002', 'ORDER-SQL-0002', 'studentDto-002', @course_id, 'MOMO', 149.99, 'VND', 'COMPLETED', NOW(), NOW()),
+('PAY-SQL-0003', 'ORDER-SQL-0003', 'studentDto-003', @course_id, 'STRIPE', 149.99, 'VND', 'COMPLETED', NOW(), NOW());
 
-select * from payments;
-
--- Get payment IDs for enrollments
-SET @payment_id_1 = LAST_INSERT_ID() - 2;
-SET @payment_id_2 = LAST_INSERT_ID() - 1;
-SET @payment_id_3 = LAST_INSERT_ID();
+select * from payment_transaction;
 
 -- 7. Insert Enrollments (Link studentDtos to course)
-INSERT INTO enrollments (student_id, course_id, payment_id, status, enrolled_at, expires_at, created_at, updated_at) VALUES
-('studentDto-001', @course_id, 2, 'ACTIVE', NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), NOW(), NOW()),
-('studentDto-002', @course_id, 3, 'ACTIVE', NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), NOW(), NOW()),
-('studentDto-003', @course_id, 4, 'ACTIVE', NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), NOW(), NOW());
+INSERT INTO enrollments (student_id, course_id, payment_code, status, enrolled_at, expires_at, created_at, updated_at) VALUES
+('studentDto-001', @course_id, 'PAY-SQL-0001', 'ACTIVE', NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), NOW(), NOW()),
+('studentDto-002', @course_id, 'PAY-SQL-0002', 'ACTIVE', NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), NOW(), NOW()),
+('studentDto-003', @course_id, 'PAY-SQL-0003', 'ACTIVE', NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), NOW(), NOW());
 
 -- 8. Insert Progress (Student watching videos)
 INSERT INTO progress (student_id, lesson_video_id, watched_duration, is_completed, created_at, updated_at) VALUES
@@ -93,7 +88,7 @@ INSERT INTO course_reviews ( student_id,course_id, rating, comment, created_at, 
 -- Course: Java Spring Boot Masterclass - $149.99 (3 studentDtos enrolled)
 -- Lessons: 3 lessons with 6 videos total
 -- Enrollments: 3 active enrollments
--- Payments: 3 completed payments
+-- Payment Transactions: 3 completed payments
 -- Progress: Various studentDtos watching videos
 -- Reviews: 2 course reviews
 -- =============================================

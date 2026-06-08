@@ -78,52 +78,62 @@ create table lesson_videos
 create index idx_lesson_videos_lesson_id on lesson_videos (lesson_id);
 create index idx_lessons_course_id on lessons (course_id);
 
-create table payments
+create table payment_gateway_config
 (
-    id         bigint auto_increment primary key,
-    student_id char(36)                                not null,
-    course_id  bigint                                  not null,
-    amount     decimal(10, 2)                          not null,
-    status     enum ('PENDING', 'COMPLETED', 'FAILED') not null,
-    created_by char(36)                                null,
-    updated_by char(36)                                null,
-    created_at timestamp default CURRENT_TIMESTAMP     null,
-    updated_at timestamp default CURRENT_TIMESTAMP     null on update CURRENT_TIMESTAMP,
-    constraint payments_ibfk_1
-        foreign key (course_id) references courses (id)
+    id                bigint auto_increment primary key,
+    provider          varchar(20)                          not null,
+    enabled           tinyint(1) default 1                 not null,
+    environment       varchar(20)                          not null,
+    merchant_code     varchar(100)                         null,
+    endpoint_base_url varchar(255)                         not null,
+    create_api_path   varchar(255)                         null,
+    query_api_path    varchar(255)                         null,
+    return_url        varchar(255)                         not null,
+    callback_url      varchar(255)                         not null,
+    secret_ref        varchar(255)                         not null,
+    timeout_seconds   int        default 15                not null,
+    priority          int        default 100               not null,
+    config_json       json                                 null,
+    created_at        timestamp  default CURRENT_TIMESTAMP not null,
+    updated_at        timestamp  default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+    constraint uk_payment_gateway_provider unique (provider)
+)
+    comment 'Store payment gateway configuration for checkout and webhooks';
+
+create table payment_transaction
+(
+    id                     bigint auto_increment primary key,
+    payment_code           varchar(64)                          not null,
+    order_id               varchar(64)                          not null,
+    student_id             char(36)                             not null,
+    course_id              bigint                               not null,
+    provider               varchar(20)                          not null,
+    gateway_txn_ref        varchar(100)                         null,
+    gateway_transaction_no varchar(100)                         null,
+    amount                 decimal(19, 2)                       not null,
+    currency               varchar(10) default 'VND'            not null,
+    status                 varchar(20)                          not null,
+    payment_url            text                                 null,
+    request_payload        json                                 null,
+    response_payload       json                                 null,
+    callback_payload       json                                 null,
+    fail_reason            varchar(255)                         null,
+    paid_at                timestamp                            null,
+    created_at             timestamp  default CURRENT_TIMESTAMP not null,
+    updated_at             timestamp  default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
+    constraint uk_payment_code unique (payment_code),
+    constraint fk_payment_transaction_course foreign key (course_id) references courses (id)
 )
     comment 'Store payment transactions for course purchases';
 
-create index course_id
-    on payments (course_id);
+create index idx_payment_course_id
+    on payment_transaction (course_id);
 
-create table payment_gateways
-(
-    id                      bigint auto_increment primary key,
-    code                    varchar(50)                          not null,
-    display_name            varchar(150)                         not null,
-    provider_type           varchar(50)                          not null,
-    description             varchar(500)                         null,
-    merchant_id             varchar(150)                         null,
-    partner_code            varchar(150)                         null,
-    secret_key              varchar(500)                         null,
-    payment_endpoint        varchar(500)                         null,
-    return_url              varchar(500)                         null,
-    webhook_url             varchar(500)                         null,
-    ip_allowlist            text                                 null,
-    enabled                 tinyint(1) default 1                 null,
-    sandbox_mode            tinyint(1) default 0                 null,
-    routing_priority        int        default 99                null,
-    transaction_fee_percent decimal(8, 2) default 0              null,
-    success_rate_percent    decimal(8, 2) default 0              null,
-    status                  varchar(30)                          not null,
-    created_by              char(36)                             null,
-    updated_by              char(36)                             null,
-    created_at              timestamp  default CURRENT_TIMESTAMP null,
-    updated_at              timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
-    constraint uq_payment_gateways_code unique (code)
-)
-    comment 'Store payment gateway configuration for checkout and webhooks';
+create index idx_payment_order_id
+    on payment_transaction (order_id);
+
+create index idx_payment_provider_ref
+    on payment_transaction (provider, gateway_txn_ref);
 
 create table progress
 (
@@ -193,10 +203,10 @@ alter table course_reviews
     add index idx_course_reviews_student_id (student_id),
     add constraint fk_course_reviews_student foreign key (student_id) references users (id);
 
--- Link payments.student_id to users
-alter table payments
-    add index idx_payments_student_id (student_id),
-    add constraint fk_payments_student foreign key (student_id) references users (id);
+-- Link payment_transaction.student_id to users
+alter table payment_transaction
+    add index idx_payment_student_id (student_id),
+    add constraint fk_payment_transaction_student foreign key (student_id) references users (id);
 
 -- Link progress.student_id to users
 alter table progress
@@ -209,7 +219,7 @@ create table enrollments
     id          bigint auto_increment primary key,
     student_id  char(36)                              not null,
     course_id   bigint                                not null,
-    payment_id  bigint                                null,
+    payment_code varchar(64)                          null,
     status      enum ('ACTIVE','CANCELLED','EXPIRED') not null default 'ACTIVE',
     enrolled_at timestamp default CURRENT_TIMESTAMP   null,
     expires_at  timestamp                             null,
@@ -220,9 +230,10 @@ create table enrollments
     constraint uq_enrollments_student_course unique (student_id, course_id),
     constraint fk_enrollments_student foreign key (student_id) references users (id),
     constraint fk_enrollments_course foreign key (course_id) references courses (id),
-    constraint fk_enrollments_payment foreign key (payment_id) references payments (id)
+    constraint fk_enrollments_payment_code foreign key (payment_code) references payment_transaction (payment_code)
 )
     comment 'Grant course access for a studentDto (based on payment).';
 
 create index idx_enrollments_course_id on enrollments (course_id);
 create index idx_enrollments_student_id on enrollments (student_id);
+create index idx_enrollments_payment_code on enrollments (payment_code);

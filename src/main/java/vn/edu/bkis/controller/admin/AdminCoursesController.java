@@ -122,7 +122,7 @@ public class AdminCoursesController {
             boolean deleted = adminCourseManagementService.deleteOrArchiveCourse(courseId);
             redirectAttributes.addFlashAttribute(
                 "successMessage",
-                deleted ? "Course deleted successfully." : "Course has enrollments or payments, so it was hidden instead."
+                deleted ? "Course deleted successfully." : "Course has enrollments or payment transactions, so it was hidden instead."
             );
             return "redirect:/admin/courses/";
         } catch (IllegalArgumentException ex) {

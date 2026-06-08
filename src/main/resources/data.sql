@@ -39,15 +39,15 @@ INSERT INTO lesson_videos (lesson_id, title, video_url, duration, position, is_p
 (3, 'JPA and Entity Mapping', 'https://example.com/videos/spring-db-1.mp4', 550, 1, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (3, 'CRUD Operations with Repository', 'https://example.com/videos/spring-db-2.mp4', 480, 2, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO payments (student_id, course_id, amount, status, created_at, updated_at) VALUES
-('studentDto-001', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('studentDto-002', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('studentDto-003', 1, 149.99, 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO payment_transaction (payment_code, order_id, student_id, course_id, provider, amount, currency, status, created_at, updated_at) VALUES
+('PAY-H2-0001', 'ORDER-H2-0001', 'studentDto-001', 1, 'VNPAY', 149.99, 'VND', 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('PAY-H2-0002', 'ORDER-H2-0002', 'studentDto-002', 1, 'MOMO', 149.99, 'VND', 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('PAY-H2-0003', 'ORDER-H2-0003', 'studentDto-003', 1, 'STRIPE', 149.99, 'VND', 'COMPLETED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO enrollments (student_id, course_id, payment_id, status, enrolled_at, expires_at, created_at, updated_at) VALUES
-('studentDto-001', 1, 1, 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('studentDto-002', 1, 2, 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('studentDto-003', 1, 3, 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO enrollments (student_id, course_id, payment_code, status, enrolled_at, expires_at, created_at, updated_at) VALUES
+('studentDto-001', 1, 'PAY-H2-0001', 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-002', 1, 'PAY-H2-0002', 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('studentDto-003', 1, 'PAY-H2-0003', 'ACTIVE', CURRENT_TIMESTAMP, DATEADD('YEAR', 1, CURRENT_TIMESTAMP), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO progress (student_id, lesson_video_id, watched_duration, is_completed, created_at, updated_at) VALUES
 ('studentDto-001', 1, 450, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

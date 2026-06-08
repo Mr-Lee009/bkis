@@ -84,7 +84,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
         ) enroll_stats ON enroll_stats.course_id = c.id
         LEFT JOIN (
             SELECT course_id, SUM(CASE WHEN status = 'COMPLETED' THEN amount ELSE 0 END) AS revenue
-            FROM payments
+            FROM payment_transaction
             GROUP BY course_id
         ) payment_stats ON payment_stats.course_id = c.id
         LEFT JOIN (
@@ -197,7 +197,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             SELECT course_id,
                    SUM(CASE WHEN status = 'COMPLETED' THEN amount ELSE 0 END) AS revenue,
                    COUNT(*) AS payment_count
-            FROM payments
+            FROM payment_transaction
             GROUP BY course_id
         ) payment_stats ON payment_stats.course_id = c.id
         LEFT JOIN (
@@ -218,6 +218,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query(value = "SELECT COUNT(*) FROM enrollments en WHERE en.course_id = :courseId", nativeQuery = true)
     long countEnrollmentsByCourseId(@Param("courseId") Long courseId);
 
-    @Query(value = "SELECT COUNT(*) FROM payments p WHERE p.course_id = :courseId", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM payment_transaction pt WHERE pt.course_id = :courseId", nativeQuery = true)
     long countPaymentsByCourseId(@Param("courseId") Long courseId);
 }

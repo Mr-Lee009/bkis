@@ -49,10 +49,13 @@ entity "lesson_videos" as lesson_videos {
   updated_at : TIMESTAMP
 }
 
-entity "payments" as payments {
+entity "payment_transaction" as payment_transaction {
   *id : BIGINT
+  payment_code : VARCHAR(64)
+  order_id : VARCHAR(64)
   student_id : CHAR(36)
   course_id : BIGINT
+  provider : VARCHAR(20)
   amount : DECIMAL
   status : ENUM
   created_by : CHAR(36)
@@ -90,7 +93,7 @@ entity "enrollments" as enrollments {
   *id : BIGINT
   student_id : CHAR(36)
   course_id : BIGINT
-  payment_id : BIGINT
+  payment_code : VARCHAR(64)
   status : ENUM
   enrolled_at : TIMESTAMP
   expires_at : TIMESTAMP
@@ -104,12 +107,12 @@ entity "enrollments" as enrollments {
 users ||--o{ courses : "teaches"
 courses ||--o{ lessons : "has"
 lessons ||--o{ lesson_videos : "contains"
-users ||--o{ payments : "makes"
-courses ||--o{ payments : "purchased in"
+users ||--o{ payment_transaction : "makes"
+courses ||--o{ payment_transaction : "purchased in"
 lesson_videos ||--o{ progress : "progress"
 courses ||--o{ course_reviews : "reviewed by"
 users ||--o{ course_reviews : "writes"
 users ||--o{ enrollments : "enrolls"
 courses ||--o{ enrollments : "has"
-payments ||--o{ enrollments : "grants"
+payment_transaction ||--o{ enrollments : "grants"
 @enduml

@@ -47,17 +47,17 @@ ON DUPLICATE KEY UPDATE
     is_preview = VALUES(is_preview),
     updated_at = NOW();
 
-INSERT INTO payments (id, student_id, course_id, amount, status, created_by, updated_by, created_at, updated_at)
+INSERT INTO payment_transaction (id, payment_code, order_id, student_id, course_id, provider, amount, currency, status, created_by, updated_by, created_at, updated_at)
 VALUES
-    (1, '00000000-0000-0000-0000-000000000003', 1, 149.00, 'COMPLETED', 'system', 'system', NOW(), NOW())
+    (1, 'PAY-DEMO-0001', 'ORDER-DEMO-0001', '00000000-0000-0000-0000-000000000003', 1, 'VNPAY', 149.00, 'VND', 'COMPLETED', 'system', 'system', NOW(), NOW())
 ON DUPLICATE KEY UPDATE
     amount = VALUES(amount),
     status = VALUES(status),
     updated_at = NOW();
 
-INSERT INTO enrollments (id, student_id, course_id, payment_id, status, enrolled_at, expires_at, created_by, updated_by, created_at, updated_at)
+INSERT INTO enrollments (id, student_id, course_id, payment_code, status, enrolled_at, expires_at, created_by, updated_by, created_at, updated_at)
 VALUES
-    (1, '00000000-0000-0000-0000-000000000003', 1, 1, 'ACTIVE', NOW(), DATE_ADD(NOW(), INTERVAL 365 DAY), 'system', 'system', NOW(), NOW())
+    (1, '00000000-0000-0000-0000-000000000003', 1, 'PAY-DEMO-0001', 'ACTIVE', NOW(), DATE_ADD(NOW(), INTERVAL 365 DAY), 'system', 'system', NOW(), NOW())
 ON DUPLICATE KEY UPDATE
     status = VALUES(status),
     expires_at = VALUES(expires_at),

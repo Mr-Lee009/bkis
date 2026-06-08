@@ -108,71 +108,6 @@ CREATE TABLE IF NOT EXISTS lesson_videos (
     CONSTRAINT fk_lesson_videos_lesson FOREIGN KEY (lesson_id) REFERENCES lessons(id)
 );
 
-CREATE TABLE IF NOT EXISTS payments (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    student_id VARCHAR(36) NOT NULL,
-    course_id BIGINT NOT NULL,
-    amount DECIMAL(19,2) NOT NULL,
-    status VARCHAR(20) NOT NULL,
-    created_by VARCHAR(255),
-    updated_by VARCHAR(255),
-    created_at DATETIME,
-    updated_at DATETIME,
-    PRIMARY KEY (id),
-    KEY idx_payments_student_id (student_id),
-    KEY idx_payments_course_id (course_id),
-    CONSTRAINT fk_payments_student FOREIGN KEY (student_id) REFERENCES users(id),
-    CONSTRAINT fk_payments_course FOREIGN KEY (course_id) REFERENCES courses(id)
-);
-
-CREATE TABLE IF NOT EXISTS payment_gateways (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    code VARCHAR(50) NOT NULL,
-    display_name VARCHAR(150) NOT NULL,
-    provider_type VARCHAR(50) NOT NULL,
-    description VARCHAR(500),
-    merchant_id VARCHAR(150),
-    partner_code VARCHAR(150),
-    secret_key VARCHAR(500),
-    payment_endpoint VARCHAR(500),
-    return_url VARCHAR(500),
-    webhook_url VARCHAR(500),
-    ip_allowlist TEXT,
-    enabled BIT DEFAULT b'1',
-    sandbox_mode BIT DEFAULT b'0',
-    routing_priority INT DEFAULT 99,
-    transaction_fee_percent DECIMAL(8,2) DEFAULT 0,
-    success_rate_percent DECIMAL(8,2) DEFAULT 0,
-    status VARCHAR(30) NOT NULL,
-    created_by VARCHAR(255),
-    updated_by VARCHAR(255),
-    created_at DATETIME,
-    updated_at DATETIME,
-    PRIMARY KEY (id),
-    UNIQUE KEY uk_payment_gateways_code (code)
-);
-
-CREATE TABLE IF NOT EXISTS enrollments (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    student_id VARCHAR(36) NOT NULL,
-    course_id BIGINT NOT NULL,
-    payment_id BIGINT,
-    status VARCHAR(20) NOT NULL,
-    enrolled_at DATETIME,
-    expires_at DATETIME,
-    created_by VARCHAR(255),
-    updated_by VARCHAR(255),
-    created_at DATETIME,
-    updated_at DATETIME,
-    PRIMARY KEY (id),
-    KEY idx_enrollments_student_id (student_id),
-    KEY idx_enrollments_course_id (course_id),
-    KEY idx_enrollments_payment_id (payment_id),
-    CONSTRAINT fk_enrollments_student FOREIGN KEY (student_id) REFERENCES users(id),
-    CONSTRAINT fk_enrollments_course FOREIGN KEY (course_id) REFERENCES courses(id),
-    CONSTRAINT fk_enrollments_payment FOREIGN KEY (payment_id) REFERENCES payments(id)
-);
-
 CREATE TABLE IF NOT EXISTS course_reviews (
     id BIGINT NOT NULL AUTO_INCREMENT,
     course_id BIGINT NOT NULL,
@@ -206,3 +141,87 @@ CREATE TABLE IF NOT EXISTS progress (
     CONSTRAINT fk_progress_student FOREIGN KEY (student_id) REFERENCES users(id),
     CONSTRAINT fk_progress_lesson_video FOREIGN KEY (lesson_video_id) REFERENCES lesson_videos(id)
 );
+
+CREATE TABLE IF NOT EXISTS payment_gateway_config
+(
+    id                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    provider          VARCHAR(20)  NOT NULL,
+    enabled           BOOLEAN      NOT NULL DEFAULT TRUE,
+    environment       VARCHAR(20)  NOT NULL,
+    merchant_code     VARCHAR(100)          DEFAULT NULL,
+    endpoint_base_url VARCHAR(255) NOT NULL,
+    create_api_path   VARCHAR(255)          DEFAULT NULL,
+    query_api_path    VARCHAR(255)          DEFAULT NULL,
+    return_url        VARCHAR(255) NOT NULL,
+    callback_url      VARCHAR(255) NOT NULL,
+    secret_ref        VARCHAR(255) NOT NULL,
+    timeout_seconds   INT          NOT NULL DEFAULT 15,
+    priority          INT          NOT NULL DEFAULT 100,
+    config_json       JSON                  DEFAULT NULL,
+    created_at        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_payment_gateway_provider (provider),
+    KEY               idx_payment_gateway_enabled_priority (enabled, priority)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS payment_transaction
+(
+    id                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    payment_code           VARCHAR(64) NOT NULL,
+    order_id               VARCHAR(64) NOT NULL,
+    student_id             VARCHAR(36) NOT NULL,
+    course_id              BIGINT NOT NULL,
+    provider               VARCHAR(20) NOT NULL,
+    gateway_txn_ref        VARCHAR(100)         DEFAULT NULL,
+    gateway_transaction_no VARCHAR(100)         DEFAULT NULL,
+    amount                 DECIMAL(19,2) NOT NULL,
+    currency               VARCHAR(10) NOT NULL DEFAULT 'VND',
+    status                 VARCHAR(20) NOT NULL,
+    payment_url            TEXT                 DEFAULT NULL,
+    request_payload        JSON                 DEFAULT NULL,
+    response_payload       JSON                 DEFAULT NULL,
+    callback_payload       JSON                 DEFAULT NULL,
+    fail_reason            VARCHAR(255)         DEFAULT NULL,
+    paid_at                DATETIME             DEFAULT NULL,
+    created_at             DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at             DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_payment_code (payment_code),
+    KEY                    idx_payment_student_id (student_id),
+    KEY                    idx_payment_course_id (course_id),
+    KEY                    idx_payment_order_id (order_id),
+    KEY                    idx_payment_provider_ref (provider, gateway_txn_ref),
+    KEY                    idx_payment_status (status),
+    CONSTRAINT fk_payment_transaction_student FOREIGN KEY (student_id) REFERENCES users(id),
+    CONSTRAINT fk_payment_transaction_course FOREIGN KEY (course_id) REFERENCES courses(id)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS enrollments (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    student_id VARCHAR(36) NOT NULL,
+    course_id BIGINT NOT NULL,
+    payment_code VARCHAR(64),
+    status VARCHAR(20) NOT NULL,
+    enrolled_at DATETIME,
+    expires_at DATETIME,
+    created_by VARCHAR(255),
+    updated_by VARCHAR(255),
+    created_at DATETIME,
+    updated_at DATETIME,
+    PRIMARY KEY (id),
+    KEY idx_enrollments_student_id (student_id),
+    KEY idx_enrollments_course_id (course_id),
+    KEY idx_enrollments_payment_code (payment_code),
+    CONSTRAINT fk_enrollments_student FOREIGN KEY (student_id) REFERENCES users(id),
+    CONSTRAINT fk_enrollments_course FOREIGN KEY (course_id) REFERENCES courses(id),
+    CONSTRAINT fk_enrollments_payment_code FOREIGN KEY (payment_code) REFERENCES payment_transaction(payment_code)
+);
+
+
+
+
