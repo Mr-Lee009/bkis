@@ -15,16 +15,32 @@ import vn.edu.bkis.security.CustomOAuth2User;
 import vn.edu.bkis.security.CustomUserDetails;
 import vn.edu.bkis.service.CourseSignupService;
 
+/**
+ * Controller xu ly man hinh dang ky va thanh toan khoa hoc cho hoc vien.
+ */
 @Controller
 public class CourseSignupController {
     private final CourseSignupService courseSignupService;
 
-    // Khoi tao controller xu ly trang thanh toan khoa hoc; tham so service dung de lay du lieu checkout va tao payment, khong tra ve gia tri.
+    /**
+     * Khoi tao controller dang ky khoa hoc.
+     *
+     * @param courseSignupService service xu ly du lieu checkout va dang ky khoa hoc
+     * @return khong tra ve gia tri vi day la constructor cua controller
+     */
     public CourseSignupController(CourseSignupService courseSignupService) {
         this.courseSignupService = courseSignupService;
     }
 
-    // Hien thi trang thanh toan cho courseId va user hien tai; tra ve template 06-course-signup, nem loi neu principal khong hop le.
+    /**
+     * Hien thi trang thanh toan cho khoa hoc duoc chon.
+     *
+     * @param courseId id khoa hoc can dang ky
+     * @param authentication thong tin dang nhap hien tai tu Spring Security
+     * @param model model dung de dua du lieu checkout ra giao dien
+     * @return ten template trang dang ky khoa hoc
+     * @throws IllegalArgumentException neu khong lay duoc hoc vien hop le tu phien dang nhap
+     */
     @GetMapping("/courses/{courseId}/signup")
     public String signupPage(@PathVariable Long courseId, Authentication authentication, Model model) {
         // Step 1: Lay user dang dang nhap de service kiem tra quyen thanh toan.
@@ -35,7 +51,7 @@ public class CourseSignupController {
         CourseSignupPageDto signupPage = courseSignupService.getSignupPage(courseId, currentUser);
         model.addAttribute("signupPage", signupPage);
 
-        // Step 3: Tao form mac dinh voi gateway uu tien dau tien tu PaymentGateway neu chua co flash form tu lan submit loi.
+        // Step 3: Tao form mac dinh voi gateway uu tien dau tien tu payment_gateway_config neu chua co flash form tu lan submit loi.
         if (!model.containsAttribute("signupForm")) {
             CourseSignupFormDto signupForm = new CourseSignupFormDto();
             signupPage.getPaymentGateways().stream()
@@ -47,7 +63,15 @@ public class CourseSignupController {
         return "06-course-signup";
     }
 
-    // Nhan yeu cau thanh toan cho courseId; form gom paymentMethod va dieu khoan, tra ve redirect, nem loi nghiep vu qua flash message.
+    /**
+     * Nhan yeu cau dang ky khoa hoc va xu ly thanh toan mo phong.
+     *
+     * @param courseId id khoa hoc dang duoc mua
+     * @param form du lieu form dang ky gom cong thanh toan va dieu khoan
+     * @param authentication thong tin dang nhap hien tai tu Spring Security
+     * @param redirectAttributes doi tuong chua flash message sau khi redirect
+     * @return duong dan redirect sau khi xu ly thanh cong hoac that bai
+     */
     @PostMapping("/courses/{courseId}/signup")
     public String signup(@PathVariable Long courseId,
                          @ModelAttribute("signupForm") CourseSignupFormDto form,
@@ -71,7 +95,13 @@ public class CourseSignupController {
         }
     }
 
-    // Lay user local tu Authentication; tham so authentication co the den tu login thuong hoac SSO, tra ve User, nem loi neu chua dang nhap hop le.
+    /**
+     * Lay user local tu Authentication cua Spring Security.
+     *
+     * @param authentication thong tin dang nhap hien tai
+     * @return user local cua he thong duoc gan voi phien dang nhap
+     * @throws IllegalArgumentException neu principal khong phai tai khoan hop le de thanh toan
+     */
     private User getCurrentUser(Authentication authentication) {
         // Step 1: Lay principal hien tai tu Spring Security.
         Object principal = authentication == null ? null : authentication.getPrincipal();

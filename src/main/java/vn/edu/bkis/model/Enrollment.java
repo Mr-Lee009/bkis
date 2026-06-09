@@ -32,8 +32,8 @@ public class Enrollment extends BasicEntity {
     @Column(name = "course_id", nullable = false)
     private Long courseId;
 
-    @Column(name = "payment_id")
-    private Long paymentId;
+    @Column(name = "payment_code", length = 64)
+    private String paymentCode;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
