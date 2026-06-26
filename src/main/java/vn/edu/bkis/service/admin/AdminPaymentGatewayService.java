@@ -4,12 +4,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.bkis.dto.admin.payment.PaymentGatewayDto;
@@ -21,6 +20,8 @@ import vn.edu.bkis.model.PaymentGatewayConfigEntity;
 import vn.edu.bkis.model.PaymentTransactionEntity;
 import vn.edu.bkis.repository.PaymentGatewayConfigRepository;
 import vn.edu.bkis.repository.PaymentTransactionRepository;
+import vn.edu.bkis.util.DateUtil;
+import vn.edu.bkis.util.VietnameseNameUtil;
 
 @Service
 public class AdminPaymentGatewayService {
@@ -899,4 +900,57 @@ public class AdminPaymentGatewayService {
     private String coalesce(String first, String second) {
         return isBlank(first) ? second : first;
     }
+
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    /**
+     * Chen 1 trieu ban ghi vao bang payment_transaction de test batch insert.
+     */
+    void insertOneMillionRecords() {
+        int totalRecords = 1000000;
+        int batchSize = 5000; // Khớp với batch_size đã cấu hình
+
+        long startTime = System.currentTimeMillis();
+
+        for (int i = 1; i <= totalRecords; i++) {
+            PaymentTransactionEntity transaction = new PaymentTransactionEntity();
+
+            LocalDateTime now = DateUtil.getRandomDateTimeInCurrentYear();
+
+            // Không set ID vì dùng GenerationType.IDENTITY (để DB tự tăng)
+            transaction.setPaymentCode("PAY-" + UUID.randomUUID().toString().replace("-", "").toUpperCase().substring(0, 16) + i);
+            transaction.setOrderId("ORD-" + i + "-" + UUID.randomUUID().toString().substring(0, 8));
+            transaction.setStudentId("28f4f5e7-0e08-48af-8a02-ed6c2126d465");
+            transaction.setCourseId(2L);
+            transaction.setProvider("vnpay");
+            transaction.setAmount(new BigDecimal("129.00"));
+            transaction.setCurrency("VND");
+            transaction.setStatus("COMPLETED");
+            transaction.setPaymentUrl("https://pay.vnpay.vn/vpcpay.html");
+            transaction.setRequestPayload("{\"amount\": 129.0, \"orderId\": \"ORD-" + i + VietnameseNameUtil.getRandomFullName() + "\"}");
+            transaction.setResponsePayload("{\"status\": \"COMPLETED\", \"provider\": \"vnpay\"}");
+            transaction.setCreatedAt(now);
+            transaction.setUpdatedAt(now);
+
+            // Lưu vào Persistence Context
+            entityManager.persist(transaction);
+
+            // Cứ đủ 5000 bản ghi thì đẩy (flush) xuống DB và xóa (clear) bộ nhớ RAM của JPA
+            if (i % batchSize == 0) {
+                entityManager.flush();
+                entityManager.clear();
+                System.out.println("Đã xử lý xong " + i + " bản ghi...");
+            }
+        }
+
+        // Xử lý nốt phần dư còn lại
+        entityManager.flush();
+        entityManager.clear();
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Hoàn thành chèn 1 triệu bản ghi bằng JPA mất: " + (endTime - startTime) / 1000.0 + " giây.");
+    }
+
 }

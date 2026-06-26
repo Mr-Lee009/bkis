@@ -1,29 +1,28 @@
 version: '3.8'
 services:
   db:
-    image: mysql:8.0
+    image: 'mysql:8.0'
     container_name: mysql_bkis
     env_file:
       - ./docker/.env.docker
     ports:
-      - "3310:3306"
+      - '3310:3306'
     volumes:
-      - db_data:/var/lib/mysql
-      - ./docker/mysql:/docker-entrypoint-initdb.d
+      - 'db_data:/var/lib/mysql'
+      - './docker/mysql:/docker-entrypoint-initdb.d'
     restart: always
-
-    app:
-      build: .
-      container_name: bkis_app
-      env_file:
-        - ./docker/.env.docker
-      ports:
-        - "8888:8888"
-      depends_on:
-        - db
-      volumes:
-        - ./storage/uploads:/app/uploads
-        - ./storage/upload-tmp:/app/upload-tmp
-      restart: always
+  app:
+    build: .
+    container_name: bkis_app
+    env_file:
+      - ./docker/.env.docker
+    ports:
+      - '8888:8888'
+    depends_on:
+      - db
+    volumes:
+      - './storage/uploads:/app/uploads'
+      - './storage/upload-tmp:/app/upload-tmp'
+    restart: always
 volumes:
-  db_data:
+  db_data: null
