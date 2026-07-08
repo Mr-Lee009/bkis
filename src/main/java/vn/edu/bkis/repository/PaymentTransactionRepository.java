@@ -3,11 +3,20 @@ package vn.edu.bkis.repository;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import vn.edu.bkis.model.PaymentTransactionEntity;
 
 public interface PaymentTransactionRepository extends JpaRepository<PaymentTransactionEntity, Long> {
+
+    /**
+     * Tim giao dich theo ma payment noi bo.
+     *
+     * @param paymentCode ma giao dich can tra cuu
+     * @return giao dich neu ton tai
+     */
+    Optional<PaymentTransactionEntity> findByPaymentCode(String paymentCode);
 
     List<PaymentTransactionEntity> findByProviderIn(Collection<String> providers);
 

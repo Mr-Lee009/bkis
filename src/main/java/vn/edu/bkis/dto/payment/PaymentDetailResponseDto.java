@@ -1,9 +1,13 @@
 package vn.edu.bkis.dto.payment;
 
+import lombok.Data;
+import vn.edu.bkis.model.PaymentStatus;
+
 /**
  * DTO trả về thông tin chi tiết payment hiện tại.
  * Dùng cho frontend poll trạng thái hoặc hiển thị kết quả thanh toán.
  */
+@Data
 public class PaymentDetailResponseDto {
     // Mã payment nội bộ.
     private String paymentCode;

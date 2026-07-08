@@ -4,10 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.bkis.dto.CourseSignupFormDto;
 import vn.edu.bkis.dto.CourseSignupPageDto;
 import vn.edu.bkis.model.User;
@@ -61,38 +58,6 @@ public class CourseSignupController {
             model.addAttribute("signupForm", signupForm);
         }
         return "06-course-signup";
-    }
-
-    /**
-     * Nhan yeu cau dang ky khoa hoc va xu ly thanh toan mo phong.
-     *
-     * @param courseId id khoa hoc dang duoc mua
-     * @param form du lieu form dang ky gom cong thanh toan va dieu khoan
-     * @param authentication thong tin dang nhap hien tai tu Spring Security
-     * @param redirectAttributes doi tuong chua flash message sau khi redirect
-     * @return duong dan redirect sau khi xu ly thanh cong hoac that bai
-     */
-    @PostMapping("/courses/{courseId}/signup")
-    public String signup(@PathVariable Long courseId,
-                         @ModelAttribute("signupForm") CourseSignupFormDto form,
-                         Authentication authentication,
-                         RedirectAttributes redirectAttributes) {
-        try {
-            // Step 1: Goi service tao payment COMPLETED va kich hoat enrollment trong cung transaction.
-            courseSignupService.signup(courseId, getCurrentUser(authentication), form);
-
-            // Step 2: Bao thanh cong va dua user ve trang chi tiet khoa hoc.
-            redirectAttributes.addFlashAttribute(
-                    "successMessage",
-                    "Thanh toán khóa học thành công. Bạn đã có quyền học khóa học này."
-            );
-            return "redirect:/courses/" + courseId;
-        } catch (IllegalArgumentException ex) {
-            // Step 3: Giu lai form va thong bao loi de user chon lai cong thanh toan neu can.
-            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
-            redirectAttributes.addFlashAttribute("signupForm", form);
-            return "redirect:/courses/" + courseId + "/signup";
-        }
     }
 
     /**

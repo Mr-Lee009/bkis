@@ -67,7 +67,7 @@
                         <h1 class="checkout-title">Thanh toán</h1>
 
                         <form id="checkoutForm"
-                              th:action="@{/courses/{id}/signup(id=${signupPage.courseId})}"
+                            th:action="@{/payment/courses/{id}(id=${signupPage.courseId})}"
                               th:object="${signupForm}"
                               method="post">
                             <h2 class="checkout-section-title">Địa chỉ thanh toán</h2>

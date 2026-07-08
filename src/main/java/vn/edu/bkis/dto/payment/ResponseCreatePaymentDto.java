@@ -1,7 +1,9 @@
 package vn.edu.bkis.dto.payment;
 
+import lombok.Data;
 import vn.edu.bkis.model.PaymentStatus;
 
+@Data
 public class ResponseCreatePaymentDto {
 
     private String paymentCode;
