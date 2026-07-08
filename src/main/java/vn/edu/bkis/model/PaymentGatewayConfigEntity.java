@@ -59,7 +59,7 @@ public class PaymentGatewayConfigEntity {
     @Column(name = "priority", nullable = false)
     private Integer priority = 100;
 
-    @Column(name = "config_json", columnDefinition = "json")
+    @Column(name = "config_json", columnDefinition = "TEXT")
     private String configJson;
 
     @Column(name = "created_at", nullable = false)

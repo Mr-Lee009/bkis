@@ -57,13 +57,13 @@ public class PaymentTransactionEntity {
     @Column(name = "payment_url", columnDefinition = "TEXT")
     private String paymentUrl;
 
-    @Column(name = "request_payload", columnDefinition = "json")
+    @Column(name = "request_payload", columnDefinition = "TEXT")
     private String requestPayload;
 
-    @Column(name = "response_payload", columnDefinition = "json")
+    @Column(name = "response_payload", columnDefinition = "TEXT")
     private String responsePayload;
 
-    @Column(name = "callback_payload", columnDefinition = "json")
+    @Column(name = "callback_payload", columnDefinition = "TEXT")
     private String callbackPayload;
 
     @Column(name = "fail_reason", length = 255)
