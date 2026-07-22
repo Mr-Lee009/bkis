@@ -49,4 +49,4 @@ dev.evn
 !*.env.example
 
 ### source ###
-./uploads/rource
+./uploads/rource/**

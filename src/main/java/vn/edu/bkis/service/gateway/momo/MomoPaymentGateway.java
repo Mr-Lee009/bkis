@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import org.springframework.stereotype.Component;
 import vn.edu.bkis.dto.payment.CreatePaymentRequestDto;
 import vn.edu.bkis.dto.payment.GatewayCreatePaymentResult;
@@ -35,40 +36,40 @@ public class MomoPaymentGateway implements PaymentGateway {
      * Tao request thanh toan MoMo, ky signature va goi API create payment.
      *
      * @param request du lieu thanh toan chung
-     * @param config cau hinh gateway MoMo trong DB
+     * @param config  cau hinh gateway MoMo trong DB
      * @return ket qua tao payment da chuan hoa
      * @throws IllegalArgumentException neu cau hinh thieu truong bat buoc hoac provider tra loi loi
      */
     @Override
     public GatewayCreatePaymentResult createPayment(CreatePaymentRequestDto request,
-        PaymentGatewayConfigEntity config) {
+                                                    PaymentGatewayConfigEntity config) {
         // Step 1: parse config_json va lay cac gia tri can thiet cho request MoMo.
         Map<String, Object> metadata = RestUtil.parseMetadata(config.getConfigJson());
         String partnerCode = PaymentGatewayUtil.firstNonBlank(config.getMerchantCode(),
-            PaymentGatewayUtil.stringValue(metadata.get("partnerCode")), "MOMO");
+                PaymentGatewayUtil.stringValue(metadata.get("partnerCode")), "MOMO");
         String partnerName = PaymentGatewayUtil.firstNonBlank(
-            PaymentGatewayUtil.stringValue(metadata.get("partnerName")), "Test");
+                PaymentGatewayUtil.stringValue(metadata.get("partnerName")), "Test");
         String storeId = PaymentGatewayUtil.firstNonBlank(
-            PaymentGatewayUtil.stringValue(metadata.get("storeId")), "MomoTestStore");
+                PaymentGatewayUtil.stringValue(metadata.get("storeId")), "MomoTestStore");
         String accessKey = PaymentGatewayUtil.firstNonBlank(
-            PaymentGatewayUtil.stringValue(metadata.get("accessKey")), config.getSecretRef());
+                PaymentGatewayUtil.stringValue(metadata.get("accessKey")), config.getSecretRef());
         String secretKey = PaymentGatewayUtil.firstNonBlank(
-            PaymentGatewayUtil.stringValue(metadata.get("secretKey")), config.getSecretRef());
+                PaymentGatewayUtil.stringValue(metadata.get("secretKey")), config.getSecretRef());
         String requestType = PaymentGatewayUtil.firstNonBlank(
-            PaymentGatewayUtil.stringValue(metadata.get("requestType")), "payWithMethod");
+                PaymentGatewayUtil.stringValue(metadata.get("requestType")), "payWithMethod");
         String lang = PaymentGatewayUtil.firstNonBlank(
-            PaymentGatewayUtil.stringValue(metadata.get("lang")), "vi");
+                PaymentGatewayUtil.stringValue(metadata.get("lang")), "vi");
         boolean autoCapture = PaymentGatewayUtil.booleanValue(metadata.get("autoCapture"), true);
         String extraData = PaymentGatewayUtil.firstNonBlank(
-            PaymentGatewayUtil.stringValue(metadata.get("extraData")), "");
+                PaymentGatewayUtil.stringValue(metadata.get("extraData")), "");
         String orderGroupId = PaymentGatewayUtil.firstNonBlank(
-            PaymentGatewayUtil.stringValue(metadata.get("orderGroupId")), "");
+                PaymentGatewayUtil.stringValue(metadata.get("orderGroupId")), "");
         String redirectUrl = PaymentGatewayUtil.firstNonBlank(config.getReturnUrl(),
-            PaymentGatewayUtil.stringValue(metadata.get("redirectUrl")));
+                PaymentGatewayUtil.stringValue(metadata.get("redirectUrl")));
         String ipnUrl = PaymentGatewayUtil.firstNonBlank(config.getCallbackUrl(),
-            PaymentGatewayUtil.stringValue(metadata.get("ipnUrl")));
+                PaymentGatewayUtil.stringValue(metadata.get("ipnUrl")));
         String baseUrl = PaymentGatewayUtil.firstNonBlank(config.getEndpointBaseUrl(),
-            "https://test-payment.momo.vn/v2/gateway/api/create");
+                "https://test-payment.momo.vn/v2/gateway/api/create");
         String createApiPath = PaymentGatewayUtil.blankToNull(config.getCreateApiPath());
         String endpoint = PaymentGatewayUtil.buildEndpoint(baseUrl, createApiPath);
 
@@ -80,7 +81,7 @@ public class MomoPaymentGateway implements PaymentGateway {
 
         // Step 3: ky request theo raw signature cua MoMo.
         String rawSignature = buildRawSignature(accessKey, amount, extraData, ipnUrl, orderId, orderInfo,
-            partnerCode, redirectUrl, requestId, requestType);
+                partnerCode, redirectUrl, requestId, requestType);
         String signature = calculateSignature(rawSignature, secretKey);
 
         // Step 4: build payload JSON va goi API provider.
@@ -110,7 +111,7 @@ public class MomoPaymentGateway implements PaymentGateway {
         result.setRequestId(PaymentGatewayUtil.stringValue(responseBody.get("requestId")));
         result.setAmount(PaymentGatewayUtil.longValue(responseBody.get("amount"), request.getAmount().longValue()));
         result.setResponseTime(PaymentGatewayUtil.longValue(responseBody.get("responseTime"),
-            Instant.now().toEpochMilli()));
+                Instant.now().toEpochMilli()));
         result.setResultCode(PaymentGatewayUtil.intValue(responseBody.get("resultCode"), -1));
         result.setMessage(PaymentGatewayUtil.stringValue(responseBody.get("message")));
         result.setPayUrl(PaymentGatewayUtil.stringValue(responseBody.get("payUrl")));
@@ -125,33 +126,33 @@ public class MomoPaymentGateway implements PaymentGateway {
     /**
      * Tao chuoi raw signature theo dung thu tu field MoMo yeu cau.
      *
-     * @param accessKey access key MoMo
-     * @param amount so tien
-     * @param extraData du lieu mo rong
-     * @param ipnUrl callback url server to server
-     * @param orderId ma don hang
-     * @param orderInfo noi dung don hang
+     * @param accessKey   access key MoMo
+     * @param amount      so tien
+     * @param extraData   du lieu mo rong
+     * @param ipnUrl      callback url server to server
+     * @param orderId     ma don hang
+     * @param orderInfo   noi dung don hang
      * @param partnerCode ma doi tac
      * @param redirectUrl url redirect sau thanh toan
-     * @param requestId request id
+     * @param requestId   request id
      * @param requestType kieu request
      * @return chuoi raw signature
      */
     private String buildRawSignature(String accessKey, String amount, String extraData,
-        String ipnUrl, String orderId, String orderInfo, String partnerCode, String redirectUrl,
-        String requestId, String requestType) {
+                                     String ipnUrl, String orderId, String orderInfo, String partnerCode, String redirectUrl,
+                                     String requestId, String requestType) {
         // Step 1: noi chuoi theo dung thu tu MoMo yeu cau.
         return "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData
-            + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo
-            + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId
-            + "&requestType=" + requestType;
+                + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo
+                + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId
+                + "&requestType=" + requestType;
     }
 
     /**
      * Ky raw signature bang HMAC SHA256.
      *
      * @param rawSignature chuoi can ky
-     * @param secretKey secret key cua MoMo
+     * @param secretKey    secret key cua MoMo
      * @return chu ky hexa
      */
     private String calculateSignature(String rawSignature, String secretKey) {

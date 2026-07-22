@@ -51,8 +51,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Mo public cho login, captcha server-side, static asset, file preview va callback OAuth2.
                         .requestMatchers("/login", "/register", "/forgot-password", "/reset-password", "/captcha/**",
-                                "/access-denied", "/css/**", "/js/**", "/img/**", "/uploads/**", "/favicon.ico", "/oauth2/**",
-                                "/login/oauth2/**").permitAll()
+                                "/access-denied", "/css/**", "/js/**", "/img/**", "/favicon.ico", "/oauth2/**",
+                                "/login/oauth2/**", "/api/videos/**", "/secure/videos/**").permitAll()
                         // Chi hoc vien da dang nhap moi duoc vao cac luong hoc tap ca nhan.
                         .requestMatchers("/my-courses").hasRole("STUDENT")
                         .requestMatchers("/courses/*/signup").hasRole("STUDENT")
@@ -105,3 +105,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+

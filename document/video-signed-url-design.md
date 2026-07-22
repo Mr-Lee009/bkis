@@ -2,7 +2,7 @@
 
 ## 1. Nguyen ly hoat dong
 
-Signed URL la duong dan xem video co chu ky va thoi han su dung ngan.
+Signed URL la duong dan xem video co chu ky va thoi han su dung ngan. Trong BKIS, thoi han mac dinh cua link xem video la 1 gio.
 
 Luong co ban:
 
@@ -158,7 +158,7 @@ Nhiem vu:
 
 ```properties
 app.video.signing-secret=bkis-video-secret-key-change-me
-app.video.signed-url-valid-minutes=15
+app.video.signed-url-valid-minutes=60
 app.video.storage-root=uploads
 ```
 
@@ -184,9 +184,22 @@ video.src = response.url;
 
 ## Thu tu trien khai khuyen nghi
 
-1. Them cot `video_key`.
-2. Khi upload xong, luu `video_key` thay vi full URL.
-3. Them API `/api/videos/{videoId}/signed-url`.
-4. Them API `/secure/videos/stream`.
+1. Dung cot `video_url` nhu `video_key` trong giai doan tuong thich; gia tri moi nen la `source/<file>`.
+2. Cap signed URL moi lan bam xem va khong tra URL luu tru that ve trang HTML.
+3. Them API `/api/videos/{videoId}/signed-url` voi thoi han 60 phut.
+4. Them API `/secure/videos/stream` de kiem tra han, chu ky va stream file.
 5. Update modal xem video de lay signed URL truoc khi play.
-6. Sau khi on dinh, khong public `/uploads/**` cho video khoa hoc nua.
+6. Khong public `/uploads/**` cho video khoa hoc nua.
+
+### Trang thai trien khai trong code
+
+- LessonVideo.videoUrl van duoc giu de tuong thich, nhung video upload noi bo duoc hieu la key tuong doi trong thu muc uploads.
+- Link noi bo duoc cap lai moi lan bam xem, co hieu luc 60 phut va endpoint stream se tu choi link het han.
+
+
+
+
+### Trang thai trien khai trong code
+
+- LessonVideo.videoUrl van duoc giu de tuong thich, nhung video upload noi bo duoc hieu la key tuong doi trong thu muc uploads.
+- Link noi bo duoc cap lai moi lan bam xem, co hieu luc 60 phut va endpoint stream se tu choi link het han.

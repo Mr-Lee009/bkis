@@ -93,7 +93,7 @@
 
                                                 <button class="btn btn-sm btn-outline-primary open-video-btn"
                                                         th:if="${video.accessible}"
-                                                        th:attr="data-video-url=${video.videoUrl}"
+                                                        th:attr="data-video-id=${video.id},data-video-url=${video.videoUrl}"
                                                         th:text="${course.enrolled} ? 'Xem video' : 'Xem thử'">Xem video
                                                 </button>
 
@@ -147,7 +147,7 @@
                         </ul>
                         <a class="btn btn-success w-100 py-3 mb-2"
                            th:if="${course.enrolled}"
-                           th:href="${course.lessons != null && !#lists.isEmpty(course.lessons) && !#lists.isEmpty(course.lessons[0].videos) ? course.lessons[0].videos[0].videoUrl : '#curriculum'}"
+                           th:href="'#curriculum'"
                            target="_blank"
                            rel="noopener noreferrer">
                             <i class="fa fa-play me-2"></i>Vào học / Xem video
@@ -251,14 +251,14 @@
     <script>
         $(document).ready(function (){
             /**
-             * Chuyển các URL video phổ biến sang URL embed để modal xem được YouTube hoặc Vimeo.
+             * Chuyen cac URL video pho bien sang URL embed de modal xem duoc YouTube hoac Vimeo.
              *
-             * @param videoUrl URL gốc của video lấy từ button trên giao diện
-             * @returns {string} URL embed hợp lệ hoặc chuỗi rỗng nếu không chuyển đổi được
+             * @param videoUrl URL goc cua video lay tu button tren giao dien
+             * @returns {string} URL embed hop le hoac chuoi rong neu khong chuyen doi duoc
              */
             function resolveEmbeddableVideoUrl(videoUrl) {
-                // Step 1: parse URL đầu vào để xác định nhà cung cấp video.
-                // Step 2: chuyển các URL YouTube hoặc Vimeo phổ biến về dạng embed chuẩn cho iframe.
+                // Step 1: parse URL dau vao de xac dinh nha cung cap video.
+                // Step 2: chuyen cac URL YouTube hoac Vimeo pho bien ve dang embed chuan cho iframe.
                 try {
                     const url = new URL(videoUrl, window.location.origin);
                     if (url.hostname.includes('youtube.com') && url.searchParams.get('v')) {
@@ -281,13 +281,13 @@
             }
 
             /**
-             * Mở modal video theo đúng loại player và xử lý trường hợp URL không xem được.
+             * Mo modal video theo dung loai player va xu ly truong hop URL khong xem duoc.
              *
-             * @param videoUrl URL video sẽ phát trong modal
-             * @returns {void} không trả dữ liệu; hàm cập nhật trực tiếp modal player trên giao diện
+             * @param videoUrl URL video se phat trong modal
+             * @returns {void} khong tra du lieu; ham cap nhat truc tiep modal player tren giao dien
              */
-            function openCourseVideo(videoUrl) {
-                // Step 1: reset toàn bộ player cũ để tránh phát chồng giữa các lần mở modal.
+            async function openCourseVideo(videoId, videoUrl) {
+                // Step 1: reset toan bo player cu de tranh phat chong giua cac lan mo modal.
                 const video = $('#courseVideo')[0];
                 const embed = $('#courseVideoEmbed');
                 const errorBox = $('#courseVideoError');
@@ -300,32 +300,36 @@
                 $('#courseVideo').addClass('d-none');
                 errorBox.addClass('d-none').text('');
 
-                // Step 2: ưu tiên dùng iframe nếu URL thuộc nền tảng hỗ trợ embed như YouTube hoặc Vimeo.
+                // Step 2: uu tien dung iframe neu URL thuoc nen tang ho tro embed nhu YouTube hoac Vimeo.
                 const embedUrl = resolveEmbeddableVideoUrl(videoUrl);
                 if (embedUrl) {
                     embed.removeClass('d-none').attr('src', embedUrl);
                     return;
                 }
-
-                // Step 3: nếu không có URL hợp lệ thì hiện lỗi, còn không thì phát bằng thẻ video HTML5.
-                if (!videoUrl) {
-                    errorBox.removeClass('d-none').text('Video này hiện chưa sẵn sàng để xem.');
+                // Step 3: video noi bo phai xin signed URL moi lan mo truoc khi phat.
+                if (!videoId) {
+                    errorBox.removeClass('d-none').text('Video chưa có dữ liệu để xem.');
                     return;
                 }
-
-                $('#courseVideo').removeClass('d-none');
-                video.src = videoUrl;
-                video.load();
-                video.play();
+                $.getJSON('/api/videos/' + videoId + '/signed-url')
+                    .done(function (response) {
+                        $('#courseVideo').removeClass('d-none');
+                        video.src = response.url;
+                        video.load();
+                        video.play().catch(function () {});
+                    })
+                    .fail(function () {
+                        errorBox.removeClass('d-none').text('Không thể tạo link xem video hoặc link đã hết hạn.');
+                    });
             }
 
             $('.open-video-btn').on('click', function (e) {
                 e.preventDefault();
-                openCourseVideo($(this).data('video-url'));
+                openCourseVideo($(this).data('video-id'), $(this).data('video-url'));
                 $('#videoModal').modal('show');
             });
 
-            // Step 4: khi đóng modal thì dọn player để tránh video tiếp tục chạy nền ở trình duyệt.
+            // Step 4: khi dong modal thi don player de tranh video tiep tuc chay nen o trinh duyet.
             $('#videoModal').on('hidden.bs.modal', function () {
                 let video = $('#courseVideo')[0];
                 video.pause();

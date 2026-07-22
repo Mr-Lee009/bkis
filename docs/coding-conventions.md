@@ -104,8 +104,8 @@ Tài liệu này chuẩn hóa cách viết mã trong repo `bkis` để:
 ## Quy ước comment mã nguồn
 
 ### Comment bắt buộc cho function
-- Tất cả function hoặc method được thêm mới hay chỉnh sửa đều phải có comment ngắn gọn bằng tiếng Việt.
-- Comment đặt ngay phía trên function.
+- Tất cả function hoặc method được thêm mới hay chỉnh sửa đều phải có comment ngắn gọn bằng tiếng Việt không dấu.
+- Comment đặt ngay phía trên function và dùng tiếng Việt không dấu.
 - Comment phải đủ để người đọc hiểu nhanh mục đích chính của hàm.
 - Comment bắt buộc phải nêu rõ:
   - hàm dùng để làm gì
@@ -120,9 +120,9 @@ Tài liệu này chuẩn hóa cách viết mã trong repo `bkis` để:
 ### Comment theo từng bước trong thân hàm
 - Với mọi hàm mới hoặc hàm được sửa, phần thân hàm phải có comment theo các bước xử lý chính nếu logic không chỉ là 1 phép gán đơn giản.
 - Ưu tiên dùng format nhất quán như:
-  - `Step 1: lấy dữ liệu ...`
-  - `Step 2: kiểm tra điều kiện ...`
-  - `Step 3: map dữ liệu và trả kết quả ...`
+  - `Step 1: lay du lieu ...`
+  - `Step 2: kiem tra dieu kien ...`
+  - `Step 3: map du lieu va tra ket qua ...`
 - Các step comment phải bám theo luồng xử lý thực tế của code, không viết chung chung.
 - Không cần comment mọi dòng lệnh nhỏ, nhưng phải comment đủ để người đọc lần đầu hiểu luồng dữ liệu và quyết định nghiệp vụ.
 
@@ -152,7 +152,7 @@ Tài liệu này chuẩn hóa cách viết mã trong repo `bkis` để:
 ### Chuẩn comment
 - Comment ngắn, trực tiếp, nói về `why` nhiều hơn `what`.
 - Nếu comment là cảnh báo hoặc ràng buộc, phải viết thật cụ thể.
-- Với repo này, comment trong source code ưu tiên viết bằng tiếng Việt.
+- Với repo này, comment trong source code phải viết bằng tiếng Việt không dấu; tên class, method và biến vẫn dùng tiếng Anh theo convention hiện tại.
 - Tên class, method, biến vẫn giữ theo chuẩn tiếng Anh hiện có.
 - Với hàm nhiều bước, comment nên bám theo các block xử lý chính thay vì diễn giải lại từng câu lệnh.
 
@@ -223,9 +223,9 @@ for (StudentDto student : students) {
 ## Checklist trước khi commit hoặc review
 - Tên class, method, biến đã rõ nghĩa chưa.
 - Business logic có bị trôi vào controller hoặc DTO không.
-- Comment có thực sự cần thiết và có nói đúng lý do không.
-- Tất cả function được thêm mới hoặc chỉnh sửa đã có comment ngắn bằng tiếng Việt chưa.
-- Tất cả function được thêm mới hoặc chỉnh sửa đã mô tả rõ `@param`, `@return` và các step xử lý chính chưa.
+- Comment co thuc su can thiet va co noi dung dung ly do khong.
+- Tat ca function duoc them moi hoac chinh sua da co comment ngan bang tieng Viet khong dau chua.
+- Tat ca function duoc them moi hoac chinh sua da mo ta ro `@param`, `@return` va cac step xu ly chinh chua.
 - Với `service` nhiều logic, các block xử lý chính đã được comment rõ chưa.
 - Có import thừa, code chết, hoặc block debug còn sót lại không.
 - Nếu đổi field hoặc API, đã kiểm tra các consumer liên quan chưa.
